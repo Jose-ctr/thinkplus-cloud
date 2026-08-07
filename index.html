@@ -417,6 +417,42 @@
       }
       .cta-banner{padding:30px}
     }
+    .hero{
+  position:relative;
+  overflow:hidden;
+}
+
+.hero::before,
+.hero::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  filter:blur(60px);
+  z-index:-1;
+}
+
+.hero::before{
+  width:260px;
+  height:260px;
+  background:rgba(37,99,235,.28);
+  top:-40px;
+  left:-60px;
+  animation:floatGlow 8s ease-in-out infinite alternate;
+}
+
+.hero::after{
+  width:220px;
+  height:220px;
+  background:rgba(79,140,255,.24);
+  bottom:-50px;
+  right:-40px;
+  animation:floatGlow 10s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes floatGlow{
+  from{transform:translateY(0) translateX(0);}
+  to{transform:translateY(-20px) translateX(10px);}
+}
   </style>
 </head>
 <body>
