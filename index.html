@@ -54,3 +54,36 @@
   </section>
 </body>
 </html>
+/* ========== THINKPLUS CLOUD SAAS STYLES ========== */
+.pricing { padding: 80px 20px; background: #f8f9fa; }
+.section-title { text-align: center; font-size: 2.5rem; margin-bottom: 10px; }
+.section-subtitle { text-align: center; color: #666; margin-bottom: 50px; }
+
+.pricing-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+  gap: 30px; 
+  max-width: 1200px; 
+  margin: 0 auto;
+}
+
+.pricing-card {
+  background: white;
+  border-radius: 12px;
+  padding: 40px 30px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  position: relative;
+}
+.pricing-card.featured { border: 3px solid #007bff; transform: scale(1.05); }
+
+.badge {
+  position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+  background: #007bff; color: white; padding: 5px 20px; border-radius: 20px;
+  font-size: 0.85rem; font-weight: bold;
+}
+
+.price .amount { font-size: 3rem; font-weight: bold; color: #007bff; }
+.pricing-card ul { list-style: none; padding: 0; margin: 30px 0; text-align: left; }
+.btn-primary { background: #007bff; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; }
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
