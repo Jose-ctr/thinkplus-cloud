@@ -1,54 +1,1321 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ThinkPlus School Management System</title>
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3659/3659898.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThinkPlus | School Management System</title>
+  <meta name="description" content="ThinkPlus - Modern school management system for Kenyan schools." />
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3659/3659898.png" />
+
   <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
-      font-family: Arial, sans-serif;
-      margin:0;
-      padding:40px 20px;
-      background:#f5f7fb;
-      text-align:center;
+      font-family:Inter,Arial,sans-serif;
+      background:#f5f8ff;
       color:#1e293b;
+      overflow-x:hidden;
     }
-    .card{
-      max-width:700px;
-      margin:auto;
-      background:white;
-      padding:30px;
-      border-radius:20px;
-      box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    /* Animated background */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(11,99,246,.15), transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(96,165,250,.18), transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(37,99,235,.12), transparent 45%);
+      z-index:-1;
+      animation:bgMove 12s ease-in-out infinite alternate;
     }
-    h1{color:#0b63f6;}
+    @keyframes bgMove{
+      from{transform:translateY(0)}
+      to{transform:translateY(-20px)}
+    }
+
+    .container{width:min(1120px,92%);margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.8);
+      border-bottom:1px solid #e2e8f0;
+      z-index:1000;
+    }
+    .nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 0;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      color:#0b63f6;
+      font-size:1.2rem;
+    }
+    .logo-badge{
+      width:42px;height:42px;border-radius:14px;
+      background:linear-gradient(135deg,#0b63f6,#60a5fa);
+      color:#fff;display:grid;place-items:center;
+      box-shadow:0 8px 20px rgba(11,99,246,.25);
+    }
+    nav a{
+      margin-left:22px;
+      color:#334155;
+      text-decoration:none;
+      font-weight:600;
+    }
+    nav a:hover{color:#0b63f6}
+
     .btn{
       display:inline-block;
-      margin-top:20px;
-      padding:14px 24px;
-      background:#0b63f6;
-      color:white;
-      border-radius:12px;
+      background:linear-gradient(135deg,#0b63f6,#2563eb);
+      color:#fff;
+      padding:14px 22px;
+      border-radius:14px;
       text-decoration:none;
-      font-weight:bold;
+      font-weight:700;
+      box-shadow:0 12px 24px rgba(11,99,246,.25);
+      transition:.25s ease;
     }
-    .btn:hover{background:#094dc3;}
+    .btn:hover{transform:translateY(-3px)}
+
+    /* Hero */
+    .hero{
+      min-height:92vh;
+      display:grid;
+      place-items:center;
+      padding:60px 0;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:44px;
+      align-items:center;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#e8f0ff;
+      color:#0b63f6;
+      padding:8px 14px;
+      border-radius:999px;
+      font-weight:700;
+      margin-bottom:18px;
+      border:1px solid #cfe0ff;
+    }
+    h1{
+      font-size:clamp(2.4rem,5vw,4.6rem);
+      line-height:1.02;
+      color:#0f172a;
+      margin-bottom:18px;
+    }
+    .hero p{
+      font-size:1.08rem;
+      line-height:1.8;
+      margin-bottom:28px;
+      color:#475569;
+    }
+    .hero-actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-bottom:28px;
+    }
+    .ghost{
+      display:inline-block;
+      padding:14px 22px;
+      border-radius:14px;
+      border:1px solid #cbd5e1;
+      text-decoration:none;
+      color:#0f172a;
+      font-weight:700;
+      background:#fff;
+    }
+
+    .stats{
+      display:flex;
+      gap:26px;
+      flex-wrap:wrap;
+    }
+    .stat strong{
+      display:block;
+      font-size:1.5rem;
+      color:#0f172a;
+    }
+
+    /* Dashboard mockup */
+    .mockup{
+      background:rgba(255,255,255,.7);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:28px;
+      padding:20px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 20px 40px rgba(2,6,23,.12);
+    }
+    .screen{
+      background:#0f172a;
+      border-radius:22px;
+      overflow:hidden;
+      color:#fff;
+    }
+    .screen-top{
+      display:flex;
+      gap:8px;
+      padding:12px 14px;
+      background:#111827;
+    }
+    .dot{width:10px;height:10px;border-radius:50%;background:#64748b}
+    .slides{
+      display:flex;
+      width:300%;
+      animation:slide 9s infinite;
+    }
+    .slide{
+      width:100%;
+      padding:22px;
+      min-height:280px;
+    }
+    .slide h3{margin-bottom:10px}
+    .metric{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:16px;
+      margin-top:14px;
+    }
+    .bar{
+      height:10px;
+      border-radius:999px;
+      background:#1e293b;
+      overflow:hidden;
+      margin-top:10px;
+    }
+    .bar span{
+      display:block;height:100%;
+      background:linear-gradient(90deg,#60a5fa,#2563eb);
+    }
+    @keyframes slide{
+      0%,30%{transform:translateX(0)}
+      33%,63%{transform:translateX(-33.333%)}
+      66%,96%{transform:translateX(-66.666%)}
+      100%{transform:translateX(0)}
+    }
+
+    /* Sections */
+    section{padding:84px 0}
+    .section-head{text-align:center;margin-bottom:44px}
+    .section-head h2{
+      font-size:clamp(1.8rem,4vw,2.8rem);
+      color:#0f172a;
+      margin-bottom:10px;
+    }
+    .section-head p{
+      max-width:700px;
+      margin:auto;
+      color:#475569;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+    }
+    .card{
+      background:rgba(255,255,255,.75);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:22px;
+      padding:26px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 14px 30px rgba(2,6,23,.08);
+      transition:.25s ease;
+    }
+    .card:hover{
+      transform:translateY(-6px);
+      box-shadow:0 20px 36px rgba(2,6,23,.12);
+    }
+    .icon{
+      width:58px;height:58px;border-radius:16px;
+      background:#e8f0ff;color:#0b63f6;
+      display:grid;place-items:center;
+      font-size:1.6rem;
+      margin-bottom:16px;
+    }
+    .card h3{
+      color:#0f172a;
+      margin-bottom:10px;
+    }
+
+    /* About */
+    .about{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:36px;
+      align-items:center;
+    }
+    .about-box{
+      background:rgba(255,255,255,.78);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:26px;
+      padding:30px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 16px 32px rgba(2,6,23,.08);
+    }
+    .check{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom:14px;
+    }
+    .check span{color:#16a34a;font-weight:900}
+
+    /* Testimonials */
+    .testimonials{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+    }
+    .testimonial{
+      background:rgba(255,255,255,.78);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:22px;
+      padding:24px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 16px 32px rgba(2,6,23,.08);
+    }
+    .stars{color:#f59e0b;margin-bottom:12px}
+    .person{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-top:16px;
+    }
+    .avatar{
+      width:46px;height:46px;border-radius:50%;
+      background:#dbeafe;color:#0b63f6;
+      display:grid;place-items:center;font-weight:800;
+    }
+
+    /* CTA */
+    .cta-banner{
+      background:linear-gradient(135deg,#0b63f6,#2563eb);
+      color:#fff;
+      border-radius:28px;
+      padding:42px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:24px;
+      align-items:center;
+      box-shadow:0 20px 40px rgba(11,99,246,.22);
+    }
+    .cta-banner h2{
+      font-size:clamp(1.8rem,3vw,2.6rem);
+      margin-bottom:10px;
+    }
+    .cta-banner .btn{
+      background:#fff;
+      color:#0b63f6;
+      box-shadow:none;
+    }
+
+    /* Contact */
+    .contact{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:26px;
+    }
+    .contact-card{
+      background:rgba(255,255,255,.78);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:24px;
+      padding:28px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 16px 32px rgba(2,6,23,.08);
+    }
+    .contact-item{
+      display:flex;
+      gap:14px;
+      margin-bottom:18px;
+      align-items:flex-start;
+    }
+    .contact-icon{
+      width:44px;height:44px;border-radius:12px;
+      background:#e8f0ff;color:#0b63f6;
+      display:grid;place-items:center;font-weight:700;
+      flex-shrink:0;
+    }
+    .contact-item h4{
+      color:#0f172a;
+      margin-bottom:4px;
+    }
+    .contact a{
+      color:#0b63f6;
+      font-weight:700;
+      text-decoration:none;
+    }
+
+    footer{
+      padding:30px 0 44px;
+      text-align:center;
+      color:#64748b;
+      border-top:1px solid #e2e8f0;
+    }
+
+    /* Floating WhatsApp */
+    .whatsapp{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      width:62px;height:62px;
+      border-radius:50%;
+      background:#25d366;
+      color:#fff;
+      display:grid;place-items:center;
+      text-decoration:none;
+      font-size:1.7rem;
+      box-shadow:0 14px 28px rgba(37,211,102,.35);
+      z-index:999;
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse{
+      0%{transform:scale(1)}
+      50%{transform:scale(1.08)}
+      100%{transform:scale(1)}
+    }
+
+    /* Responsive */
+    @media (max-width:920px){
+      .hero-grid,
+      .about,
+      .contact,
+      .cta-banner{
+        grid-template-columns:1fr;
+      }
+      .grid,.testimonials{
+        grid-template-columns:1fr 1fr;
+      }
+      .cta-banner{text-align:center}
+    }
+    @media (max-width:640px){
+      nav{display:none}
+      .hero{padding-top:30px}
+      .grid,.testimonials{
+        grid-template-columns:1fr;
+      }
+      .hero-actions{
+        flex-direction:column;
+      }
+      .hero-actions a{
+        width:100%;
+        text-align:center;
+      }
+      .cta-banner{padding:30px}
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>ThinkPlus School Management System</h1>
-    <p>Manage fees, exams, students, SMS communication and payroll from one modern platform built for Kenyan schools.</p>
 
-    <a class="btn" href="https://wa.me/254707649890?text=Hello%20ThinkPlus,%20I%20would%20like%20a%20free%20demo" target="_blank">
-      Book a Free Demo
-    </a>
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <div class="logo-badge">TP</div>
+        ThinkPlus
+      </div>
 
-    <p style="margin-top:25px; font-size:14px; color:#64748b;">
-      📱 WhatsApp: <strong>0707 649 890</strong> <br>
-      📍 Kilifi, Kenya
-    </p>
-  </div>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-grid">
+
+      <div>
+        <div class="badge">🇰🇪 Built for Kenyan Schools</div>
+
+        <h1>School Management Reimagined</h1>
+
+        <p>
+          ThinkPlus helps schools manage fees, exams, report cards, students,
+          SMS communication and payroll from one secure modern platform.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn" href="https://wa.me/254707649890" target="_blank">Book Free Demo</a>
+          <a class="ghost" href="#features">Explore Features</a>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><strong>50+</strong>Schools</div>
+          <div class="stat"><strong>10k+</strong>Students</div>
+          <div class="stat"><strong>24/7</strong>Support</div>
+        </div>
+      </div>
+
+      <div class="mockup">
+        <div class="screen">
+          <div class="screen-top">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+
+          <div class="slides">
+
+            <div class="slide">
+              <h3>Fees Dashboard</h3>
+              <p>Real-time collection and balance tracking.</p>
+              <div class="metric">
+                <strong>KES 2.4M Collected</strong>
+                <div class="bar"><span style="width:84%"></span></div>
+              </div>
+            </div>
+
+            <div class="slide">
+              <h3>Exam Results</h3>
+              <p>Automated grading and report cards.</p>
+              <div class="metric">
+                <strong>98% Results Processed</strong>
+                <div class="bar"><span style="width:92%"></span></div>
+              </div>
+            </div>
+
+            <div class="slide">
+              <h3>Parent SMS</h3>
+              <p>Instant notifications and reminders.</p>
+              <div class="metric">
+                <strong>12,480 Messages Sent</strong>
+                <div class="bar"><span style="width:96%"></span></div>
+              </div>
+            </div>
+
+          </div>
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThinkPlus | School Management System</title>
+  <meta name="description" content="ThinkPlus - Modern school management system for Kenyan schools." />
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3659/3659898.png" />
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Inter,Arial,sans-serif;
+      background:#f5f8ff;
+      color:#1e293b;
+      overflow-x:hidden;
+    }
+
+    /* Animated background */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(11,99,246,.15), transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(96,165,250,.18), transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(37,99,235,.12), transparent 45%);
+      z-index:-1;
+      animation:bgMove 12s ease-in-out infinite alternate;
+    }
+    @keyframes bgMove{
+      from{transform:translateY(0)}
+      to{transform:translateY(-20px)}
+    }
+
+    .container{width:min(1120px,92%);margin:auto}
+
+    header{
+      position:sticky;
+      top:0;
+      backdrop-filter:blur(10px);
+      background:rgba(255,255,255,.8);
+      border-bottom:1px solid #e2e8f0;
+      z-index:1000;
+    }
+    .nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:16px 0;
+    }
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      color:#0b63f6;
+      font-size:1.2rem;
+    }
+    .logo-badge{
+      width:42px;height:42px;border-radius:14px;
+      background:linear-gradient(135deg,#0b63f6,#60a5fa);
+      color:#fff;display:grid;place-items:center;
+      box-shadow:0 8px 20px rgba(11,99,246,.25);
+    }
+    nav a{
+      margin-left:22px;
+      color:#334155;
+      text-decoration:none;
+      font-weight:600;
+    }
+    nav a:hover{color:#0b63f6}
+
+    .btn{
+      display:inline-block;
+      background:linear-gradient(135deg,#0b63f6,#2563eb);
+      color:#fff;
+      padding:14px 22px;
+      border-radius:14px;
+      text-decoration:none;
+      font-weight:700;
+      box-shadow:0 12px 24px rgba(11,99,246,.25);
+      transition:.25s ease;
+    }
+    .btn:hover{transform:translateY(-3px)}
+
+    /* Hero */
+    .hero{
+      min-height:92vh;
+      display:grid;
+      place-items:center;
+      padding:60px 0;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:44px;
+      align-items:center;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#e8f0ff;
+      color:#0b63f6;
+      padding:8px 14px;
+      border-radius:999px;
+      font-weight:700;
+      margin-bottom:18px;
+      border:1px solid #cfe0ff;
+    }
+    h1{
+      font-size:clamp(2.4rem,5vw,4.6rem);
+      line-height:1.02;
+      color:#0f172a;
+      margin-bottom:18px;
+    }
+    .hero p{
+      font-size:1.08rem;
+      line-height:1.8;
+      margin-bottom:28px;
+      color:#475569;
+    }
+    .hero-actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-bottom:28px;
+    }
+    .ghost{
+      display:inline-block;
+      padding:14px 22px;
+      border-radius:14px;
+      border:1px solid #cbd5e1;
+      text-decoration:none;
+      color:#0f172a;
+      font-weight:700;
+      background:#fff;
+    }
+
+    .stats{
+      display:flex;
+      gap:26px;
+      flex-wrap:wrap;
+    }
+    .stat strong{
+      display:block;
+      font-size:1.5rem;
+      color:#0f172a;
+    }
+
+    /* Dashboard mockup */
+    .mockup{
+      background:rgba(255,255,255,.7);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:28px;
+      padding:20px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 20px 40px rgba(2,6,23,.12);
+    }
+    .screen{
+      background:#0f172a;
+      border-radius:22px;
+      overflow:hidden;
+      color:#fff;
+    }
+    .screen-top{
+      display:flex;
+      gap:8px;
+      padding:12px 14px;
+      background:#111827;
+    }
+    .dot{width:10px;height:10px;border-radius:50%;background:#64748b}
+    .slides{
+      display:flex;
+      width:300%;
+      animation:slide 9s infinite;
+    }
+    .slide{
+      width:100%;
+      padding:22px;
+      min-height:280px;
+    }
+    .slide h3{margin-bottom:10px}
+    .metric{
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:16px;
+      margin-top:14px;
+    }
+    .bar{
+      height:10px;
+      border-radius:999px;
+      background:#1e293b;
+      overflow:hidden;
+      margin-top:10px;
+    }
+    .bar span{
+      display:block;height:100%;
+      background:linear-gradient(90deg,#60a5fa,#2563eb);
+    }
+    @keyframes slide{
+      0%,30%{transform:translateX(0)}
+      33%,63%{transform:translateX(-33.333%)}
+      66%,96%{transform:translateX(-66.666%)}
+      100%{transform:translateX(0)}
+    }
+
+    /* Sections */
+    section{padding:84px 0}
+    .section-head{text-align:center;margin-bottom:44px}
+    .section-head h2{
+      font-size:clamp(1.8rem,4vw,2.8rem);
+      color:#0f172a;
+      margin-bottom:10px;
+    }
+    .section-head p{
+      max-width:700px;
+      margin:auto;
+      color:#475569;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+    }
+    .card{
+      background:rgba(255,255,255,.75);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:22px;
+      padding:26px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 14px 30px rgba(2,6,23,.08);
+      transition:.25s ease;
+    }
+    .card:hover{
+      transform:translateY(-6px);
+      box-shadow:0 20px 36px rgba(2,6,23,.12);
+    }
+    .icon{
+      width:58px;height:58px;border-radius:16px;
+      background:#e8f0ff;color:#0b63f6;
+      display:grid;place-items:center;
+      font-size:1.6rem;
+      margin-bottom:16px;
+    }
+    .card h3{
+      color:#0f172a;
+      margin-bottom:10px;
+    }
+
+    /* About */
+    .about{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:36px;
+      align-items:center;
+    }
+    .about-box{
+      background:rgba(255,255,255,.78);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:26px;
+      padding:30px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 16px 32px rgba(2,6,23,.08);
+    }
+    .check{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom:14px;
+    }
+    .check span{color:#16a34a;font-weight:900}
+
+    /* Testimonials */
+    .testimonials{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+    }
+    .testimonial{
+      background:rgba(255,255,255,.78);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:22px;
+      padding:24px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 16px 32px rgba(2,6,23,.08);
+    }
+    .stars{color:#f59e0b;margin-bottom:12px}
+    .person{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-top:16px;
+    }
+    .avatar{
+      width:46px;height:46px;border-radius:50%;
+      background:#dbeafe;color:#0b63f6;
+      display:grid;place-items:center;font-weight:800;
+    }
+
+    /* CTA */
+    .cta-banner{
+      background:linear-gradient(135deg,#0b63f6,#2563eb);
+      color:#fff;
+      border-radius:28px;
+      padding:42px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:24px;
+      align-items:center;
+      box-shadow:0 20px 40px rgba(11,99,246,.22);
+    }
+    .cta-banner h2{
+      font-size:clamp(1.8rem,3vw,2.6rem);
+      margin-bottom:10px;
+    }
+    .cta-banner .btn{
+      background:#fff;
+      color:#0b63f6;
+      box-shadow:none;
+    }
+
+    /* Contact */
+    .contact{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:26px;
+    }
+    .contact-card{
+      background:rgba(255,255,255,.78);
+      border:1px solid rgba(255,255,255,.7);
+      border-radius:24px;
+      padding:28px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 16px 32px rgba(2,6,23,.08);
+    }
+    .contact-item{
+      display:flex;
+      gap:14px;
+      margin-bottom:18px;
+      align-items:flex-start;
+    }
+    .contact-icon{
+      width:44px;height:44px;border-radius:12px;
+      background:#e8f0ff;color:#0b63f6;
+      display:grid;place-items:center;font-weight:700;
+      flex-shrink:0;
+    }
+    .contact-item h4{
+      color:#0f172a;
+      margin-bottom:4px;
+    }
+    .contact a{
+      color:#0b63f6;
+      font-weight:700;
+      text-decoration:none;
+    }
+
+    footer{
+      padding:30px 0 44px;
+      text-align:center;
+      color:#64748b;
+      border-top:1px solid #e2e8f0;
+    }
+
+    /* Floating WhatsApp */
+    .whatsapp{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      width:62px;height:62px;
+      border-radius:50%;
+      background:#25d366;
+      color:#fff;
+      display:grid;place-items:center;
+      text-decoration:none;
+      font-size:1.7rem;
+      box-shadow:0 14px 28px rgba(37,211,102,.35);
+      z-index:999;
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse{
+      0%{transform:scale(1)}
+      50%{transform:scale(1.08)}
+      100%{transform:scale(1)}
+    }
+
+    /* Responsive */
+    @media (max-width:920px){
+      .hero-grid,
+      .about,
+      .contact,
+      .cta-banner{
+        grid-template-columns:1fr;
+      }
+      .grid,.testimonials{
+        grid-template-columns:1fr 1fr;
+      }
+      .cta-banner{text-align:center}
+    }
+    @media (max-width:640px){
+      nav{display:none}
+      .hero{padding-top:30px}
+      .grid,.testimonials{
+        grid-template-columns:1fr;
+      }
+      .hero-actions{
+        flex-direction:column;
+      }
+      .hero-actions a{
+        width:100%;
+        text-align:center;
+      }
+      .cta-banner{padding:30px}
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <div class="logo">
+        <div class="logo-badge">TP</div>
+        ThinkPlus
+      </div>
+
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-grid">
+
+      <div>
+        <div class="badge">🇰🇪 Built for Kenyan Schools</div>
+
+        <h1>School Management Reimagined</h1>
+
+        <p>
+          ThinkPlus helps schools manage fees, exams, report cards, students,
+          SMS communication and payroll from one secure modern platform.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn" href="https://wa.me/254707649890" target="_blank">Book Free Demo</a>
+          <a class="ghost" href="#features">Explore Features</a>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><strong>50+</strong>Schools</div>
+          <div class="stat"><strong>10k+</strong>Students</div>
+          <div class="stat"><strong>24/7</strong>Support</div>
+        </div>
+      </div>
+
+      <div class="mockup">
+        <div class="screen">
+          <div class="screen-top">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+
+          <div class="slides">
+
+            <div class="slide">
+              <h3>Fees Dashboard</h3>
+              <p>Real-time collection and balance tracking.</p>
+              <div class="metric">
+                <strong>KES 2.4M Collected</strong>
+                <div class="bar"><span style="width:84%"></span></div>
+              </div>
+            </div>
+
+            <div class="slide">
+              <h3>Exam Results</h3>
+              <p>Automated grading and report cards.</p>
+              <div class="metric">
+                <strong>98% Results Processed</strong>
+                <div class="bar"><span style="width:92%"></span></div>
+              </div>
+            </div>
+
+            <div class="slide">
+              <h3>Parent SMS</h3>
+              <p>Instant notifications and reminders.</p>
+              <div class="metric">
+                <strong>12,480 Messages Sent</strong>
+                <div class="bar"><span style="width:96%"></span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="container">
+
+      <div class="section-head">
+        <h2>Everything Your School Needs</h2>
+        <p>Replace paperwork and disconnected spreadsheets with one integrated management system.</p>
+      </div>
+
+      <div class="grid">
+
+        <div class="card">
+          <div class="icon">💰</div>
+          <h3>Fees Management</h3>
+          <p>Track payments, balances, receipts and reminders automatically.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">📝</div>
+          <h3>Exams &amp; Reports</h3>
+          <p>Enter marks, grade automatically and print report cards instantly.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">👨‍🎓</div>
+          <h3>Student Records</h3>
+          <p>Maintain complete student profiles and academic history.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">📲</div>
+          <h3>SMS to Parents</h3>
+          <p>Send reminders, meeting notices and exam results instantly.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">👩‍🏫</div>
+          <h3>Staff Management</h3>
+          <p>Store teacher records, departments and employment details.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">💼</div>
+          <h3>Payroll</h3>
+          <p>Prepare salaries and payroll summaries with less effort.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container about">
+
+      <div>
+        <div class="section-head" style="text-align:left;margin-bottom:20px">
+          <h2>Designed for Kenyan Schools</h2>
+          <p>Affordable, simple and supported locally for primary and secondary schools.</p>
+        </div>
+
+        <div class="check"><span>✔</span><div>Setup in less than 7 days</div></div>
+        <div class="check"><span>✔</span><div>Works on phone, tablet and computer</div></div>
+        <div class="check"><span>✔</span><div>No dedicated IT staff required</div></div>
+        <div class="check"><span>✔</span><div>Local WhatsApp support</div></div>
+      </div>
+
+      <div class="about-box">
+        <h3 style="color:#0f172a;margin-bottom:14px">Why schools choose ThinkPlus</h3>
+        <p style="margin-bottom:18px">
+          Administrators save time, teachers prepare reports faster, and parents receive timely communication.
+        </p>
+
+        <div style="background:#f1f5f9;border-radius:16px;padding:18px">
+          <strong style="color:#0f172a">Average time saved</strong>
+          <div class="bar" style="background:#cbd5e1;margin-top:10px">
+            <span style="width:82%"></span>
+          </div>
+          <p style="margin-top:10px;font-size:.95rem">
+            Schools report significantly faster fee reconciliation and report card preparation.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+
+      <div class="section-head">
+        <h2>Trusted by School Leaders</h2>
+        <p>Feedback from administrators and teachers using ThinkPlus.</p>
+      </div>
+
+      <div class="testimonials">
+
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p>“Fee collection is now transparent and parents receive receipts immediately.”</p>
+          <div class="person">
+            <div class="avatar">JM</div>
+            <div><strong>Jane Mwangi</strong><br/>School Bursar</div>
+          </div>
+        </div>
+
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p>“Report cards that used to take days are ready within minutes.”</p>
+          <div class="person">
+            <div class="avatar">PK</div>
+            <div><strong>Peter Kimani</strong><br/>Deputy Principal</div>
+          </div>
+        </div>
+
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p>“Parents appreciate the SMS reminders and exam result notifications.”</p>
+          <div class="person">
+            <div class="avatar">SW</div>
+            <div><strong>Sarah Wanjiku</strong><br/>Headteacher</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="cta-banner">
+        <div>
+          <h2>Ready to modernize your school?</h2>
+          <p>Book a free demo and see ThinkPlus in action on your phone or computer.</p>
+        </div>
+
+        <a class="btn"
+           href="https://wa.me/254707649890?text=Hello%20ThinkPlus,%20I%20would%20like%20a%20free%20demo%20for%20my%20school."
+           target="_blank">
+           Book Free Demo
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container contact">
+
+      <div class="contact-card">
+        <h2 style="color:#0f172a;margin-bottom:18px">Contact ThinkPlus</h2>
+
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <h4>Phone / WhatsApp</h4>
+            <a href="tel:+254707649890">0707 649 890</a>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">🌐</div>
+          <div>
+            <h4>Website</h4>
+            <a href="https://jose-ctr.github.io/thinkplus-website/" target="_blank">Live Demo</a>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-icon">👤</div>
+          <div>
+            <h4>Founder</h4>
+            Joseph Mbui – ThinkPlus Kilifi
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <h2 style="color:#0f172a;margin-bottom:18px">Book a Demo</h2>
+        <p style="margin-bottom:22px">
+          Send us a WhatsApp message and we will schedule a free demonstration for your school.
+        </p>
+
+        <a class="btn" style="width:100%;text-align:center"
+           href="https://wa.me/254707649890?text=Hello%20ThinkPlus,%20I%20would%20like%20a%20free%20demo%20for%20my%20school."
+           target="_blank">
+           Chat on WhatsApp
+        </a>
+
+        <p style="margin-top:18px;font-size:.95rem">
+          Available Monday – Saturday, 8:00am – 6:00pm.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 ThinkPlus School Management System. All rights reserved.</p>
+      <p>Empowering Education Through Technology in Kenya.</p>
+    </div>
+  </footer>
+
+  <a class="whatsapp"
+     href="https://wa.me/254707649890?text=Hello%20ThinkPlus,%20I%20am%20interested%20in%20your%20school%20management%20system."
+     target="_blank"
+     aria-label="Chat on WhatsApp">💬</a>
+
 </body>
-</html>
+                </html></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="container">
+
+      <div class="section-head">
+        <h2>Everything Your School Needs</h2>
+        <p>Replace paperwork and disconnected spreadsheets with one integrated management system.</p>
+      </div>
+
+      <div class="grid">
+
+        <div class="card">
+          <div class="icon">💰</div>
+          <h3>Fees Management</h3>
+          <p>Track payments, balances, receipts and reminders automatically.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">📝</div>
+          <h3>Exams &amp; Reports</h3>
+          <p>Enter marks, grade automatically and print report cards instantly.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">👨‍🎓</div>
+          <h3>Student Records</h3>
+          <p>Maintain complete student profiles and academic history.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">📲</div>
+          <h3>SMS to Parents</h3>
+          <p>Send reminders, meeting notices and exam results instantly.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">👩‍🏫</div>
+          <h3>Staff Management</h3>
+          <p>Store teacher records, departments and employment details.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">💼</div>
+          <h3>Payroll</h3>
+          <p>Prepare salaries and payroll summaries with less effort.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container about">
+
+      <div>
+        <div class="section-head" style="text-align:left;margin-bottom:20px">
+          <h2>Designed for Kenyan Schools</h2>
+          <p>Affordable, simple and supported locally for primary and secondary schools.</p>
+        </div>
+
+        <div class="check"><span>✔</span><div>Setup in less than 7 days</div></div>
+        <div class="check"><span>✔</span><div>Works on phone, tablet and computer</div></div>
+        <div class="check"><span>✔</span><div>No dedicated IT staff required</div></div>
+        <div class="check"><span>✔</span><div>Local WhatsApp support</div></div>
+      </div>
+
+      <div class="about-box">
+        <h3 style="color:#0f172a;margin-bottom:14px">Why schools choose ThinkPlus</h3>
+        <p style="margin-bottom:18px">
+          Administrators save time, teachers prepare reports faster, and parents receive timely communication.
+        </p>
+
+        <div style="background:#f1f5f9;border-radius:16px;padding:18px">
+          <strong style="color:#0f172a">Average time saved</strong>
+          <div class="bar" style="background:#cbd5e1;margin-top:10px">
+            <span style="width:82%"></span>
+          </div>
+          <p style="margin-top:10px;font-size:.95rem">
+            Schools report significantly faster fee reconciliation and report card preparation.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+
+      <div class="section-head">
+        <h2>Trusted by School Leaders</h2>
+        <p>Feedback from administrators and teachers using ThinkPlus.</p>
+      </div>
+
+      <div class="testimonials">
+
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <p>“Fee collection is now transparent and parents receive receipts immediately.”</p>
+          <div class="person">
+            <div class="avatar">JM</div>
