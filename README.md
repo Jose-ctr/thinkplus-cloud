@@ -19,7 +19,7 @@ Used by 50+ schools to manage Fees, Exams, Report Cards, SMS & Payroll.
 
 ### **BOOK A FREE DEMO**
 📱 **WhatsApp**: 0707649890
-👤 **Founder**: Joseph - ThinkPlus Kilifi
+👤 **Founder**: Joseph Mbui- ThinkPlus Kilifi
 🌐 **Website**: https://jose-ctr.github.io/thinkplus-website/
 
 ---
