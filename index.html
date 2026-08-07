@@ -1,89 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ThinkPlus Cloud | School Management System</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-  :root{
-    --bg:#0B1026; --bg2:#111B4A; --card:#131B3D; --card2:#182354;
-    --primary:#2563EB; --primary2:#4F8CFF; --text:#F8FAFC; 
-    --muted:#CBD5E1; --border:rgba(255,255,255,.08);
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:Inter,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text)}
-  @keyframes floatGlow {0%{transform:translateY(0)}100%{transform:translateY(-8px)}}
-  .container{width:min(1120px,92%);margin:auto}
-  header{position:sticky;top:0;backdrop-filter:blur(10px);background:rgba(11,16,38,.75);border-bottom:1px solid var(--border)}
-  .nav{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
-  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}
-  .logo-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--primary2));display:grid;place-items:center;color:#fff}
-  .btn{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;padding:12px 22px;border-radius:12px;text-decoration:none;font-weight:600}
-  .badge{background:rgba(37,99,235,.15);color:#CFE0FF;border:1px solid rgba(79,140,255,.35);padding:6px 12px;border-radius:20px;font-size:12px;display:inline-block;margin-bottom:16px}
-  h1{font-size:48px;line-height:1.1;background:linear-gradient(135deg,#FFFFFF,var(--primary2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}
-  .hero{padding:100px 0;text-align:center}
-  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
-  .card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;padding:24px}
-  .stat strong{font-size:36px;display:block;background:linear-gradient(135deg,#FFFFFF,var(--primary2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  @media(max-width:900px){.grid-3{grid-template-columns:1fr}}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ThinkPlus Cloud | School Management SaaS for Kenyan Schools</title>
+<meta name="description" content="Cloud-based school management SaaS for Kenyan schools. Fees, Exams, M-Pesa, PDF Reports. KES 5000/month. 14-day free trial.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#010126; --bg2:#111B4A; --card:#131B3D; --card2:#182354;
+  --primary:#3E63EB; --primary2:#4FBFFF; --text:#F8FAFC;
+  --muted:#CBD5E1; --border:rgba(255,255,255,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text)}
+.container{width:min(1120px,92%);margin:auto}
+header{position:sticky;top:0;z-index:10;backdrop-filter:blur(10px);background:rgba(1,1,38,.75);border-bottom:1px solid var(--border)}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}
+.logo-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--primary2));display:grid;place-items:center;font-weight:800}
+.btn{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;padding:12px 22px;border-radius:12px;text-decoration:none;font-weight:600;display:inline-block;margin:5px;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.badge{background:rgba(37,99,235,.15);color:#CFE0FF;border:1px solid rgba(70,140,255,.35);padding:6px 12px;border-radius:999px;font-size:12px;display:inline-block;margin-bottom:16px}
+h1{font-size:48px;line-height:1.1;background:linear-gradient(135deg,#FFFFFF,var(--primary2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}
+.hero{padding:100px 20px;text-align:center}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+.card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;padding:20px}
+.stat strong{font-size:36px;display:block;background:linear-gradient(135deg,#FFFFFF,var(--primary2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* PRICING SECTION */
+.pricing{padding:80px 20px;background:#f8f9fa;color:#111}
+.section-title{text-align:center;font-size:2.5rem;margin-bottom:10px;color:#111}
+.section-subtitle{text-align:center;color:#666;margin-bottom:50px}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;max-width:1200px;margin:0 auto}
+.pricing-card{background:white;border-radius:12px;padding:40px 30px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,0.1);position:relative}
+.pricing-card.featured{border:3px solid #007bff;transform:scale(1.05)}
+.pricing-card .badge-pop{position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:#007bff;color:white;padding:5px 20px;border-radius:20px;font-size:0.85rem;font-weight:bold}
+.price{margin:20px 0}
+.price .amount{font-size:3rem;font-weight:bold;color:#007bff}
+.price .period{font-size:1rem;color:#666}
+.pricing-card ul{list-style:none;padding:0;margin:30px 0;text-align:left}
+.pricing-card ul li{padding:10px 0;border-bottom:1px solid #eee}
+.pricing-note{text-align:center;margin-top:40px;color:#666}
+
+footer{padding:40px 20px;text-align:center;border-top:1px solid var(--border);color:var(--muted)}
+@media(max-width:900px){
+  .grid-3{grid-template-columns:1fr}
+  .pricing-card.featured{transform:scale(1)}
+  h1{font-size:32px}
+  .section-title{font-size:2rem}
+</style>
 </head>
 <body>
-  <header>
-    <div class="container nav">
-      <div class="logo"><div class="logo-badge">TPC</div>ThinkPlus Cloud</div>
-      <a href="#pricing" class="btn">Login</a>
+<header>
+  <div class="container nav">
+    <div class="logo"><div class="logo-badge">TPC</div>ThinkPlus Cloud</div>
+    <div>
+      <a href="#pricing" class="btn-outline btn">Pricing</a>
+      <a href="https://wa.me/254707649890" class="btn">Login</a>
     </div>
-  </header>
+  </div>
+</header>
 
-  <section class="hero">
-    <div class="container">
-      <div style="font-size:3rem;margin-bottom:12px;filter:drop-shadow(0 0 16px rgba(79,140,255,.55));animation:floatGlow 4s ease-in-out infinite alternate;">📊</div>
-      <div class="badge">☁️ Cloud-based SaaS for Kenyan Schools</div>
-      <h1>Run Your Entire School in the Cloud</h1>
-      <p style="color:var(--muted);font-size:18px">ThinkPlus Cloud is a subscription-based school management platform that helps schools manage fees, academics, and administration from anywhere.</p>
-      <a href="#pricing" class="btn" style="margin-top:24px;display:inline-block">Start Free Trial</a>
-      
-      <div class="grid-3">
-        <div class="card stat"><strong>50+</strong><span style="color:var(--muted)">Active Schools</span></div>
-        <div class="card stat"><strong>99.9%</strong><span style="color:var(--muted)">Cloud Uptime</span></div>
-        <div class="card stat"><strong>24/7</strong><span style="color:var(--muted)">Support</span></div>
+<section class="hero">
+  <div class="container">
+    <div style="font-size:3rem;margin-bottom:12px">☁️</div>
+    <div class="badge">☁️ Cloud-based SaaS for Kenyan Schools</div>
+    <h1>Run Your Entire School in the Cloud</h1>
+    <p style="color:var(--muted);font-size:18px;margin:20px 0;max-width:700px;margin-left:auto;margin-right:auto">
+      Fees, Exams, SMS, Payroll, PDF Reports — All in 1 Place. 
+      No Installation. No Servers. Works on any Phone.
+    </p>
+    <a href="#pricing" class="btn">Start 14-Day Free Trial</a>
+    <a href="https://wa.me/254707649890?text=Hi%20Joseph,%20I%20want%20a%20free%20demo" class="btn btn-outline">Book Free Demo</a>
+    
+    <div class="grid-3">
+      <div class="card stat"><strong>50+</strong><span style="color:var(--muted)">Active Schools</span></div>
+      <div class="card stat"><strong>99.9%</strong><span style="color:var(--muted)">Cloud Uptime</span></div>
+      <div class="card stat"><strong>24/7</strong><span style="color:var(--muted)">Kenyan Support</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="container">
+    <h2 class="section-title">Simple, Transparent SaaS Pricing</h2>
+    <p class="section-subtitle">Pay monthly. Cancel anytime. No setup fees.</p>
+    
+    <div class="pricing-grid">
+      <!-- BASIC -->
+      <div class="pricing-card">
+        <h3>Basic</h3>
+        <div class="price">
+          <span class="amount">KES 5,000</span><span class="period">/month</span>
+        </div>
+        <p style="color:#666">Best for Primary Schools</p>
+        <ul>
+          <li>✓ Up to 300 Students</li>
+          <li>✓ Fees Management + M-Pesa</li>
+          <li>✓ Exams & PDF Report Cards</li>
+          <li>✓ SMS to Parents</li>
+          <li>✓ Daily Cloud Backups</li>
+        </ul>
+        <a href="https://wa.me/254707649890?text=Hi,%20I%20want%20the%20Basic%20Plan" class="btn btn-outline">Get Started</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="pricing-card featured">
+        <span class="badge-pop">Most Popular</span>
+        <h3>Pro</h3>
+        <div class="price">
+          <span class="amount">KES 15,000</span><span class="period">/month</span>
+        </div>
+        <p style="color:#666">Best for Secondary Schools</p>
+        <ul>
+          <li>✓ Up to 1000 Students</li>
+          <li>✓ Everything in Basic</li>
+          <li>✓ Payroll & HR</li>
+          <li>✓ WhatsApp Broadcast</li>
+          <li>✓ Analytics Dashboard</li>
+          <li>✓ Priority Support</li>
+        </ul>
+        <a href="https://wa.me/254707649890?text=Hi,%20I%20want%20the%20Pro%20Plan%20Trial" class="btn">Start Free Trial</a>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="pricing-card">
+        <h3>Enterprise</h3>
+        <div class="price">
+          <span class="amount">Custom</span>
+        </div>
+        <p style="color:#666">For School Chains & Groups</p>
+        <ul>
+          <li>✓ Unlimited Students</li>
+          <li>✓ Everything in Pro</li>
+          <li>✓ API Access</li>
+          <li>✓ Dedicated Account Manager</li>
+          <li>✓ On-site Training</li>
+        </ul>
+        <a href="https://wa.me/254707649890?text=Hi,%20I%20want%20Enterprise%20Pricing" class="btn btn-outline">Contact Sales</a>
       </div>
     </div>
-  </section>
+    <p class="pricing-note">*All plans include automatic updates, 99.9% uptime, and 24/7 Kenyan support*</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p><strong>ThinkPlus Cloud</strong></p>
+    <p>Founder: Joseph Mbui | 📱 WhatsApp: 0707649890 | 📍 Kilifi, Kenya</p>
+    <p style="margin-top:20px">© 2026 ThinkPlus Cloud. Made with ❤️ in Kenya.</p>
+  </div>
+</footer>
 </body>
 </html>
-/* ========== THINKPLUS CLOUD SAAS STYLES ========== */
-.pricing { padding: 80px 20px; background: #f8f9fa; }
-.section-title { text-align: center; font-size: 2.5rem; margin-bottom: 10px; }
-.section-subtitle { text-align: center; color: #666; margin-bottom: 50px; }
-
-.pricing-grid { 
-  display: grid; 
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-  gap: 30px; 
-  max-width: 1200px; 
-  margin: 0 auto;
-}
-
-.pricing-card {
-  background: white;
-  border-radius: 12px;
-  padding: 40px 30px;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  position: relative;
-}
-.pricing-card.featured { border: 3px solid #007bff; transform: scale(1.05); }
-
-.badge {
-  position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-  background: #007bff; color: white; padding: 5px 20px; border-radius: 20px;
-  font-size: 0.85rem; font-weight: bold;
-}
-
-.price .amount { font-size: 3rem; font-weight: bold; color: #007bff; }
-.pricing-card ul { list-style: none; padding: 0; margin: 30px 0; text-align: left; }
-.btn-primary { background: #007bff; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; }
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
