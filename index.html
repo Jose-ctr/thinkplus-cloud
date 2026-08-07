@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ThinkPlus Cloud | School Management System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+  :root{
+    --bg:#0B1026; --bg2:#111B4A; --card:#131B3D; --card2:#182354;
+    --primary:#2563EB; --primary2:#4F8CFF; --text:#F8FAFC; 
+    --muted:#CBD5E1; --border:rgba(255,255,255,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:Inter,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text)}
+  @keyframes floatGlow {0%{transform:translateY(0)}100%{transform:translateY(-8px)}}
+  .container{width:min(1120px,92%);margin:auto}
+  header{position:sticky;top:0;backdrop-filter:blur(10px);background:rgba(11,16,38,.75);border-bottom:1px solid var(--border)}
+  .nav{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}
+  .logo-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--primary2));display:grid;place-items:center;color:#fff}
+  .btn{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;padding:12px 22px;border-radius:12px;text-decoration:none;font-weight:600}
+  .badge{background:rgba(37,99,235,.15);color:#CFE0FF;border:1px solid rgba(79,140,255,.35);padding:6px 12px;border-radius:20px;font-size:12px;display:inline-block;margin-bottom:16px}
+  h1{font-size:48px;line-height:1.1;background:linear-gradient(135deg,#FFFFFF,var(--primary2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}
+  .hero{padding:100px 0;text-align:center}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+  .card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;padding:24px}
+  .stat strong{font-size:36px;display:block;background:linear-gradient(135deg,#FFFFFF,var(--primary2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  @media(max-width:900px){.grid-3{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo"><div class="logo-badge">TPC</div>ThinkPlus Cloud</div>
+      <a href="#pricing" class="btn">Login</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div style="font-size:3rem;margin-bottom:12px;filter:drop-shadow(0 0 16px rgba(79,140,255,.55));animation:floatGlow 4s ease-in-out infinite alternate;">📊</div>
+      <div class="badge">☁️ Cloud-based SaaS for Kenyan Schools</div>
+      <h1>Run Your Entire School in the Cloud</h1>
+      <p style="color:var(--muted);font-size:18px">ThinkPlus Cloud is a subscription-based school management platform that helps schools manage fees, academics, and administration from anywhere.</p>
+      <a href="#pricing" class="btn" style="margin-top:24px;display:inline-block">Start Free Trial</a>
+      
+      <div class="grid-3">
+        <div class="card stat"><strong>50+</strong><span style="color:var(--muted)">Active Schools</span></div>
+        <div class="card stat"><strong>99.9%</strong><span style="color:var(--muted)">Cloud Uptime</span></div>
+        <div class="card stat"><strong>24/7</strong><span style="color:var(--muted)">Support</span></div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
