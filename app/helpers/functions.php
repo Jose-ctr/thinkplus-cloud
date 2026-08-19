@@ -13,6 +13,10 @@ declare(strict_types=1);
  * File:
  * app/helpers/functions.php
  *
+ * Description:
+ * Shared authentication, security, validation, session,
+ * formatting and database helper functions.
+ *
  * ============================================================
  */
 
@@ -76,7 +80,6 @@ function post(
     string $key,
     string $default = ''
 ): string {
-
     if (!isset($_POST[$key])) {
         return $default;
     }
@@ -95,7 +98,6 @@ function get(
     string $key,
     string $default = ''
 ): string {
-
     if (!isset($_GET[$key])) {
         return $default;
     }
@@ -150,30 +152,42 @@ function currentUser(): ?array
         return null;
     }
 
-    $stmt = $pdo->prepare(
-        'SELECT
-            id,
-            school_id,
-            role,
-            name,
-            email,
-            phone,
-            status,
-            last_login_at,
-            created_at
-         FROM users
-         WHERE id = ?
-         AND status = "active"
-         LIMIT 1'
-    );
+    try {
 
-    $stmt->execute([
-        $userId
-    ]);
+        $stmt = $pdo->prepare(
+            'SELECT
+                id,
+                school_id,
+                role,
+                name,
+                email,
+                phone,
+                status,
+                last_login_at,
+                created_at
+             FROM users
+             WHERE id = ?
+             AND status = "active"
+             LIMIT 1'
+        );
 
-    $user = $stmt->fetch();
+        $stmt->execute([
+            $userId
+        ]);
 
-    return $user ?: null;
+        $user = $stmt->fetch();
+
+        return $user ?: null;
+
+    } catch (Throwable $e) {
+
+        error_log(
+            'ThinkPlus currentUser error: ' .
+            $e->getMessage()
+        );
+
+        return null;
+    }
 }
 
 
@@ -191,7 +205,9 @@ function currentRole(): ?string
         return null;
     }
 
-    return $user['role'] ?? null;
+    return isset($user['role'])
+        ? (string) $user['role']
+        : null;
 }
 
 
@@ -201,10 +217,8 @@ function currentRole(): ?string
 |--------------------------------------------------------------------------
 */
 
-function hasRole(
-    string|array $roles
-): bool {
-
+function hasRole(string|array $roles): bool
+{
     $role = currentRole();
 
     if ($role === null) {
@@ -225,7 +239,7 @@ function hasRole(
 
 /*
 |--------------------------------------------------------------------------
-| CURRENT SCHOOL
+| CURRENT SCHOOL ID
 |--------------------------------------------------------------------------
 */
 
@@ -324,6 +338,21 @@ function setFlash(
     string $type = 'success'
 ): void {
 
+    $allowedTypes = [
+        'success',
+        'danger',
+        'warning',
+        'info'
+    ];
+
+    if (!in_array(
+        $type,
+        $allowedTypes,
+        true
+    )) {
+        $type = 'info';
+    }
+
     $_SESSION['message'] = $message;
     $_SESSION['message_type'] = $type;
 }
@@ -389,10 +418,9 @@ function csrfToken(): string
         !is_string($_SESSION['csrf_token'])
     ) {
 
-        $_SESSION['csrf_token'] =
-            bin2hex(
-                random_bytes(32)
-            );
+        $_SESSION['csrf_token'] = bin2hex(
+            random_bytes(32)
+        );
     }
 
     return $_SESSION['csrf_token'];
@@ -426,13 +454,14 @@ function verifyCsrfToken(
 
     if (
         $token === null ||
-        !isset($_SESSION['csrf_token'])
+        !isset($_SESSION['csrf_token']) ||
+        !is_string($_SESSION['csrf_token'])
     ) {
         return false;
     }
 
     return hash_equals(
-        (string) $_SESSION['csrf_token'],
+        $_SESSION['csrf_token'],
         $token
     );
 }
@@ -467,10 +496,8 @@ function requireCsrf(): void
 |--------------------------------------------------------------------------
 */
 
-function hashPassword(
-    string $password
-): string {
-
+function hashPassword(string $password): string
+{
     return password_hash(
         $password,
         PASSWORD_DEFAULT
@@ -488,7 +515,6 @@ function verifyPassword(
     string $password,
     string $hash
 ): bool {
-
     return password_verify(
         $password,
         $hash
@@ -502,10 +528,8 @@ function verifyPassword(
 |--------------------------------------------------------------------------
 */
 
-function validEmail(
-    string $email
-): bool {
-
+function validEmail(string $email): bool
+{
     return filter_var(
         $email,
         FILTER_VALIDATE_EMAIL
@@ -519,10 +543,8 @@ function validEmail(
 |--------------------------------------------------------------------------
 */
 
-function normalizeKenyanPhone(
-    string $phone
-): string {
-
+function normalizeKenyanPhone(string $phone): string
+{
     $phone = preg_replace(
         '/[\s\-()]/',
         '',
@@ -533,28 +555,40 @@ function normalizeKenyanPhone(
         return '';
     }
 
-    if (str_starts_with($phone, '+254')) {
+    /*
+     * +254712345678
+     */
+    if (preg_match(
+        '/^\+254(7\d{8}|1\d{8})$/',
+        $phone
+    )) {
         return $phone;
     }
 
-    if (str_starts_with($phone, '254')) {
+    /*
+     * 254712345678
+     */
+    if (preg_match(
+        '/^254(7\d{8}|1\d{8})$/',
+        $phone
+    )) {
         return '+' . $phone;
     }
 
-    if (
-        preg_match(
-            '/^0(7\d{8}|1\d{8})$/',
-            $phone
-        )
-    ) {
-
+    /*
+     * 0712345678 / 0112345678
+     */
+    if (preg_match(
+        '/^0(7\d{8}|1\d{8})$/',
+        $phone
+    )) {
         return '+254' . substr(
             $phone,
             1
         );
     }
 
-    return $phone;
+    return '';
 }
 
 
@@ -591,7 +625,6 @@ function intValue(
 function money(
     float|int|string $amount
 ): string {
-
     return number_format(
         (float) $amount,
         2,
@@ -654,11 +687,14 @@ function logoutUser(): void
         setcookie(
             session_name(),
             '',
-            time() - 42000,
-            $params['path'],
-            $params['domain'],
-            $params['secure'],
-            $params['httponly']
+            [
+                'expires' => time() - 42000,
+                'path' => $params['path'],
+                'domain' => $params['domain'],
+                'secure' => $params['secure'],
+                'httponly' => $params['httponly'],
+                'samesite' => $params['samesite'] ?? 'Lax'
+            ]
         );
     }
 
