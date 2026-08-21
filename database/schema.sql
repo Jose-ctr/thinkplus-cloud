@@ -885,11 +885,108 @@ CREATE TABLE sms_logs (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
--- ============================================================
+============================================================
 -- 19. M-PESA TRANSACTIONS
 -- ============================================================
 
 CREATE TABLE mpesa_transactions (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 
-    school_id INT U
+    school_id INT UNSIGNED NOT NULL,
+
+    student_id BIGINT UNSIGNED DEFAULT NULL,
+
+    merchant_request_id VARCHAR(100) DEFAULT NULL,
+
+    checkout_request_id VARCHAR(100) DEFAULT NULL,
+
+    mpesa_receipt VARCHAR(100) DEFAULT NULL,
+
+    phone VARCHAR(30) NOT NULL,
+
+    amount DECIMAL(12,2) NOT NULL,
+
+    transaction_date DATETIME DEFAULT NULL,
+
+    result_code VARCHAR(20) DEFAULT NULL,
+
+    result_description VARCHAR(255) DEFAULT NULL,
+
+    status ENUM(
+        'pending',
+        'completed',
+        'failed'
+    ) NOT NULL DEFAULT 'pending',
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id),
+
+    UNIQUE KEY uq_checkout_request (
+        checkout_request_id
+    ),
+
+    UNIQUE KEY uq_mpesa_receipt (
+        mpesa_receipt
+    ),
+
+    KEY idx_mpesa_school (school_id),
+
+    KEY idx_mpesa_student (student_id),
+
+    CONSTRAINT fk_mpesa_school
+        FOREIGN KEY (school_id)
+        REFERENCES schools(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_mpesa_student
+        FOREIGN KEY (student_id)
+        REFERENCES students(id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- ============================================================
+-- 20. AUDIT LOGS
+-- ============================================================
+
+CREATE TABLE audit_logs (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+
+    school_id INT UNSIGNED DEFAULT NULL,
+
+    user_id BIGINT UNSIGNED DEFAULT NULL,
+
+    action VARCHAR(100) NOT NULL,
+
+    description TEXT DEFAULT NULL,
+
+    ip_address VARCHAR(45) DEFAULT NULL,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id),
+
+    KEY idx_audit_school (school_id),
+
+    KEY idx_audit_user (user_id),
+
+    CONSTRAINT fk_audit_school
+        FOREIGN KEY (school_id)
+        REFERENCES schools(id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_audit_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- ============================================================
