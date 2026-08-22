@@ -1,73 +1,162 @@
 # ThinkPlus Cloud ☁️
-### The Subscription-Based School Management SaaS for Kenyan Schools
 
-**Run your entire school in the cloud.** Fees, Exams, SMS, Payroll, Reports — all in 1 place.  
-Works on any phone. No installation. No servers.
+### The School Management SaaS for Kenyan Schools
 
-![Website](https://img.shields.io/badge/website-live-brightgreen)
-![Schools](https://img.shields.io/badge/used%20by-50%2B%20Schools-blue)
-![Uptime](https://img.shields.io/badge/uptime-99.9%25-success)
+**Run your entire school in the cloud.**
+
+Fees • Exams • Students • Parents • SMS • M-Pesa • Payroll • Reports
+
+> Multi-tenant school management platform built for Kenyan schools.
+
+![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4)
+![MySQL](https://img.shields.io/badge/MySQL-8.0%2B-4479A1)
+![PDO](https://img.shields.io/badge/Database-PDO-green)
+![Status](https://img.shields.io/badge/status-in%20development-orange)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
 ---
 
-## Table of Contents
+## 📋 Table of Contents
+
 1. [Overview](#overview)
-2. [Key Features](#key-features)
-3. [Pricing](#pricing)
-4. [Who It's For](#who-its-for)
-5. [Contact & Demo](#contact--demo)
+2. [Technology Stack](#technology-stack)
+3. [Architecture](#architecture)
+4. [Core Features](#core-features)
+5. [User Roles](#user-roles)
+6. [Multi-Tenant Design](#multi-tenant-design)
+7. [Database](#database)
+8. [Security](#security)
+9. [Pricing](#pricing)
+10. [Development Roadmap](#development-roadmap)
+11. [Project Structure](#project-structure)
+12. [Configuration](#configuration)
+13. [Development](#development)
+14. [Contact](#contact)
+15. [License](#license)
 
 ---
 
-## Overview
-**ThinkPlus Cloud** is a cloud-based SaaS platform built specifically for Kenyan schools. 
+# Overview
 
-Problem: Schools struggle with manual registers, lost report cards, and printing costs.  
-Solution: 100% cloud system. Log in from phone, tablet or PC. We handle backups, security and updates.
+**ThinkPlus Cloud** is a cloud-based School Management SaaS platform designed for Kenyan schools.
 
-**Trusted by 50+ Active Schools** across Kenya with **99.9% uptime**.
+The goal is to provide schools with one centralized platform for managing:
 
-## Key Features
-- **Fees Management + M-Pesa Integration**  
-  Track payments, auto-receipts, SMS fee reminders
-- **Exams & Results in PDF**  
-  Auto-grading. Generate and send report cards via WhatsApp in 1 click
-- **Student & Staff Records**  
-  Secure cloud database with daily backups
-- **SMS & WhatsApp Broadcast**  
-  Send bulk messages for meetings, fees, announcements
-- **Payroll & HR**  
-  Manage teacher salaries and deductions
-- **Analytics Dashboard**  
-  Real-time insights on performance and fees
-- **24/7 Kenyan Support**  
-  Support in English & Swahili
+- Students
+- Parents and guardians
+- Teachers and staff
+- Classes and streams
+- Academics
+- Exams and marks
+- Report cards
+- School fees
+- M-Pesa payments
+- SMS notifications
+- WhatsApp communication
+- Payroll
+- School analytics
+- SaaS subscriptions
 
-## Pricing
-Simple monthly subscription. Cancel anytime. 14-day free trial.
-
-| Plan | Price / Month | Best For | Includes |
-| --- | --- | --- | --- |
-| **Basic** | KES 5,000 | Primary Schools | Up to 300 students, Fees, Exams, SMS |
-| **Pro** | KES 15,000 | Secondary Schools | Up to 1000 students, +Payroll, Analytics |
-| **Enterprise** | Custom | School Chains | Unlimited, +API, Dedicated Support |
-
-*No setup fee.*
-
-## Who It's For
-- Primary Schools
-- Secondary Schools  
-- Academies & Tuition Centers
-- School Chains
-
-## Contact & Demo
-Ready to go cloud? Book a free demo.
-
-📱 **WhatsApp**: 0707649890  
-👤 **Founder**: Joseph Mbui  
-📍 **Location**: Kilifi, Kenya  
-🌐 **Website**: https://jose-ctr.github.io/thinkplus-website/
+ThinkPlus Cloud is designed as a **multi-tenant system**, allowing multiple schools to operate securely on the same platform while keeping their data isolated.
 
 ---
-Made with ❤️ in Kenya
+
+# Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| PHP 8.2+ | Backend application |
+| MySQL 8.0+ | Database |
+| PDO | Secure database access |
+| HTML5 | Web interface |
+| CSS3 | Styling |
+| Vanilla JavaScript | Frontend interactions |
+| M-Pesa Daraja API | Payment integration |
+| Africa's Talking | SMS integration |
+| GitHub | Source control |
+
+---
+
+# Architecture
+
+ThinkPlus Cloud follows a modular SaaS architecture.
+
+```text
+ThinkPlus Cloud
+│
+├── public/
+│   ├── index.php
+│   ├── pricing.php
+│   ├── features.php
+│   ├── contact.php
+│   ├── demo.php
+│   └── assets/
+│       ├── css/
+│       ├── js/
+│       └── images/
+│
+├── app/
+│   ├── Auth/
+│   │   ├── Login.php
+│   │   ├── Register.php
+│   │   ├── Reset.php
+│   │   └── Permissions.php
+│   │
+│   ├── School/
+│   │   ├── Dashboard.php
+│   │   ├── Student.php
+│   │   ├── Parent.php
+│   │   ├── Teacher.php
+│   │   └── Class.php
+│   │
+│   ├── Academics/
+│   │   ├── Exam.php
+│   │   ├── Marks.php
+│   │   └── ReportCard.php
+│   │
+│   ├── Finance/
+│   │   ├── Fee.php
+│   │   ├── Invoice.php
+│   │   ├── Mpesa.php
+│   │   └── Receipt.php
+│   │
+│   ├── Comms/
+│   │   ├── Sms.php
+│   │   ├── Whatsapp.php
+│   │   └── Announcement.php
+│   │
+│   ├── HR/
+│   │   ├── Staff.php
+│   │   └── Payroll.php
+│   │
+│   └── SaaS/
+│       ├── School.php
+│       ├── Subscription.php
+│       └── Billing.php
+│
+├── database/
+│   ├── schema.sql
+│   ├── seed.sql
+│   └── migrations/
+│
+├── security/
+│   ├── Audit.php
+│   ├── Tenant.php
+│   ├── Csrf.php
+│   └── Security.php
+│
+├── config/
+│   ├── database.php
+│   ├── app.php
+│   └── services.php
+│
+├── storage/
+│   ├── logs/
+│   └── reports/
+│
+├── routes/
+│   └── web.php
+│
+├── .env.example
+├── .gitignore
+└── README.md
