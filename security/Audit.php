@@ -1,303 +1,449 @@
 <?php
-
 declare(strict_types=1);
-
-namespace Security;
 
 /**
  * ============================================================
  * THINKPLUS CLOUD
- * CSRF Protection
+ * Audit Logging
  * ============================================================
  *
  * Phase 3: Authentication & Security
  *
- * Founder: Joseph Mbui
- * Location: Mariakani, Kilifi, Kenya
- *
  * File:
- * security/Csrf.php
+ * security/Audit.php
  *
  * Description:
- * Central CSRF protection for ThinkPlus Cloud forms and
- * state-changing HTTP requests.
+ * Centralized audit logging for security-sensitive and
+ * administrative actions.
+ *
+ * Matches:
+ * database/schema.sql v3.0
  *
  * ============================================================
  */
 
-class Csrf
+namespace Security;
+
+use PDO;
+use Throwable;
+
+class Audit
 {
     /*
     |--------------------------------------------------------------------------
-    | SESSION KEYS
+    | MAIN AUDIT LOGGER
     |--------------------------------------------------------------------------
     */
 
-    private const TOKEN_KEY = '_csrf_token';
-
-    private const TOKEN_TIME_KEY = '_csrf_time';
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | TOKEN TIMEOUT
-    |--------------------------------------------------------------------------
-    |
-    | CSRF tokens expire after one hour.
-    |
-    */
-
-    private const TIMEOUT = 3600;
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | GENERATE TOKEN
-    |--------------------------------------------------------------------------
-    */
-
-    public static function generate(): string
-    {
-        Security::startSecureSession();
-
-        $token = Security::randomToken(32);
-
-        $_SESSION[self::TOKEN_KEY] = $token;
-        $_SESSION[self::TOKEN_TIME_KEY] = time();
-
-        return $token;
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | GET CURRENT TOKEN
-    |--------------------------------------------------------------------------
-    */
-
-    public static function getToken(): string
-    {
-        Security::startSecureSession();
-
-        $token = $_SESSION[self::TOKEN_KEY] ?? null;
-
-        $time = isset($_SESSION[self::TOKEN_TIME_KEY])
-            ? (int) $_SESSION[self::TOKEN_TIME_KEY]
-            : 0;
-
-        /*
-         * Generate a token if none exists.
-         */
-        if (
-            !is_string($token) ||
-            $token === ''
-        ) {
-            return self::generate();
-        }
-
-        /*
-         * Generate a new token if the existing
-         * token has expired.
-         */
-        if (
-            $time <= 0 ||
-            (time() - $time) > self::TIMEOUT
-        ) {
-            return self::generate();
-        }
-
-        return $token;
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | HTML FORM FIELD
-    |--------------------------------------------------------------------------
-    */
-
-    public static function field(): string
-    {
-        $token = self::getToken();
-
-        return
-            '<input type="hidden" ' .
-            'name="_csrf" ' .
-            'value="' .
-            Security::e($token) .
-            '">';
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | VERIFY TOKEN
-    |--------------------------------------------------------------------------
-    */
-
-    public static function verify(
-        ?string $token
+    public static function log(
+        PDO $pdo,
+        string $action,
+        ?string $entityType = null,
+        ?int $entityId = null,
+        ?array $oldValues = null,
+        ?array $newValues = null,
+        ?string $description = null
     ): bool {
+        try {
+            Security::startSecureSession();
 
-        Security::startSecureSession();
+            /*
+             * Authenticated user.
+             */
+            $userId = null;
 
-        $stored = $_SESSION[self::TOKEN_KEY] ?? null;
+            if (
+                isset($_SESSION['user_id']) &&
+                is_numeric($_SESSION['user_id'])
+            ) {
+                $userId = (int) $_SESSION['user_id'];
+            }
 
-        $time = isset($_SESSION[self::TOKEN_TIME_KEY])
-            ? (int) $_SESSION[self::TOKEN_TIME_KEY]
-            : 0;
+            /*
+             * Tenant MUST come from Tenant.php.
+             * Never trust a school_id supplied by a request.
+             */
+            $schoolId = Tenant::id();
 
-        /*
-         * Token must exist.
-         */
-        if (
-            !is_string($stored) ||
-            $stored === ''
-        ) {
-            return false;
-        }
+            /*
+             * Safely encode audit values.
+             */
+            $oldJson = self::encodeValues($oldValues);
+            $newJson = self::encodeValues($newValues);
 
-        /*
-         * Submitted token must exist.
-         */
-        if (
-            $token === null ||
-            $token === ''
-        ) {
-            return false;
-        }
+            /*
+             * Client information.
+             */
+            $ipAddress = self::clientIp();
 
-        /*
-         * Token timestamp must be valid.
-         */
-        if ($time <= 0) {
-            return false;
-        }
-
-        /*
-         * Token must not be expired.
-         */
-        if (
-            (time() - $time) > self::TIMEOUT
-        ) {
-            return false;
-        }
-
-        /*
-         * Constant-time comparison.
-         */
-        return hash_equals(
-            $stored,
-            $token
-        );
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | REQUIRE VALID CSRF TOKEN
-    |--------------------------------------------------------------------------
-    */
-
-    public static function requireValid(
-        ?string $token
-    ): void {
-
-        if (!self::verify($token)) {
-
-            http_response_code(419);
-
-            exit(
-                'CSRF token mismatch. ' .
-                'Please refresh the page and try again.'
+            $userAgent = substr(
+                (string) (
+                    $_SERVER['HTTP_USER_AGENT'] ?? ''
+                ),
+                0,
+                500
             );
+
+            $stmt = $pdo->prepare(
+                'INSERT INTO audit_logs (
+                    public_id,
+                    school_id,
+                    user_id,
+                    action,
+                    entity_type,
+                    entity_id,
+                    old_values,
+                    new_values,
+                    description,
+                    ip_address,
+                    user_agent,
+                    created_at
+                ) VALUES (
+                    :public_id,
+                    :school_id,
+                    :user_id,
+                    :action,
+                    :entity_type,
+                    :entity_id,
+                    :old_values,
+                    :new_values,
+                    :description,
+                    :ip_address,
+                    :user_agent,
+                    NOW()
+                )'
+            );
+
+            return $stmt->execute([
+                ':public_id' => Security::publicId(),
+                ':school_id' => $schoolId,
+                ':user_id' => $userId,
+                ':action' => $action,
+                ':entity_type' => $entityType,
+                ':entity_id' => $entityId,
+                ':old_values' => $oldJson,
+                ':new_values' => $newJson,
+                ':description' => $description,
+                ':ip_address' => $ipAddress,
+                ':user_agent' => $userAgent
+            ]);
+
+        } catch (Throwable $e) {
+
+            /*
+             * Audit failure must never expose database details
+             * to the user.
+             */
+            error_log(
+                'ThinkPlus Audit failed: ' .
+                $e->getMessage()
+            );
+
+            return false;
         }
     }
 
 
     /*
     |--------------------------------------------------------------------------
-    | VERIFY CURRENT REQUEST
+    | LOGIN
     |--------------------------------------------------------------------------
-    |
-    | GET/HEAD/OPTIONS requests are not normally state-changing.
-    | POST, PUT, PATCH and DELETE requests require CSRF protection.
-    |
     */
 
-    public static function verifyRequest(): void
-    {
-        $method = strtoupper(
-            $_SERVER['REQUEST_METHOD'] ?? 'GET'
+    public static function login(
+        PDO $pdo,
+        int $userId
+    ): bool {
+        return self::log(
+            $pdo,
+            'login',
+            'user',
+            $userId,
+            null,
+            null,
+            'User logged in'
         );
+    }
 
-        $protectedMethods = [
-            'POST',
-            'PUT',
-            'PATCH',
-            'DELETE'
-        ];
 
-        if (!in_array(
-            $method,
-            $protectedMethods,
-            true
-        )) {
-            return;
+    /*
+    |--------------------------------------------------------------------------
+    | LOGOUT
+    |--------------------------------------------------------------------------
+    */
+
+    public static function logout(
+        PDO $pdo,
+        int $userId
+    ): bool {
+        return self::log(
+            $pdo,
+            'logout',
+            'user',
+            $userId,
+            null,
+            null,
+            'User logged out'
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FAILED LOGIN
+    |--------------------------------------------------------------------------
+    */
+
+    public static function failedLogin(
+        PDO $pdo,
+        string $email
+    ): bool {
+        /*
+         * Store only the email involved in the attempt.
+         *
+         * NEVER store:
+         * - passwords
+         * - password hashes
+         * - session tokens
+         * - CSRF tokens
+         */
+        return self::log(
+            $pdo,
+            'failed_login',
+            'user',
+            null,
+            null,
+            [
+                'email' => $email
+            ],
+            'Failed login attempt'
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CREATE
+    |--------------------------------------------------------------------------
+    */
+
+    public static function create(
+        PDO $pdo,
+        string $type,
+        int $id,
+        array $data
+    ): bool {
+        return self::log(
+            $pdo,
+            'create',
+            $type,
+            $id,
+            null,
+            $data,
+            "Created {$type} #{$id}"
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE
+    |--------------------------------------------------------------------------
+    */
+
+    public static function update(
+        PDO $pdo,
+        string $type,
+        int $id,
+        array $old,
+        array $new
+    ): bool {
+        return self::log(
+            $pdo,
+            'update',
+            $type,
+            $id,
+            $old,
+            $new,
+            "Updated {$type} #{$id}"
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DELETE
+    |--------------------------------------------------------------------------
+    */
+
+    public static function delete(
+        PDO $pdo,
+        string $type,
+        int $id,
+        ?array $old = null
+    ): bool {
+        return self::log(
+            $pdo,
+            'delete',
+            $type,
+            $id,
+            $old,
+            null,
+            "Deleted {$type} #{$id}"
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PASSWORD CHANGE
+    |--------------------------------------------------------------------------
+    */
+
+    public static function passwordChanged(
+        PDO $pdo,
+        int $userId
+    ): bool {
+        return self::log(
+            $pdo,
+            'password_changed',
+            'user',
+            $userId,
+            null,
+            null,
+            'User password changed'
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PERMISSION CHANGE
+    |--------------------------------------------------------------------------
+    */
+
+    public static function permissionChanged(
+        PDO $pdo,
+        int $userId,
+        array $old = [],
+        array $new = []
+    ): bool {
+        return self::log(
+            $pdo,
+            'permission_changed',
+            'user',
+            $userId,
+            $old,
+            $new,
+            "Permissions changed for user #{$userId}"
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SECURITY EVENT
+    |--------------------------------------------------------------------------
+    */
+
+    public static function securityEvent(
+        PDO $pdo,
+        string $description,
+        ?int $userId = null
+    ): bool {
+        return self::log(
+            $pdo,
+            'security_event',
+            'security',
+            $userId,
+            null,
+            null,
+            $description
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PAYMENT
+    |--------------------------------------------------------------------------
+    */
+
+    public static function payment(
+        PDO $pdo,
+        int $paymentId,
+        array $data = []
+    ): bool {
+        return self::log(
+            $pdo,
+            'payment',
+            'payment',
+            $paymentId,
+            null,
+            $data,
+            "Payment recorded #{$paymentId}"
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | JSON ENCODING
+    |--------------------------------------------------------------------------
+    */
+
+    private static function encodeValues(
+        ?array $values
+    ): ?string {
+        if ($values === null) {
+            return null;
         }
 
-        /*
-         * Standard form token.
-         */
-        $token = null;
+        try {
+            return json_encode(
+                $values,
+                JSON_THROW_ON_ERROR |
+                JSON_UNESCAPED_UNICODE |
+                JSON_UNESCAPED_SLASHES
+            );
 
-        if (isset($_POST['_csrf'])) {
-            $token = (string) $_POST['_csrf'];
+        } catch (Throwable $e) {
+
+            error_log(
+                'ThinkPlus Audit JSON error: ' .
+                $e->getMessage()
+            );
+
+            return null;
         }
+    }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | CLIENT IP
+    |--------------------------------------------------------------------------
+    */
+
+    private static function clientIp(): string
+    {
         /*
-         * API/AJAX token.
+         * Do not blindly trust X-Forwarded-For.
+         *
+         * The direct REMOTE_ADDR is safer unless the application
+         * is explicitly configured to trust a reverse proxy.
          */
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+
         if (
-            $token === null &&
-            isset($_SERVER['HTTP_X_CSRF_TOKEN'])
+            filter_var(
+                $ip,
+                FILTER_VALIDATE_IP
+            ) !== false
         ) {
-            $token = (string)
-                $_SERVER['HTTP_X_CSRF_TOKEN'];
+            return $ip;
         }
 
-        self::requireValid($token);
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | ROTATE TOKEN
-    |--------------------------------------------------------------------------
-    |
-    | Useful after authentication or other sensitive actions.
-    |
-    */
-
-    public static function rotate(): string
-    {
-        return self::generate();
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | REMOVE TOKEN
-    |--------------------------------------------------------------------------
-    */
-
-    public static function destroy(): void
-    {
-        Security::startSecureSession();
-
-        unset(
-            $_SESSION[self::TOKEN_KEY],
-            $_SESSION[self::TOKEN_TIME_KEY]
-        );
+        return '0.0.0.0';
     }
 }
