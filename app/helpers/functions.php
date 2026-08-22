@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -20,7 +21,21 @@ declare(strict_types=1);
  * ============================================================
  */
 
-require_once __DIR__ . '/../config/db.php';
+
+/*
+|--------------------------------------------------------------------------
+| DATABASE CONFIGURATION
+|--------------------------------------------------------------------------
+|
+| functions.php is located at:
+|
+| app/helpers/functions.php
+|
+| Therefore the project root is two levels above this file.
+|
+*/
+
+require_once dirname(__DIR__, 2) . '/config/database.php';
 
 
 /*
@@ -152,6 +167,10 @@ function currentUser(): ?array
         return null;
     }
 
+    if (!isset($pdo) || !$pdo instanceof PDO) {
+        return null;
+    }
+
     try {
 
         $stmt = $pdo->prepare(
@@ -175,7 +194,7 @@ function currentUser(): ?array
             $userId
         ]);
 
-        $user = $stmt->fetch();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $user ?: null;
 
@@ -287,7 +306,7 @@ function redirect(string $url): never
 */
 
 function requireLogin(
-    string $loginUrl = '/public/index.php'
+    string $loginUrl = '/login.php'
 ): void {
 
     if (!isLoggedIn()) {
@@ -310,7 +329,7 @@ function requireLogin(
 
 function requireRole(
     string|array $roles,
-    string $redirectUrl = '/public/index.php'
+    string $redirectUrl = '/dashboard.php'
 ): void {
 
     requireLogin();
@@ -644,7 +663,11 @@ function beginTransaction(): void
 {
     global $pdo;
 
-    if (!$pdo->inTransaction()) {
+    if (
+        isset($pdo) &&
+        $pdo instanceof PDO &&
+        !$pdo->inTransaction()
+    ) {
         $pdo->beginTransaction();
     }
 }
@@ -654,7 +677,11 @@ function commitTransaction(): void
 {
     global $pdo;
 
-    if ($pdo->inTransaction()) {
+    if (
+        isset($pdo) &&
+        $pdo instanceof PDO &&
+        $pdo->inTransaction()
+    ) {
         $pdo->commit();
     }
 }
@@ -664,7 +691,11 @@ function rollbackTransaction(): void
 {
     global $pdo;
 
-    if ($pdo->inTransaction()) {
+    if (
+        isset($pdo) &&
+        $pdo instanceof PDO &&
+        $pdo->inTransaction()
+    ) {
         $pdo->rollBack();
     }
 }
@@ -711,6 +742,10 @@ function logoutUser(): void
 function databaseIsHealthy(): bool
 {
     global $pdo;
+
+    if (!isset($pdo) || !$pdo instanceof PDO) {
+        return false;
+    }
 
     try {
 
