@@ -76,24 +76,13 @@ ThinkPlus Cloud is designed as a **multi-tenant system**, allowing multiple scho
 | GitHub | Source control |
 
 ---
+## 🏗️ Project Structure
 
-# Architecture
-
-ThinkPlus Cloud follows a modular SaaS architecture.
+ThinkPlus Cloud uses a modular, multi-tenant SaaS architecture designed for
+Kenyan schools.
 
 ```text
-ThinkPlus Cloud
-│
-├── public/
-│   ├── index.php
-│   ├── pricing.php
-│   ├── features.php
-│   ├── contact.php
-│   ├── demo.php
-│   └── assets/
-│       ├── css/
-│       ├── js/
-│       └── images/
+thinkplus-website/
 │
 ├── app/
 │   ├── Auth/
@@ -129,15 +118,32 @@ ThinkPlus Cloud
 │   │   ├── Staff.php
 │   │   └── Payroll.php
 │   │
-│   └── SaaS/
-│       ├── School.php
-│       ├── Subscription.php
-│       └── Billing.php
+│   ├── SaaS/
+│   │   ├── School.php
+│   │   ├── Subscription.php
+│   │   └── Billing.php
+│   │
+│   └── helpers/
+│       └── functions.php
+│
+├── config/
+│   ├── database.php
+│   ├── app.php
+│   └── services.php
 │
 ├── database/
 │   ├── schema.sql
 │   ├── seed.sql
 │   └── migrations/
+│
+├── public/
+│   ├── index.php
+│   ├── login.php
+│   ├── dashboard.php
+│   └── assets/
+│       ├── css/
+│       ├── js/
+│       └── images/
 │
 ├── security/
 │   ├── Audit.php
@@ -145,17 +151,12 @@ ThinkPlus Cloud
 │   ├── Csrf.php
 │   └── Security.php
 │
-├── config/
-│   ├── database.php
-│   ├── app.php
-│   └── services.php
+├── routes/
+│   └── web.php
 │
 ├── storage/
 │   ├── logs/
 │   └── reports/
-│
-├── routes/
-│   └── web.php
 │
 ├── .env.example
 ├── .gitignore
