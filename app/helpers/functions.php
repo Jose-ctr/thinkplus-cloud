@@ -1386,4 +1386,410 @@ if (!function_exists('db_exists')) {
 
 if (!function_exists('tenant_db_fetch')) {
 
- 
+    /**
+     * Fetch one tenant-scoped record.
+     *
+     * The caller supplies the tenant condition in SQL.
+     * The tenant ID is always obtained from Tenant.php.
+     *
+     * @return array<string,mixed>|null
+     */
+    function tenant_db_fetch(
+        PDO $pdo,
+        string $sql,
+        array $params = []
+    ): ?array {
+
+        $tenantId = Tenant::requireId();
+
+        $params['tenant_school_id'] =
+            $tenantId;
+
+        return db_fetch(
+            $pdo,
+            $sql,
+            $params
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| JSON RESPONSE HELPERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('json_response')) {
+
+    /**
+     * Return a JSON response and terminate execution.
+     *
+     * @param array<string,mixed>|list<mixed> $data
+     * @return never
+     */
+    function json_response(
+        array $data,
+        int $status = 200
+    ): never {
+
+        if (
+            $status < 100 ||
+            $status > 599
+        ) {
+            $status = 200;
+        }
+
+        http_response_code($status);
+
+        header(
+            'Content-Type: application/json; charset=UTF-8'
+        );
+
+        header(
+            'X-Content-Type-Options: nosniff'
+        );
+
+        echo json_encode(
+            $data,
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES |
+            JSON_INVALID_UTF8_SUBSTITUTE
+        );
+
+        exit;
+    }
+}
+
+
+if (!function_exists('json_success')) {
+
+    /**
+     * Return a successful JSON response.
+     *
+     * @param array<string,mixed> $data
+     * @return never
+     */
+    function json_success(
+        array $data = [],
+        int $status = 200
+    ): never {
+
+        json_response(
+            array_merge(
+                [
+                    'success' => true
+                ],
+                $data
+            ),
+            $status
+        );
+    }
+}
+
+
+if (!function_exists('json_error')) {
+
+    /**
+     * Return an error JSON response.
+     *
+     * @param array<string,mixed> $data
+     * @return never
+     */
+    function json_error(
+        string $message,
+        int $status = 400,
+        array $data = []
+    ): never {
+
+        json_response(
+            array_merge(
+                [
+                    'success' => false,
+                    'message' => $message
+                ],
+                $data
+            ),
+            $status
+        );
+    }
+}
+
+
+if (!function_exists('json_created')) {
+
+    /**
+     * Return a 201 Created response.
+     *
+     * @param array<string,mixed> $data
+     * @return never
+     */
+    function json_created(
+        array $data = []
+    ): never {
+
+        json_success(
+            $data,
+            201
+        );
+    }
+}
+
+
+if (!function_exists('json_no_content')) {
+
+    /**
+     * Return a 204 No Content response.
+     *
+     * @return never
+     */
+    function json_no_content(): never
+    {
+        http_response_code(204);
+
+        exit;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DATE / TIME HELPERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('format_date')) {
+
+    /**
+     * Format a date value.
+     */
+    function format_date(
+        ?string $date,
+        string $format = 'd M Y'
+    ): string {
+
+        if (
+            $date === null ||
+            trim($date) === ''
+        ) {
+            return '';
+        }
+
+        try {
+
+            return (
+                new DateTimeImmutable($date)
+            )->format($format);
+
+        } catch (Throwable) {
+
+            return '';
+        }
+    }
+}
+
+
+if (!function_exists('format_datetime')) {
+
+    /**
+     * Format a date/time value.
+     */
+    function format_datetime(
+        ?string $dateTime,
+        string $format = 'd M Y H:i'
+    ): string {
+
+        return format_date(
+            $dateTime,
+            $format
+        );
+    }
+}
+
+
+if (!function_exists('format_time')) {
+
+    /**
+     * Format a time value.
+     */
+    function format_time(
+        ?string $time,
+        string $format = 'H:i'
+    ): string {
+
+        if (
+            $time === null ||
+            trim($time) === ''
+        ) {
+            return '';
+        }
+
+        try {
+
+            return (
+                new DateTimeImmutable($time)
+            )->format($format);
+
+        } catch (Throwable) {
+
+            return '';
+        }
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MONEY HELPERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('money')) {
+
+    /**
+     * Format a monetary amount.
+     *
+     * Default currency is Kenyan Shillings.
+     */
+    function money(
+        int|float|string|null $amount,
+        string $currency = 'KES'
+    ): string {
+
+        if (
+            $amount === null ||
+            $amount === ''
+        ) {
+            $amount = 0;
+        }
+
+        if (!is_numeric($amount)) {
+            $amount = 0;
+        }
+
+        return $currency .
+            ' ' .
+            number_format(
+                (float) $amount,
+                2,
+                '.',
+                ','
+            );
+    }
+}
+
+
+if (!function_exists('format_number')) {
+
+    /**
+     * Format a numeric value.
+     */
+    function format_number(
+        int|float|string|null $value,
+        int $decimals = 0
+    ): string {
+
+        if (
+            $value === null ||
+            !is_numeric($value)
+        ) {
+            return '0';
+        }
+
+        $decimals = max(
+            0,
+            $decimals
+        );
+
+        return number_format(
+            (float) $value,
+            $decimals,
+            '.',
+            ','
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| STRING HELPERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('str_limit')) {
+
+    /**
+     * Limit a string to a maximum length.
+     */
+    function str_limit(
+        string $value,
+        int $limit = 100,
+        string $suffix = '...'
+    ): string {
+
+        if ($limit <= 0) {
+            return '';
+        }
+
+        if (
+            function_exists('mb_strlen') &&
+            function_exists('mb_substr')
+        ) {
+
+            if (
+                mb_strlen(
+                    $value,
+                    'UTF-8'
+                ) <= $limit
+            ) {
+                return $value;
+            }
+
+            $suffixLength =
+                mb_strlen(
+                    $suffix,
+                    'UTF-8'
+                );
+
+            if ($suffixLength >= $limit) {
+                return mb_substr(
+                    $suffix,
+                    0,
+                    $limit,
+                    'UTF-8'
+                );
+            }
+
+            return mb_substr(
+                $value,
+                0,
+                $limit - $suffixLength,
+                'UTF-8'
+            ) . $suffix;
+        }
+
+        if (strlen($value) <= $limit) {
+            return $value;
+        }
+
+        $suffixLength = strlen($suffix);
+
+        if ($suffixLength >= $limit) {
+            return substr(
+                $suffix,
+                0,
+                $limit
+            );
+        }
+
+        return substr(
+            $value,
+            0,
+            $limit - $suffixLength
+        ) . $suffix;
+    }
+}
+
+
+
