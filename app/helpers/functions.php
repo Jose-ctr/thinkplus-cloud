@@ -2100,4 +2100,381 @@ if (!function_exists('security_headers')) {
 
 if (!function_exists('public_id')) {
 
+    /**
+     * Generate a public UUID-style identifier.
+     */
+    function public_id(): string
+    {
+        return Security::publicId();
+    }
+}
+
+
+if (!function_exists('random_token')) {
+
+    /**
+     * Generate a cryptographically secure random token.
+     */
+    function random_token(
+        int $length = 32
+    ): string {
+
+        return Security::randomToken(
+            $length
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSE / ERROR HELPERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('abort')) {
+
+    /**
+     * Stop execution with an HTTP error.
+     *
+     * @return never
+     */
+    function abort(
+        int $status,
+        string $message = ''
+    ): never {
+
+        if (
+            $status < 100 ||
+            $status > 599
+        ) {
+            $status = 500;
+        }
+
+        http_response_code($status);
+
+        if ($message === '') {
+
+            $message = match ($status) {
+
+                400 => 'Bad request.',
+                401 => 'Authentication required.',
+                403 => 'Access denied.',
+                404 => 'Page not found.',
+                405 => 'Method not allowed.',
+                419 => 'Page expired.',
+                422 => 'Validation failed.',
+                429 => 'Too many requests.',
+                default => 'An error occurred.',
+            };
+        }
+
+        /*
+         * Return JSON when explicitly requested.
+         */
+        $accept =
+            strtolower(
+                (string) (
+                    $_SERVER['HTTP_ACCEPT']
+                    ?? ''
+                )
+            );
+
+        if (
+            str_contains(
+                $accept,
+                'application/json'
+            )
+        ) {
+
+            json_error(
+                $message,
+                $status
+            );
+        }
+
+        echo e($message);
+
+        exit;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DATABASE SAFETY
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('database_healthy')) {
+
+    /**
+     * Check whether the database connection is healthy.
+     */
+    function database_healthy(
+        PDO $pdo
+    ): bool {
+
+        return Security::databaseHealthy(
+            $pdo
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REQUEST IP / USER AGENT
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('client_ip')) {
+
+    /**
+     * Return the remote client IP.
+     *
+     * Do not blindly trust X-Forwarded-For unless the
+     * application is behind a trusted proxy.
+     */
+    function client_ip(): string
+    {
+        $ip =
+            $_SERVER['REMOTE_ADDR']
+            ?? '';
+
+        return filter_var(
+            $ip,
+            FILTER_VALIDATE_IP
+        ) !== false
+            ? $ip
+            : '';
+    }
+}
+
+
+if (!function_exists('user_agent')) {
+
+    /**
+     * Return a bounded user-agent string.
+     */
+    function user_agent(
+        int $maxLength = 500
+    ): string {
+
+        $value =
+            $_SERVER['HTTP_USER_AGENT']
+            ?? '';
+
+        if (!is_string($value)) {
+            return '';
+        }
+
+        return substr(
+            $value,
+            0,
+            max(
+                1,
+                $maxLength
+            )
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HTTP REQUEST BODY
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('request_json')) {
+
+    /**
+     * Decode a JSON request body.
+     *
+     * @return array<string,mixed>
+     */
+    function request_json(): array
+    {
+        $raw = file_get_contents(
+            'php://input'
+        );
+
+        if (
+            $raw === false ||
+            trim($raw) === ''
+        ) {
+            return [];
+        }
+
+        try {
+
+            $data = json_decode(
+                $raw,
+                true,
+                512,
+                JSON_THROW_ON_ERROR
+            );
+
+            return is_array($data)
+                ? $data
+                : [];
+
+        } catch (Throwable) {
+
+            return [];
+        }
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REQUEST CONTENT TYPE
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('expects_json')) {
+
+    /**
+     * Determine whether the client expects JSON.
+     */
+    function expects_json(): bool
+    {
+        $accept =
+            strtolower(
+                (string) (
+                    $_SERVER['HTTP_ACCEPT']
+                    ?? ''
+                )
+            );
+
+        $contentType =
+            strtolower(
+                (string) (
+                    $_SERVER['CONTENT_TYPE']
+                    ?? ''
+                )
+            );
+
+        return str_contains(
+            $accept,
+            'application/json'
+        ) || str_contains(
+            $contentType,
+            'application/json'
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATION SESSION DATA
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('auth_public_id')) {
+
+    /**
+     * Return the authenticated user's public ID.
+     */
+    function auth_public_id(): ?string
+    {
+        Security::startSecureSession();
+
+        $value =
+            $_SESSION['public_id']
+            ?? null;
+
+        return is_string($value) &&
+            $value !== ''
+                ? $value
+                : null;
+    }
+}
+
+
+if (!function_exists('auth_email')) {
+
+    /**
+     * Return the authenticated user's email.
+     */
+    function auth_email(): ?string
+    {
+        Security::startSecureSession();
+
+        $value =
+            $_SESSION['email']
+            ?? null;
+
+        return is_string($value) &&
+            $value !== ''
+                ? $value
+                : null;
+    }
+}
+
+
+if (!function_exists('auth_authenticated_at')) {
+
+    /**
+     * Return authentication timestamp.
+     */
+    function auth_authenticated_at(): ?int
+    {
+        Security::startSecureSession();
+
+        $value =
+            $_SESSION['authenticated_at']
+            ?? null;
+
+        return is_numeric($value)
+            ? (int) $value
+            : null;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| APPLICATION INITIALIZATION HELPER
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('initialize_security')) {
+
+    /**
+     * Initialize security protections for a web request.
+     *
+     * Call near the beginning of public entry points.
+     *
+     * Example:
+     *
+     * require_once __DIR__ .
+     *     '/../app/helpers/functions.php';
+     *
+     * initialize_security();
+     */
+    function initialize_security(
+        bool $protectCsrfRequest = false
+    ): void {
+
+        Security::startSecureSession();
+
+        Security::securityHeaders();
+
+        if ($protectCsrfRequest) {
+            Csrf::verifyRequest();
+        }
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| END OF HELPERS
+|--------------------------------------------------------------------------
+*/
+
 
