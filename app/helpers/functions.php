@@ -8,34 +8,33 @@ declare(strict_types=1);
  * Shared Helper Functions
  * ============================================================
  *
- * Author: Joseph Mbui
- * Copyright: © 2026 ThinkPlus Cloud
- *
  * File:
  * app/helpers/functions.php
  *
- * Responsibilities:
- * - Database bootstrap
- * - Session helpers
+ * Purpose:
+ * - Shared application helpers
  * - Authentication helpers
- * - Role authorization
- * - Tenant helpers
- * - HTML escaping
  * - Input helpers
  * - Flash messages
- * - Redirects
- * - CSRF bridge
- * - Password helpers
+ * - HTML escaping
+ * - CSRF wrappers
  * - Kenyan phone normalization
- * - Database transaction helpers
- * - Database health checks
+ * - Validation
+ * - Money formatting
+ * - Database transactions
+ * - Tenant helpers
+ * - Logout
  *
- * Security classes are centralized in:
+ * Security responsibilities remain in:
  *
  * security/Security.php
  * security/Csrf.php
- * security/Audit.php
  * security/Tenant.php
+ * security/Audit.php
+ *
+ * Database connection:
+ *
+ * app/config/db.php
  *
  * ============================================================
  */
@@ -46,12 +45,7 @@ declare(strict_types=1);
 | LOAD DATABASE
 |--------------------------------------------------------------------------
 |
-| functions.php:
-|
 | app/helpers/functions.php
-|
-| db.php:
-|
 | app/config/db.php
 |
 */
@@ -63,16 +57,22 @@ require_once dirname(__DIR__) . '/config/db.php';
 |--------------------------------------------------------------------------
 | LOAD SECURITY CLASSES
 |--------------------------------------------------------------------------
-|
-| These are loaded here so pages using the shared helpers can
-| also use the centralized security layer.
-|
 */
 
 require_once dirname(__DIR__, 2) . '/security/Security.php';
 require_once dirname(__DIR__, 2) . '/security/Csrf.php';
-require_once dirname(__DIR__, 2) . '/security/Audit.php';
 require_once dirname(__DIR__, 2) . '/security/Tenant.php';
+
+
+/*
+|--------------------------------------------------------------------------
+| IMPORT SECURITY CLASSES
+|--------------------------------------------------------------------------
+*/
+
+use Security\Security;
+use Security\Csrf;
+use Security\Tenant;
 
 
 /*
@@ -80,34 +80,25 @@ require_once dirname(__DIR__, 2) . '/security/Tenant.php';
 | START SECURE SESSION
 |--------------------------------------------------------------------------
 |
-| Security.php owns the secure session configuration.
+| Security.php owns the session configuration.
 |
 */
 
-if (
-    class_exists(\Security\Security::class)
-) {
-    \Security\Security::startSecureSession();
-} elseif (
-    session_status() === PHP_SESSION_NONE
-) {
-    session_start();
-}
+Security::startSecureSession();
 
 
 /*
 |--------------------------------------------------------------------------
-| ESCAPE HTML
+| HTML ESCAPE
 |--------------------------------------------------------------------------
 */
 
-function e(?string $value): string
-{
-    return htmlspecialchars(
-        $value ?? '',
-        ENT_QUOTES | ENT_SUBSTITUTE,
-        'UTF-8'
-    );
+if (!function_exists('e')) {
+
+    function e(?string $value): string
+    {
+        return Security::e($value);
+    }
 }
 
 
@@ -117,17 +108,18 @@ function e(?string $value): string
 |--------------------------------------------------------------------------
 */
 
-function sanitize(mixed $data): string
-{
-    if (is_array($data)) {
-        return '';
-    }
+if (!function_exists('sanitize')) {
 
-    return trim(
-        strip_tags(
+    function sanitize(mixed $data): string
+    {
+        if (is_array($data) || is_object($data)) {
+            return '';
+        }
+
+        return Security::sanitize(
             (string) $data
-        )
-    );
+        );
+    }
 }
 
 
@@ -137,15 +129,43 @@ function sanitize(mixed $data): string
 |--------------------------------------------------------------------------
 */
 
-function post(
-    string $key,
-    string $default = ''
-): string {
-    if (!isset($_POST[$key])) {
-        return $default;
-    }
+if (!function_exists('post')) {
 
-    return sanitize($_POST[$key]);
+    function post(
+        string $key,
+        string $default = ''
+    ): string {
+
+        if (!array_key_exists($key, $_POST)) {
+            return $default;
+        }
+
+        return sanitize($_POST[$key]);
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RAW POST INPUT
+|--------------------------------------------------------------------------
+|
+| Useful when a value must not be modified by strip_tags()
+| before validation.
+|
+*/
+
+if (!function_exists('postRaw')) {
+
+    function postRaw(
+        string $key,
+        mixed $default = null
+    ): mixed {
+
+        return array_key_exists($key, $_POST)
+            ? $_POST[$key]
+            : $default;
+    }
 }
 
 
@@ -155,15 +175,88 @@ function post(
 |--------------------------------------------------------------------------
 */
 
-function get(
-    string $key,
-    string $default = ''
-): string {
-    if (!isset($_GET[$key])) {
-        return $default;
-    }
+if (!function_exists('get')) {
 
-    return sanitize($_GET[$key]);
+    function get(
+        string $key,
+        string $default = ''
+    ): string {
+
+        if (!array_key_exists($key, $_GET)) {
+            return $default;
+        }
+
+        return sanitize($_GET[$key]);
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RAW GET INPUT
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('getRaw')) {
+
+    function getRaw(
+        string $key,
+        mixed $default = null
+    ): mixed {
+
+        return array_key_exists($key, $_GET)
+            ? $_GET[$key]
+            : $default;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REQUEST METHOD
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('requestMethod')) {
+
+    function requestMethod(): string
+    {
+        return strtoupper(
+            (string) (
+                $_SERVER['REQUEST_METHOD'] ?? 'GET'
+            )
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| IS POST REQUEST
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('isPost')) {
+
+    function isPost(): bool
+    {
+        return requestMethod() === 'POST';
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| IS GET REQUEST
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('isGet')) {
+
+    function isGet(): bool
+    {
+        return requestMethod() === 'GET';
+    }
 }
 
 
@@ -173,21 +266,12 @@ function get(
 |--------------------------------------------------------------------------
 */
 
-function isLoggedIn(): bool
-{
-    if (
-        !isset($_SESSION['user_id'])
-    ) {
-        return false;
-    }
+if (!function_exists('isLoggedIn')) {
 
-    if (
-        !is_numeric($_SESSION['user_id'])
-    ) {
-        return false;
+    function isLoggedIn(): bool
+    {
+        return Security::isLoggedIn();
     }
-
-    return (int) $_SESSION['user_id'] > 0;
 }
 
 
@@ -197,133 +281,11 @@ function isLoggedIn(): bool
 |--------------------------------------------------------------------------
 */
 
-function currentUserId(): ?int
-{
-    if (!isLoggedIn()) {
-        return null;
-    }
+if (!function_exists('currentUserId')) {
 
-    return (int) $_SESSION['user_id'];
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| CURRENT SCHOOL / TENANT ID
-|--------------------------------------------------------------------------
-*/
-
-function currentSchoolId(): ?int
-{
-    /*
-     * Prefer the authenticated school_id.
-     */
-    if (
-        isset($_SESSION['school_id']) &&
-        is_numeric($_SESSION['school_id'])
-    ) {
-        $schoolId = (int) $_SESSION['school_id'];
-
-        if ($schoolId > 0) {
-            return $schoolId;
-        }
-    }
-
-    /*
-     * Fall back to the active tenant.
-     */
-    if (
-        isset($_SESSION['_tenant_school_id']) &&
-        is_numeric($_SESSION['_tenant_school_id'])
-    ) {
-        $schoolId = (int) $_SESSION['_tenant_school_id'];
-
-        if ($schoolId > 0) {
-            return $schoolId;
-        }
-    }
-
-    return null;
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| CURRENT USER
-|--------------------------------------------------------------------------
-*/
-
-function currentUser(): ?array
-{
-    global $pdo;
-
-    $userId = currentUserId();
-
-    if ($userId === null) {
-        return null;
-    }
-
-    if (
-        !isset($pdo) ||
-        !$pdo instanceof PDO
-    ) {
-        return null;
-    }
-
-    try {
-
-        $stmt = $pdo->prepare(
-            'SELECT
-                id,
-                public_id,
-                school_id,
-                name,
-                email,
-                phone,
-                role,
-                status,
-                failed_attempts,
-                locked_until,
-                last_login_at,
-                created_at,
-                updated_at
-             FROM users
-             WHERE id = ?
-             LIMIT 1'
-        );
-
-        $stmt->execute([
-            $userId
-        ]);
-
-        $user = $stmt->fetch(
-            PDO::FETCH_ASSOC
-        );
-
-        if (!$user) {
-            return null;
-        }
-
-        /*
-         * Do not treat inactive users as authenticated.
-         */
-        if (
-            isset($user['status']) &&
-            $user['status'] !== 'active'
-        ) {
-            return null;
-        }
-
-        return $user;
-
-    } catch (Throwable $e) {
-
-        error_log(
-            'ThinkPlus currentUser error: ' .
-            $e->getMessage()
-        );
-
-        return null;
+    function currentUserId(): ?int
+    {
+        return Security::userId();
     }
 }
 
@@ -334,29 +296,12 @@ function currentUser(): ?array
 |--------------------------------------------------------------------------
 */
 
-function currentRole(): ?string
-{
-    /*
-     * Session role is useful and avoids an unnecessary
-     * database query when it is already authenticated.
-     */
-    if (
-        isset($_SESSION['role']) &&
-        is_string($_SESSION['role']) &&
-        $_SESSION['role'] !== ''
-    ) {
-        return $_SESSION['role'];
+if (!function_exists('currentRole')) {
+
+    function currentRole(): ?string
+    {
+        return Security::role();
     }
-
-    $user = currentUser();
-
-    if (!$user) {
-        return null;
-    }
-
-    return isset($user['role'])
-        ? (string) $user['role']
-        : null;
 }
 
 
@@ -366,50 +311,243 @@ function currentRole(): ?string
 |--------------------------------------------------------------------------
 */
 
-function hasRole(
-    string|array $roles
-): bool {
+if (!function_exists('hasRole')) {
 
-    $role = currentRole();
+    function hasRole(
+        string|array $roles
+    ): bool {
 
-    if ($role === null) {
-        return false;
+        return Security::hasRole($roles);
     }
-
-    if (is_string($roles)) {
-        return $role === $roles;
-    }
-
-    return in_array(
-        $role,
-        $roles,
-        true
-    );
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| TENANT CHECK
+| CURRENT SCHOOL / TENANT ID
 |--------------------------------------------------------------------------
 |
-| Prevent application code from accidentally operating
-| outside the authenticated school.
+| Tenant.php determines the effective tenant from the
+| authenticated user. Do not trust school_id from requests.
 |
 */
 
-function belongsToCurrentSchool(
-    int $schoolId
-): bool {
+if (!function_exists('currentSchoolId')) {
 
-    $currentSchoolId =
-        currentSchoolId();
-
-    if ($currentSchoolId === null) {
-        return false;
+    function currentSchoolId(): ?int
+    {
+        return Tenant::id();
     }
+}
 
-    return $currentSchoolId === $schoolId;
+
+/*
+|--------------------------------------------------------------------------
+| ACTIVE TENANT ID
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('tenantId')) {
+
+    function tenantId(): ?int
+    {
+        return Tenant::id();
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REQUIRE TENANT
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('requireTenant')) {
+
+    function requireTenant(): int
+    {
+        return Tenant::requireId();
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REQUIRE SCHOOL
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('requireSchool')) {
+
+    function requireSchool(
+        string $redirectUrl = '/dashboard.php'
+    ): void {
+
+        requireLogin();
+
+        if (!Tenant::authenticated()) {
+
+            setFlash(
+                'No school tenant is associated with this account.',
+                'danger'
+            );
+
+            redirect($redirectUrl);
+        }
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| HAS SCHOOL
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('hasSchool')) {
+
+    function hasSchool(): bool
+    {
+        return Tenant::authenticated();
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| VALIDATE REQUESTED SCHOOL
+|--------------------------------------------------------------------------
+|
+| If a request supplies school_id, Tenant.php verifies that
+| it belongs to the authenticated user's tenant.
+|
+*/
+
+if (!function_exists('validateSchoolId')) {
+
+    function validateSchoolId(
+        mixed $requestedSchoolId = null
+    ): int {
+
+        return Tenant::validateRequestedSchool(
+            $requestedSchoolId
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TENANT OWNERSHIP CHECK
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('tenantOwns')) {
+
+    function tenantOwns(
+        string $table,
+        int $recordId,
+        string $idColumn = 'id',
+        string $tenantColumn = 'school_id'
+    ): bool {
+
+        return Tenant::owns(
+            $table,
+            $recordId,
+            $idColumn,
+            $tenantColumn
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REQUIRE TENANT OWNERSHIP
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('requireTenantOwnership')) {
+
+    function requireTenantOwnership(
+        string $table,
+        int $recordId,
+        string $idColumn = 'id',
+        string $tenantColumn = 'school_id'
+    ): void {
+
+        Tenant::requireOwnership(
+            $table,
+            $recordId,
+            $idColumn,
+            $tenantColumn
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TENANT QUERY PARAMETERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('tenantQueryParams')) {
+
+    function tenantQueryParams(
+        array $params = []
+    ): array {
+
+        return Tenant::queryParams($params);
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TENANT WHERE CLAUSE
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('tenantWhere')) {
+
+    function tenantWhere(
+        string $column = 'school_id'
+    ): array {
+
+        return Tenant::where($column);
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TENANT SQL SCOPE
+|--------------------------------------------------------------------------
+|
+| Example:
+|
+| $scope = tenantScope(
+|     'SELECT * FROM students WHERE deleted_at IS NULL'
+| );
+|
+| $stmt = $pdo->prepare($scope['sql']);
+| $stmt->execute($scope['params']);
+|
+*/
+
+if (!function_exists('tenantScope')) {
+
+    function tenantScope(
+        string $sql,
+        string $column = 'school_id'
+    ): array {
+
+        return Tenant::scope(
+            $sql,
+            $column
+        );
+    }
 }
 
 
@@ -419,17 +557,30 @@ function belongsToCurrentSchool(
 |--------------------------------------------------------------------------
 */
 
-function redirect(
-    string $url
-): never {
+if (!function_exists('redirect')) {
 
-    header(
-        'Location: ' . $url,
-        true,
-        302
-    );
+    function redirect(
+        string $url,
+        int $status = 302
+    ): never {
 
-    exit;
+        if (
+            !preg_match(
+                '#^/[A-Za-z0-9_\-./?=&%]*$#',
+                $url
+            )
+        ) {
+            $url = '/';
+        }
+
+        header(
+            'Location: ' . $url,
+            true,
+            $status
+        );
+
+        exit;
+    }
 }
 
 
@@ -439,20 +590,28 @@ function redirect(
 |--------------------------------------------------------------------------
 */
 
-function requireLogin(
-    string $loginUrl = '/login.php'
-): void {
+if (!function_exists('requireLogin')) {
 
-    if (isLoggedIn()) {
-        return;
+    function requireLogin(
+        string $loginUrl = '/login.php'
+    ): void {
+
+        if (Security::isLoggedIn()) {
+            return;
+        }
+
+        Security::startSecureSession();
+
+        $_SESSION['intended_url'] =
+            $_SERVER['REQUEST_URI'] ?? '/';
+
+        setFlash(
+            'Please log in to continue.',
+            'warning'
+        );
+
+        redirect($loginUrl);
     }
-
-    setFlash(
-        'Please log in to continue.',
-        'warning'
-    );
-
-    redirect($loginUrl);
 }
 
 
@@ -462,21 +621,32 @@ function requireLogin(
 |--------------------------------------------------------------------------
 */
 
-function requireRole(
-    string|array $roles,
-    string $redirectUrl = '/dashboard.php'
-): void {
+if (!function_exists('requireRole')) {
 
-    requireLogin();
+    function requireRole(
+        string|array $roles,
+        string $redirectUrl = '/dashboard.php'
+    ): void {
 
-    if (!hasRole($roles)) {
-
-        setFlash(
-            'You do not have permission to access this page.',
-            'danger'
+        Security::requireRole(
+            $roles,
+            $redirectUrl
         );
+    }
+}
 
-        redirect($redirectUrl);
+
+/*
+|--------------------------------------------------------------------------
+| REQUIRE GUEST
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('requireGuest')) {
+
+    function requireGuest(): void
+    {
+        Security::requireGuest();
     }
 }
 
@@ -487,33 +657,80 @@ function requireRole(
 |--------------------------------------------------------------------------
 */
 
-function setFlash(
-    string $message,
-    string $type = 'success'
-): void {
+if (!function_exists('setFlash')) {
 
-    $allowedTypes = [
-        'success',
-        'danger',
-        'warning',
-        'info'
-    ];
+    function setFlash(
+        string $message,
+        string $type = 'success'
+    ): void {
 
-    if (
-        !in_array(
+        $allowedTypes = [
+            'success',
+            'danger',
+            'warning',
+            'info'
+        ];
+
+        if (!in_array(
             $type,
             $allowedTypes,
             true
-        )
-    ) {
-        $type = 'info';
+        )) {
+            $type = 'info';
+        }
+
+        $_SESSION['message'] = $message;
+        $_SESSION['message_type'] = $type;
     }
+}
 
-    $_SESSION['message'] =
-        $message;
 
-    $_SESSION['message_type'] =
-        $type;
+/*
+|--------------------------------------------------------------------------
+| GET FLASH MESSAGE
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('getFlash')) {
+
+    function getFlash(): ?array
+    {
+        if (!isset($_SESSION['message'])) {
+            return null;
+        }
+
+        $message = (string)
+            $_SESSION['message'];
+
+        $type = (string) (
+            $_SESSION['message_type'] ?? 'info'
+        );
+
+        $allowedTypes = [
+            'success',
+            'danger',
+            'warning',
+            'info'
+        ];
+
+        if (!in_array(
+            $type,
+            $allowedTypes,
+            true
+        )) {
+            $type = 'info';
+        }
+
+        unset(
+            $_SESSION['message'],
+            $_SESSION['message_type']
+        );
+
+        return [
+            'message' => $message,
+            'type' => $type
+        ];
+    }
 }
 
 
@@ -523,50 +740,23 @@ function setFlash(
 |--------------------------------------------------------------------------
 */
 
-function showMessage(): void
-{
-    if (
-        !isset($_SESSION['message'])
-    ) {
-        return;
+if (!function_exists('showMessage')) {
+
+    function showMessage(): void
+    {
+        $flash = getFlash();
+
+        if ($flash === null) {
+            return;
+        }
+
+        echo
+            '<div class="alert alert-' .
+            e($flash['type']) .
+            '" role="alert">' .
+            e($flash['message']) .
+            '</div>';
     }
-
-    $message = e(
-        (string) $_SESSION['message']
-    );
-
-    $type =
-        $_SESSION['message_type'] ??
-        'success';
-
-    $allowedTypes = [
-        'success',
-        'danger',
-        'warning',
-        'info'
-    ];
-
-    if (
-        !in_array(
-            $type,
-            $allowedTypes,
-            true
-        )
-    ) {
-        $type = 'info';
-    }
-
-    echo
-        '<div class="alert alert-' .
-        e($type) .
-        '" role="alert">' .
-        $message .
-        '</div>';
-
-    unset(
-        $_SESSION['message'],
-        $_SESSION['message_type']
-    );
 }
 
 
@@ -574,19 +764,14 @@ function showMessage(): void
 |--------------------------------------------------------------------------
 | CSRF TOKEN
 |--------------------------------------------------------------------------
-|
-| IMPORTANT:
-| Do not create a second CSRF implementation here.
-|
-| The canonical implementation is:
-|
-| security/Csrf.php
-|
 */
 
-function csrfToken(): string
-{
-    return \Security\Csrf::getToken();
+if (!function_exists('csrfToken')) {
+
+    function csrfToken(): string
+    {
+        return Csrf::getToken();
+    }
 }
 
 
@@ -596,9 +781,12 @@ function csrfToken(): string
 |--------------------------------------------------------------------------
 */
 
-function csrfField(): string
-{
-    return \Security\Csrf::field();
+if (!function_exists('csrfField')) {
+
+    function csrfField(): string
+    {
+        return Csrf::field();
+    }
 }
 
 
@@ -608,13 +796,14 @@ function csrfField(): string
 |--------------------------------------------------------------------------
 */
 
-function verifyCsrfToken(
-    ?string $token
-): bool {
+if (!function_exists('verifyCsrfToken')) {
 
-    return \Security\Csrf::verify(
-        $token
-    );
+    function verifyCsrfToken(
+        ?string $token
+    ): bool {
+
+        return Csrf::verify($token);
+    }
 }
 
 
@@ -624,67 +813,78 @@ function verifyCsrfToken(
 |--------------------------------------------------------------------------
 */
 
-function requireCsrf(): void
-{
-    $token = null;
+if (!function_exists('requireCsrf')) {
 
-    /*
-     * Standard HTML form.
-     */
-    if (
-        isset($_POST['_csrf'])
-    ) {
-        $token =
-            (string) $_POST['_csrf'];
+    function requireCsrf(): void
+    {
+        Csrf::verifyRequest();
     }
-
-    /*
-     * AJAX/API request.
-     */
-    if (
-        $token === null &&
-        isset($_SERVER['HTTP_X_CSRF_TOKEN'])
-    ) {
-        $token =
-            (string) $_SERVER[
-                'HTTP_X_CSRF_TOKEN'
-            ];
-    }
-
-    \Security\Csrf::requireValid(
-        $token
-    );
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| VERIFY CURRENT REQUEST
+| REQUIRE SPECIFIC CSRF TOKEN
 |--------------------------------------------------------------------------
 */
 
-function verifyCsrfRequest(): void
-{
-    \Security\Csrf::verifyRequest();
+if (!function_exists('requireValidCsrf')) {
+
+    function requireValidCsrf(
+        ?string $token
+    ): void {
+
+        Csrf::requireValid($token);
+    }
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| PASSWORD HASH
+| ROTATE CSRF TOKEN
 |--------------------------------------------------------------------------
-|
-| Security.php is the canonical security layer.
-|
 */
 
-function hashPassword(
-    string $password
-): string {
+if (!function_exists('rotateCsrf')) {
 
-    return \Security\Security::hashPassword(
-        $password
-    );
+    function rotateCsrf(): string
+    {
+        return Csrf::rotate();
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DESTROY CSRF TOKEN
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('destroyCsrf')) {
+
+    function destroyCsrf(): void
+    {
+        Csrf::destroy();
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| PASSWORD HASHING
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('hashPassword')) {
+
+    function hashPassword(
+        string $password
+    ): string {
+
+        return Security::hashPassword(
+            $password
+        );
+    }
 }
 
 
@@ -694,15 +894,18 @@ function hashPassword(
 |--------------------------------------------------------------------------
 */
 
-function verifyPassword(
-    string $password,
-    string $hash
-): bool {
+if (!function_exists('verifyPassword')) {
 
-    return \Security\Security::verifyPassword(
-        $password,
-        $hash
-    );
+    function verifyPassword(
+        string $password,
+        string $hash
+    ): bool {
+
+        return Security::verifyPassword(
+            $password,
+            $hash
+        );
+    }
 }
 
 
@@ -712,13 +915,35 @@ function verifyPassword(
 |--------------------------------------------------------------------------
 */
 
-function passwordNeedsRehash(
-    string $hash
-): bool {
+if (!function_exists('passwordNeedsRehash')) {
 
-    return \Security\Security::needsRehash(
-        $hash
-    );
+    function passwordNeedsRehash(
+        string $hash
+    ): bool {
+
+        return Security::needsRehash(
+            $hash
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| PASSWORD VALIDATION
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('validatePassword')) {
+
+    function validatePassword(
+        string $password
+    ): array {
+
+        return Security::validatePassword(
+            $password
+        );
+    }
 }
 
 
@@ -728,77 +953,16 @@ function passwordNeedsRehash(
 |--------------------------------------------------------------------------
 */
 
-function validEmail(
-    string $email
-): bool {
+if (!function_exists('validEmail')) {
 
-    return \Security\Security::isValidEmail(
-        $email
-    );
-}
+    function validEmail(
+        string $email
+    ): bool {
 
-
-/*
-|--------------------------------------------------------------------------
-| KENYAN PHONE NORMALIZATION
-|--------------------------------------------------------------------------
-*/
-
-function normalizeKenyanPhone(
-    string $phone
-): string {
-
-    $phone = preg_replace(
-        '/[\s\-()]/',
-        '',
-        trim($phone)
-    );
-
-    if ($phone === null) {
-        return '';
+        return Security::isValidEmail(
+            $email
+        );
     }
-
-    /*
-     * +254712345678
-     */
-    if (
-        preg_match(
-            '/^\+254(7\d{8}|1\d{8})$/',
-            $phone
-        )
-    ) {
-        return $phone;
-    }
-
-    /*
-     * 254712345678
-     */
-    if (
-        preg_match(
-            '/^254(7\d{8}|1\d{8})$/',
-            $phone
-        )
-    ) {
-        return '+' . $phone;
-    }
-
-    /*
-     * 0712345678 / 0112345678
-     */
-    if (
-        preg_match(
-            '/^0(7\d{8}|1\d{8})$/',
-            $phone
-        )
-    ) {
-        return '+254' .
-            substr(
-                $phone,
-                1
-            );
-    }
-
-    return '';
 }
 
 
@@ -808,21 +972,110 @@ function normalizeKenyanPhone(
 |--------------------------------------------------------------------------
 */
 
-function intValue(
-    mixed $value,
-    int $default = 0
-): int {
+if (!function_exists('intValue')) {
 
-    $result = filter_var(
-        $value,
-        FILTER_VALIDATE_INT
-    );
+    function intValue(
+        mixed $value,
+        int $default = 0
+    ): int {
 
-    if ($result === false) {
-        return $default;
+        return Security::intValue(
+            $value,
+            $default
+        );
     }
+}
 
-    return (int) $result;
+
+/*
+|--------------------------------------------------------------------------
+| KENYAN PHONE NORMALIZATION
+|--------------------------------------------------------------------------
+|
+| Supported:
+|
+| 0712345678
+| 0112345678
+| 254712345678
+| 254112345678
+| +254712345678
+| +254112345678
+|
+| Returns E.164-style +254... or an empty string if invalid.
+|
+*/
+
+if (!function_exists('normalizeKenyanPhone')) {
+
+    function normalizeKenyanPhone(
+        string $phone
+    ): string {
+
+        $phone = preg_replace(
+            '/[\s\-()]/',
+            '',
+            trim($phone)
+        );
+
+        if ($phone === null) {
+            return '';
+        }
+
+        /*
+         * +254712345678
+         * +254112345678
+         */
+        if (preg_match(
+            '/^\+254(7\d{8}|1\d{8})$/',
+            $phone
+        )) {
+            return $phone;
+        }
+
+        /*
+         * 254712345678
+         * 254112345678
+         */
+        if (preg_match(
+            '/^254(7\d{8}|1\d{8})$/',
+            $phone
+        )) {
+            return '+' . $phone;
+        }
+
+        /*
+         * 0712345678
+         * 0112345678
+         */
+        if (preg_match(
+            '/^0(7\d{8}|1\d{8})$/',
+            $phone
+        )) {
+            return '+254' . substr(
+                $phone,
+                1
+            );
+        }
+
+        return '';
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| VALIDATE KENYAN PHONE
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('validKenyanPhone')) {
+
+    function validKenyanPhone(
+        string $phone
+    ): bool {
+
+        return normalizeKenyanPhone($phone) !== '';
+    }
 }
 
 
@@ -832,91 +1085,129 @@ function intValue(
 |--------------------------------------------------------------------------
 */
 
-function money(
-    float|int|string $amount
-): string {
+if (!function_exists('money')) {
 
-    return number_format(
-        (float) $amount,
-        2,
-        '.',
-        ','
-    );
-}
+    function money(
+        float|int|string $amount
+    ): string {
 
-
-/*
-|--------------------------------------------------------------------------
-| DATABASE TRANSACTION
-|--------------------------------------------------------------------------
-*/
-
-function beginTransaction(): void
-{
-    global $pdo;
-
-    if (
-        isset($pdo) &&
-        $pdo instanceof PDO &&
-        !$pdo->inTransaction()
-    ) {
-        $pdo->beginTransaction();
+        return number_format(
+            (float) $amount,
+            2,
+            '.',
+            ','
+        );
     }
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| COMMIT TRANSACTION
+| KENYAN CURRENCY FORMAT
 |--------------------------------------------------------------------------
 */
 
-function commitTransaction(): void
-{
-    global $pdo;
+if (!function_exists('kes')) {
 
-    if (
-        isset($pdo) &&
-        $pdo instanceof PDO &&
-        $pdo->inTransaction()
-    ) {
-        $pdo->commit();
+    function kes(
+        float|int|string $amount
+    ): string {
+
+        return 'KES ' . money($amount);
     }
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| ROLLBACK TRANSACTION
+| DATABASE TRANSACTION - BEGIN
 |--------------------------------------------------------------------------
 */
 
-function rollbackTransaction(): void
-{
-    global $pdo;
+if (!function_exists('beginTransaction')) {
 
-    if (
-        isset($pdo) &&
-        $pdo instanceof PDO &&
-        $pdo->inTransaction()
-    ) {
-        $pdo->rollBack();
+    function beginTransaction(): void
+    {
+        global $pdo;
+
+        if (
+            isset($pdo) &&
+            $pdo instanceof PDO &&
+            !$pdo->inTransaction()
+        ) {
+            $pdo->beginTransaction();
+        }
     }
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| LOGOUT USER
+| DATABASE TRANSACTION - COMMIT
 |--------------------------------------------------------------------------
-|
-| Prefer the centralized Security logout implementation.
-|
 */
 
-function logoutUser(): void
-{
-    \Security\Security::logout();
+if (!function_exists('commitTransaction')) {
+
+    function commitTransaction(): void
+    {
+        global $pdo;
+
+        if (
+            isset($pdo) &&
+            $pdo instanceof PDO &&
+            $pdo->inTransaction()
+        ) {
+            $pdo->commit();
+        }
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DATABASE TRANSACTION - ROLLBACK
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('rollbackTransaction')) {
+
+    function rollbackTransaction(): void
+    {
+        global $pdo;
+
+        if (
+            isset($pdo) &&
+            $pdo instanceof PDO &&
+            $pdo->inTransaction()
+        ) {
+            $pdo->rollBack();
+        }
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DATABASE CONNECTION
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('database')) {
+
+    function database(): ?PDO
+    {
+        global $pdo;
+
+        if (
+            isset($pdo) &&
+            $pdo instanceof PDO
+        ) {
+            return $pdo;
+        }
+
+        return null;
+    }
 }
 
 
@@ -926,55 +1217,152 @@ function logoutUser(): void
 |--------------------------------------------------------------------------
 */
 
-function databaseIsHealthy(): bool
-{
-    global $pdo;
+if (!function_exists('databaseIsHealthy')) {
 
-    if (
-        !isset($pdo) ||
-        !$pdo instanceof PDO
-    ) {
-        return false;
-    }
+    function databaseIsHealthy(): bool
+    {
+        $pdo = database();
 
-    try {
+        if ($pdo === null) {
+            return false;
+        }
 
-        $stmt = $pdo->query(
-            'SELECT 1'
-        );
+        try {
 
-        return $stmt !== false;
+            $stmt = $pdo->query(
+                'SELECT 1'
+            );
 
-    } catch (Throwable $e) {
+            return $stmt !== false;
 
-        error_log(
-            'ThinkPlus database health check failed: ' .
-            $e->getMessage()
-        );
+        } catch (Throwable $e) {
 
-        return false;
+            error_log(
+                'ThinkPlus database health check failed: ' .
+                $e->getMessage()
+            );
+
+            return false;
+        }
     }
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| DATABASE ACCESSOR
+| LOGOUT USER
+|--------------------------------------------------------------------------
+|
+| This helper performs a complete local logout.
+| Authentication-specific audit logging belongs in
+| App\Auth\Login::logout() / Audit.php.
+|
+*/
+
+if (!function_exists('logoutUser')) {
+
+    function logoutUser(): void
+    {
+        Security::logout();
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CURRENT REQUEST URI
 |--------------------------------------------------------------------------
 */
 
-function database(): PDO
-{
-    global $pdo;
+if (!function_exists('currentUrl')) {
 
-    if (
-        !isset($pdo) ||
-        !$pdo instanceof PDO
-    ) {
-        throw new RuntimeException(
-            'ThinkPlus database connection is unavailable.'
+    function currentUrl(): string
+    {
+        return (string) (
+            $_SERVER['REQUEST_URI'] ?? '/'
         );
     }
+}
 
-    return $pdo;
+
+/*
+|--------------------------------------------------------------------------
+| INTENDED URL
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('intendedUrl')) {
+
+    function intendedUrl(
+        string $default = '/dashboard.php'
+    ): string {
+
+        $url = $_SESSION['intended_url'] ?? null;
+
+        unset($_SESSION['intended_url']);
+
+        if (
+            !is_string($url) ||
+            $url === '' ||
+            !str_starts_with($url, '/') ||
+            str_starts_with($url, '//')
+        ) {
+            return $default;
+        }
+
+        return $url;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| JSON RESPONSE
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('jsonResponse')) {
+
+    function jsonResponse(
+        array $data,
+        int $status = 200
+    ): never {
+
+        if (!headers_sent()) {
+
+            http_response_code($status);
+
+            header(
+                'Content-Type: application/json; charset=UTF-8'
+            );
+
+            header(
+                'X-Content-Type-Options: nosniff'
+            );
+        }
+
+        echo json_encode(
+            $data,
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES |
+            JSON_INVALID_UTF8_SUBSTITUTE
+        );
+
+        exit;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SECURITY HEADERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('securityHeaders')) {
+
+    function securityHeaders(): void
+    {
+        Security::securityHeaders();
+    }
 }
