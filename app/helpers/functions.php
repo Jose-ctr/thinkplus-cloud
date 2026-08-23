@@ -1791,5 +1791,313 @@ if (!function_exists('str_limit')) {
     }
 }
 
+if (!function_exists('str_slug')) {
+
+    /**
+     * Generate a simple URL-safe slug.
+     */
+    function str_slug(
+        string $value
+    ): string {
+
+        $value = trim(
+            strtolower($value)
+        );
+
+        if (
+            function_exists('iconv')
+        ) {
+            $converted = iconv(
+                'UTF-8',
+                'ASCII//TRANSLIT//IGNORE',
+                $value
+            );
+
+            if ($converted !== false) {
+                $value = $converted;
+            }
+        }
+
+        $value = preg_replace(
+            '/[^a-z0-9]+/i',
+            '-',
+            $value
+        );
+
+        $value = trim(
+            (string) $value,
+            '-'
+        );
+
+        return strtolower($value);
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ARRAY HELPERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('array_get')) {
+
+    /**
+     * Retrieve a nested array value using dot notation.
+     *
+     * Example:
+     * array_get($data, 'user.profile.name')
+     */
+    function array_get(
+        array $array,
+        string $key,
+        mixed $default = null
+    ): mixed {
+
+        if ($key === '') {
+            return $array;
+        }
+
+        $segments = explode(
+            '.',
+            $key
+        );
+
+        $value = $array;
+
+        foreach ($segments as $segment) {
+
+            if (
+                !is_array($value) ||
+                !array_key_exists(
+                    $segment,
+                    $value
+                )
+            ) {
+                return $default;
+            }
+
+            $value = $value[$segment];
+        }
+
+        return $value;
+    }
+}
+
+
+if (!function_exists('array_only')) {
+
+    /**
+     * Return only selected keys.
+     *
+     * @param array<string,mixed> $array
+     * @param array<int,string> $keys
+     *
+     * @return array<string,mixed>
+     */
+    function array_only(
+        array $array,
+        array $keys
+    ): array {
+
+        return array_intersect_key(
+            $array,
+            array_flip($keys)
+        );
+    }
+}
+
+
+if (!function_exists('array_except')) {
+
+    /**
+     * Remove selected keys from an array.
+     *
+     * @param array<string,mixed> $array
+     * @param array<int,string> $keys
+     *
+     * @return array<string,mixed>
+     */
+    function array_except(
+        array $array,
+        array $keys
+    ): array {
+
+        foreach ($keys as $key) {
+            unset($array[$key]);
+        }
+
+        return $array;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| PAGINATION HELPERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('pagination_url')) {
+
+    /**
+     * Generate a pagination URL while preserving
+     * existing query parameters.
+     */
+    function pagination_url(
+        int $page,
+        string $parameter = 'page'
+    ): string {
+
+        $page = max(
+            1,
+            $page
+        );
+
+        $path =
+            $_SERVER['PHP_SELF']
+            ?? '/';
+
+        $query = $_GET;
+
+        $query[$parameter] =
+            $page;
+
+        $queryString =
+            http_build_query(
+                $query
+            );
+
+        return $path .
+            (
+                $queryString !== ''
+                    ? '?' . $queryString
+                    : ''
+            );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ENVIRONMENT HELPERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('env_value')) {
+
+    /**
+     * Read and normalize an environment value.
+     *
+     * Supported booleans:
+     * true, false, yes, no, on, off, 1, 0
+     */
+    function env_value(
+        string $key,
+        mixed $default = null
+    ): mixed {
+
+        $value = getenv($key);
+
+        if ($value === false) {
+            return $default;
+        }
+
+        $value = trim($value);
+
+        if ($value === '') {
+            return $default;
+        }
+
+        $lower = strtolower($value);
+
+        return match ($lower) {
+
+            'true',
+            'yes',
+            'on',
+            '1'
+                => true,
+
+            'false',
+            'no',
+            'off',
+            '0'
+                => false,
+
+            'null',
+            '(null)'
+                => null,
+
+            default
+                => $value,
+        };
+    }
+}
+
+
+if (!function_exists('app_env')) {
+
+    /**
+     * Return APP_ENV.
+     */
+    function app_env(
+        string $default = 'production'
+    ): string {
+
+        $value = env_value(
+            'APP_ENV',
+            $default
+        );
+
+        return is_string($value)
+            ? $value
+            : $default;
+    }
+}
+
+
+if (!function_exists('app_debug')) {
+
+    /**
+     * Determine whether application debug mode is enabled.
+     */
+    function app_debug(): bool
+    {
+        return (bool) env_value(
+            'APP_DEBUG',
+            false
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SECURITY HEADERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('security_headers')) {
+
+    /**
+     * Apply ThinkPlus security headers.
+     *
+     * Delegates the implementation to Security.php.
+     */
+    function security_headers(): void
+    {
+        Security::securityHeaders();
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SAFE IDENTIFIERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('public_id')) {
 
 
