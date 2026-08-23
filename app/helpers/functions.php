@@ -1099,5 +1099,291 @@ if (!function_exists('tenant_where')) {
     }
 }
 
+if (!function_exists('tenant_owns')) {
+
+    /**
+     * Determine whether a record belongs to the current tenant.
+     */
+    function tenant_owns(
+        string $table,
+        int $recordId,
+        string $idColumn = 'id',
+        string $tenantColumn = 'school_id'
+    ): bool {
+
+        return Tenant::owns(
+            $table,
+            $recordId,
+            $idColumn,
+            $tenantColumn
+        );
+    }
+}
+
+
+if (!function_exists('require_tenant_ownership')) {
+
+    /**
+     * Require ownership of a tenant-scoped record.
+     */
+    function require_tenant_ownership(
+        string $table,
+        int $recordId,
+        string $idColumn = 'id',
+        string $tenantColumn = 'school_id'
+    ): void {
+
+        Tenant::requireOwnership(
+            $table,
+            $recordId,
+            $idColumn,
+            $tenantColumn
+        );
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| VALIDATION HELPERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('valid_email')) {
+
+    /**
+     * Validate an email address.
+     */
+    function valid_email(string $email): bool
+    {
+        return Security::isValidEmail(
+            trim($email)
+        );
+    }
+}
+
+
+if (!function_exists('password_errors')) {
+
+    /**
+     * Validate password requirements.
+     *
+     * @return array<int,string>
+     */
+    function password_errors(
+        string $password
+    ): array {
+
+        return Security::validatePassword(
+            $password
+        );
+    }
+}
+
+
+if (!function_exists('valid_password')) {
+
+    /**
+     * Determine whether a password passes validation.
+     */
+    function valid_password(
+        string $password
+    ): bool {
+
+        return password_errors($password) === [];
+    }
+}
+
+
+if (!function_exists('required')) {
+
+    /**
+     * Determine whether a value is non-empty.
+     */
+    function required(mixed $value): bool
+    {
+        if ($value === null) {
+            return false;
+        }
+
+        if (is_string($value)) {
+            return trim($value) !== '';
+        }
+
+        if (is_array($value)) {
+            return $value !== [];
+        }
+
+        return true;
+    }
+}
+
+
+if (!function_exists('valid_int_id')) {
+
+    /**
+     * Validate a positive internal integer ID.
+     */
+    function valid_int_id(mixed $value): bool
+    {
+        $id = filter_var(
+            $value,
+            FILTER_VALIDATE_INT
+        );
+
+        return $id !== false &&
+            $id > 0;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DATABASE HELPERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('db_execute')) {
+
+    /**
+     * Execute a prepared SQL statement.
+     *
+     * @param array<int|string,mixed> $params
+     */
+    function db_execute(
+        PDO $pdo,
+        string $sql,
+        array $params = []
+    ): \PDOStatement {
+
+        $statement = $pdo->prepare($sql);
+
+        $statement->execute($params);
+
+        return $statement;
+    }
+}
+
+
+if (!function_exists('db_fetch')) {
+
+    /**
+     * Execute a query and return one row.
+     *
+     * @return array<string,mixed>|null
+     *
+     * @param array<int|string,mixed> $params
+     */
+    function db_fetch(
+        PDO $pdo,
+        string $sql,
+        array $params = []
+    ): ?array {
+
+        $statement = db_execute(
+            $pdo,
+            $sql,
+            $params
+        );
+
+        $row = $statement->fetch(
+            PDO::FETCH_ASSOC
+        );
+
+        return $row === false
+            ? null
+            : $row;
+    }
+}
+
+
+if (!function_exists('db_fetch_all')) {
+
+    /**
+     * Execute a query and return all rows.
+     *
+     * @return array<int,array<string,mixed>>
+     *
+     * @param array<int|string,mixed> $params
+     */
+    function db_fetch_all(
+        PDO $pdo,
+        string $sql,
+        array $params = []
+    ): array {
+
+        $statement = db_execute(
+            $pdo,
+            $sql,
+            $params
+        );
+
+        return $statement->fetchAll(
+            PDO::FETCH_ASSOC
+        );
+    }
+}
+
+
+if (!function_exists('db_fetch_column')) {
+
+    /**
+     * Execute a query and return one column.
+     *
+     * @param array<int|string,mixed> $params
+     */
+    function db_fetch_column(
+        PDO $pdo,
+        string $sql,
+        array $params = [],
+        int $column = 0
+    ): mixed {
+
+        $statement = db_execute(
+            $pdo,
+            $sql,
+            $params
+        );
+
+        $value = $statement->fetchColumn(
+            $column
+        );
+
+        return $value === false
+            ? null
+            : $value;
+    }
+}
+
+
+if (!function_exists('db_exists')) {
+
+    /**
+     * Determine whether a query returns at least one row.
+     *
+     * @param array<int|string,mixed> $params
+     */
+    function db_exists(
+        PDO $pdo,
+        string $sql,
+        array $params = []
+    ): bool {
+
+        return db_fetch(
+            $pdo,
+            $sql,
+            $params
+        ) !== null;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TENANT DATABASE HELPERS
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('tenant_db_fetch')) {
 
  
