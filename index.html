@@ -2,103 +2,693 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <title>ThinkPlus Cloud | School Management SaaS for Kenyan Schools</title>
 
-  <meta
-    name="theme-color"
-    content="#070B2A"
-  >
+  <meta name="description"
+        content="ThinkPlus Cloud is modern school management software for Kenyan schools. Manage fees, M-Pesa payments, students, exams, attendance, SMS, payroll and reports from one cloud platform.">
 
-  <title>ThinkPlus Cloud | School Management Software for Kenyan Schools</title>
+  <meta name="keywords"
+        content="school management system Kenya, school fee management Kenya, M-Pesa school fees, school ERP Kenya, ThinkPlus Cloud, school software Kenya">
 
-  <meta
-    name="description"
-    content="ThinkPlus Cloud helps Kenyan schools manage fees, students, exams, attendance, reports and school communication from one modern cloud platform."
-  >
+  <meta name="author" content="Joseph Mbui">
+  <meta name="robots" content="index, follow">
 
-  <meta
-    name="robots"
-    content="index, follow"
-  >
-
-  <meta
-    name="author"
-    content="Joseph Mbui - ThinkPlus Cloud"
-  >
-
-  <link
-    rel="canonical"
-    href="https://jose-ctr.github.io/thinkplus-web/"
-  >
+  <meta name="theme-color" content="#07111f">
 
   <!-- Open Graph -->
-  <meta
-    property="og:type"
-    content="website"
-  >
-
-  <meta
-    property="og:title"
-    content="ThinkPlus Cloud | Modern School Management Software"
-  >
-
-  <meta
-    property="og:description"
-    content="Manage school fees, students, exams, reports and communication from one cloud platform built for Kenyan schools."
-  >
-
-  <meta
-    property="og:url"
-    content="https://jose-ctr.github.io/thinkplus-web/"
-  >
-
-  <meta
-    property="og:site_name"
-    content="ThinkPlus Cloud"
-  >
-
-  <!-- Twitter / X -->
-  <meta
-    name="twitter:card"
-    content="summary_large_image"
-  >
-
-  <meta
-    name="twitter:title"
-    content="ThinkPlus Cloud | School Management Software"
-  >
-
-  <meta
-    name="twitter:description"
-    content="Modern school management software for Kenyan schools."
-  >
+  <meta property="og:type" content="website">
+  <meta property="og:title"
+        content="ThinkPlus Cloud | Modern School Management for Kenya">
+  <meta property="og:description"
+        content="Manage fees, students, exams, M-Pesa, SMS, payroll and reports from one powerful cloud platform.">
+  <meta property="og:url"
+        content="https://jose-ctr.github.io/thinkplus-web/">
 
   <!-- Favicon -->
-  <link
-    rel="icon"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%232563EB'/%3E%3Ctext x='50%25' y='54%25' font-size='34' font-family='Arial' font-weight='800' text-anchor='middle' fill='white'%3ETPC%3C/text%3E%3C/svg%3E"
-  >
+  <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232563eb'/%3E%3Ctext x='32' y='38' text-anchor='middle' font-family='Arial' font-size='21' font-weight='800' fill='white'%3ETPC%3C/text%3E%3C/svg%3E">
 
-  <!-- Fonts -->
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  >
+  <style>
+
+    :root {
+      --bg: #050b16;
+      --bg-soft: #07111f;
+      --surface: rgba(255,255,255,.055);
+      --surface-strong: rgba(255,255,255,.08);
+
+      --primary: #2563eb;
+      --primary-light: #60a5fa;
+      --primary-dark: #1d4ed8;
+
+      --gold: #f5b700;
+
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --muted-light: #cbd5e1;
+
+      --border: rgba(255,255,255,.09);
+
+      --shadow:
+        0 25px 80px rgba(0,0,0,.35);
+
+      --radius: 22px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(
+          circle at 20% 0%,
+          rgba(37,99,235,.18),
+          transparent 35%
+        ),
+        radial-gradient(
+          circle at 80% 20%,
+          rgba(74,91,255,.12),
+          transparent 30%
+        ),
+        var(--bg);
+
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .container {
+      width: min(1120px, 92%);
+      margin: auto;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+      background: rgba(5,11,22,.78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      min-height: 72px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+
+      text-decoration: none;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -.4px;
+    }
+
+    .logo-badge {
+      width: 40px;
+      height: 40px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 12px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          #4f46e5
+        );
+
+      box-shadow:
+        0 8px 25px rgba(37,99,235,.35);
+
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* =========================
+       BUTTONS
+    ========================= */
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      min-height: 46px;
+
+      padding: 12px 20px;
+
+      border-radius: 12px;
+
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+
+      color: white;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          #4f46e5
+        );
+
+      border: 1px solid rgba(255,255,255,.08);
+
+      box-shadow:
+        0 10px 30px rgba(37,99,235,.22);
+
+      transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        opacity .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 15px 35px rgba(37,99,235,.32);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-outline {
+      background: transparent;
+
+      border: 1px solid var(--border);
+
+      box-shadow: none;
+
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      background: var(--surface);
+      box-shadow: none;
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      position: relative;
+
+      padding: 110px 20px 90px;
+
+      text-align: center;
+
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+
+      position: absolute;
+
+      width: 500px;
+      height: 500px;
+
+      top: -250px;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(37,99,235,.22),
+          transparent 70%
+        );
+
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+
+      padding: 7px 14px;
+
+      border-radius: 999px;
+
+      background: rgba(37,99,235,.12);
+
+      border: 1px solid rgba(96,165,250,.25);
+
+      color: #bfdbfe;
+
+      font-size: 12px;
+      font-weight: 700;
+
+      margin-bottom: 22px;
+    }
+
+    .hero-icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: auto;
+
+      font-size: clamp(38px, 6vw, 68px);
+
+      line-height: 1.05;
+
+      letter-spacing: -2.5px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffffff 20%,
+          #93c5fd 60%,
+          #6366f1
+        );
+
+      -webkit-background-clip: text;
+      background-clip: text;
+
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-text {
+      max-width: 720px;
+
+      margin: 24px auto 0;
+
+      color: var(--muted-light);
+
+      font-size: 18px;
+    }
+
+    .hero-actions {
+      margin-top: 32px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      gap: 12px;
+
+      flex-wrap: wrap;
+    }
+
+    .hero-note {
+      margin-top: 18px;
+
+      color: var(--muted);
+
+      font-size: 13px;
+    }
+
+    /* =========================
+       TRUST STRIP
+    ========================= */
+
+    .trust {
+      padding: 0 20px 80px;
+    }
+
+    .trust-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 16px;
+    }
+
+    .trust-card {
+      padding: 22px;
+
+      text-align: center;
+
+      background: var(--surface);
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 18px;
+    }
+
+    .trust-card strong {
+      display: block;
+
+      font-size: 24px;
+
+      margin-bottom: 4px;
+    }
+
+    .trust-card span {
+      color: var(--muted);
+
+      font-size: 13px;
+    }
+
+    /* =========================
+       FEATURES
+    ========================= */
+
+    .features {
+      padding: 90px 20px;
+    }
+
+    .section-header {
+      text-align: center;
+
+      max-width: 700px;
+
+      margin: auto auto 50px;
+    }
+
+    .section-kicker {
+      color: #60a5fa;
+
+      font-size: 13px;
+
+      font-weight: 800;
+
+      text-transform: uppercase;
+
+      letter-spacing: 1.5px;
+
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: clamp(30px, 5vw, 44px);
+
+      line-height: 1.15;
+
+      letter-spacing: -1.5px;
+    }
+
+    .section-subtitle {
+      margin-top: 14px;
+
+      color: var(--muted);
+
+      font-size: 16px;
+    }
+
+    .features-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 18px;
+    }
+
+    .feature-card {
+      padding: 28px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: var(--radius);
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.06),
+          rgba(255,255,255,.025)
+        );
+
+      transition:
+        transform .25s ease,
+        border-color .25s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+
+      border-color:
+        rgba(96,165,250,.35);
+    }
+
+    .feature-icon {
+      width: 50px;
+      height: 50px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 14px;
+
+      background:
+        rgba(37,99,235,.14);
+
+      font-size: 23px;
+
+      margin-bottom: 18px;
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: var(--muted);
+
+      font-size: 14px;
+
+      line-height: 1.7;
+    }
+
+    /* =========================
+       PRICING
+    ========================= */
+
+    .pricing {
+      padding: 100px 20px;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.025),
+          transparent
+        );
+    }
+
+    .pricing-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 22px;
+
+      max-width: 1100px;
+
+      margin: auto;
+    }
+
+    .pricing-card {
+      position: relative;
+
+      padding: 34px 28px;
+
+      border-radius: 26px;
+
+      border:
+        1px solid var(--border);
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.065),
+          rgba(255,255,255,.025)
+        );
+
+      box-shadow: var(--shadow);
+    }
+
+    .pricing-card.featured {
+      border:
+        2px solid var(--primary);
+
+      transform: translateY(-8px);
+    }
+
+    .popular {
+      position: absolute;
+
+      top: -14px;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      white-space: nowrap;
+
+      padding: 7px 17px;
+
+      border-radius: 999px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          #4f46e5
+        );
+
+      color: white;
+
+      font-size: 11px;
+
+      font-weight: 800;
+
+      letter-spacing: .5px;
+    }
+
+    .pricing-card h3 {
+      font-size: 21px;
+    }
+
+    .plan-description {
+      color: var(--muted);
+
+      font-size: 13px;
+
+      margin-top: 5px;
+    }
+
+    .price {
+      margin: 24px 0;
+    }
+
+    .amount {
+      color: white;
+
+      font-size: 35px;
+
+      font-weight: 800;
+
+      letter-spacing: -1px;
+    }
+
+    .period {
+      color: var(--muted);
+
+      font-size: 13px;
+    }
+
+    .pricing-list {
+      list-style: none;
+
+      margin: 25px 0 30px;
+    }
+
+    .pricing-list li {
+      padding: 11px 0;
+
+      border-bottom:
+        1px solid rgba(255,255,255,.06);
+
+      color: var(--muted-light);
+
+      font-size: 14px;
+    }
+
+    .pricing-list li:last-child {
+      border-bottom: none;
+    }
+
+    .pricing-card .btn {
+      width: 100%;
+    }
+
+    .enterprise {
+      border-color:
+        rgba(245,183,0,.45);
+    }
+
+    .enterprise .amount {
+      color: var(--gold);
+    }
+
+    .enterprise .btn {
+      background:
+        linear-gradient(
+          135deg,
+          #f5b700,
+          #d99f00
+        );
+
+      color: #111827;
+    }
+
+    .pricing-note {
+      text-align: center;
+
+      margin-top: 35px;
+
+      color: var(--muted);
+
+      font-size: 13px;
+    }
+
+  </style>
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -106,14 +696,9 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "ThinkPlus Cloud",
-    "description": "Cloud-based school management software for Kenyan schools.",
     "applicationCategory": "EducationApplication",
     "operatingSystem": "Web",
-    "url": "https://jose-ctr.github.io/thinkplus-web/",
-    "author": {
-      "@type": "Person",
-      "name": "Joseph Mbui"
-    },
+    "description": "Cloud-based school management software for Kenyan schools.",
     "offers": [
       {
         "@type": "Offer",
@@ -131,2410 +716,1085 @@
   }
   </script>
 
-  <style>
-    /* =========================================================
-       THINKPLUS CLOUD
-       MODERN SAAS LANDING PAGE
-       ========================================================= */
-
-    :root {
-      --bg: #050817;
-      --bg-soft: #080d25;
-      --bg-card: rgba(255, 255, 255, 0.055);
-
-      --primary: #2563eb;
-      --primary-light: #4f7cff;
-      --primary-dark: #1d4ed8;
-
-      --accent: #22c55e;
-      --gold: #f5b700;
-
-      --white: #ffffff;
-      --text: #f8fafc;
-      --muted: #aab6cc;
-      --muted-light: #cbd5e1;
-
-      --border: rgba(255, 255, 255, 0.09);
-
-      --radius-sm: 12px;
-      --radius-md: 18px;
-      --radius-lg: 28px;
-
-      --shadow:
-        0 25px 70px rgba(0, 0, 0, 0.35);
-
-      --max-width: 1160px;
-    }
-
-    /* =========================================================
-       RESET
-       ========================================================= */
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 90px;
-    }
-
-    body {
-      font-family:
-        Inter,
-        Arial,
-        Helvetica,
-        sans-serif;
-
-      background:
-        radial-gradient(
-          circle at 50% -10%,
-          rgba(37, 99, 235, 0.22),
-          transparent 38%
-        ),
-        linear-gradient(
-          180deg,
-          #050817 0%,
-          #080d25 45%,
-          #050817 100%
-        );
-
-      color: var(--text);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    a {
-      color: inherit;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
-    button,
-    a {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    /* =========================================================
-       UTILITIES
-       ========================================================= */
-
-    .container {
-      width: min(var(--max-width), 92%);
-      margin-inline: auto;
-    }
-
-    .text-center {
-      text-align: center;
-    }
-
-    .muted {
-      color: var(--muted);
-    }
-
-    .section {
-      padding: 100px 0;
-    }
-
-    .section-header {
-      max-width: 760px;
-      margin: 0 auto 55px;
-      text-align: center;
-    }
-
-    .section-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-
-      padding: 7px 13px;
-
-      border-radius: 999px;
-
-      background:
-        rgba(37, 99, 235, 0.12);
-
-      border:
-        1px solid rgba(79, 124, 255, 0.25);
-
-      color:
-        #bcd1ff;
-
-      font-size: 13px;
-      font-weight: 700;
-
-      margin-bottom: 16px;
-    }
-
-    .section-title {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      line-height: 1.1;
-      letter-spacing: -0.04em;
-
-      margin-bottom: 16px;
-    }
-
-    .section-description {
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.8;
-    }
-
-    /* =========================================================
-       HEADER
-       ========================================================= */
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-
-      border-bottom:
-        1px solid var(--border);
-
-      background:
-        rgba(5, 8, 23, 0.82);
-
-      backdrop-filter:
-        blur(18px);
-
-      -webkit-backdrop-filter:
-        blur(18px);
-    }
-
-    .navbar {
-      min-height: 76px;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      gap: 25px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 11px;
-
-      text-decoration: none;
-      font-size: 19px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
-
-    .brand-icon {
-      width: 40px;
-      height: 40px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 12px;
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--primary),
-          var(--primary-light)
-        );
-
-      box-shadow:
-        0 10px 30px rgba(37, 99, 235, 0.35);
-
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-
-    .nav-links a {
-      color: var(--muted-light);
-      text-decoration: none;
-
-      font-size: 14px;
-      font-weight: 600;
-
-      transition:
-        color 0.2s ease;
-    }
-
-    .nav-links a:hover {
-      color: var(--white);
-    }
-
-    /* =========================================================
-       BUTTONS
-       ========================================================= */
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-
-      min-height: 48px;
-
-      padding: 12px 20px;
-
-      border-radius: 13px;
-
-      text-decoration: none;
-
-      font-size: 14px;
-      font-weight: 700;
-
-      border: 1px solid transparent;
-
-      cursor: pointer;
-
-      transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .btn-primary {
-      color: white;
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--primary),
-          var(--primary-light)
-        );
-
-      box-shadow:
-        0 12px 30px rgba(37, 99, 235, 0.28);
-    }
-
-    .btn-primary:hover {
-      box-shadow:
-        0 16px 40px rgba(37, 99, 235, 0.38);
-    }
-
-    .btn-secondary {
-      color: white;
-
-      background:
-        rgba(255, 255, 255, 0.055);
-
-      border-color:
-        var(--border);
-    }
-
-    .btn-secondary:hover {
-      background:
-        rgba(255, 255, 255, 0.09);
-    }
-
-    .btn-whatsapp {
-      background:
-        #16a34a;
-
-      color:
-        white;
-
-      box-shadow:
-        0 12px 30px rgba(22, 163, 74, 0.25);
-    }
-
-    .btn-gold {
-      background:
-        linear-gradient(
-          135deg,
-          #d4af37,
-          #f4d06f
-        );
-
-      color:
-        #171717;
-
-      box-shadow:
-        0 12px 30px rgba(212, 175, 55, 0.22);
-    }
-
-    /* =========================================================
-       HERO
-       ========================================================= */
-
-    .hero {
-      position: relative;
-
-      padding:
-        105px 0
-        90px;
-
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: "";
-
-      position: absolute;
-
-      width: 500px;
-      height: 500px;
-
-      top: -220px;
-      left: 50%;
-
-      transform: translateX(-50%);
-
-      background:
-        rgba(37, 99, 235, 0.18);
-
-      filter:
-        blur(100px);
-
-      border-radius:
-        50%;
-
-      pointer-events: none;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-
-      max-width: 900px;
-      margin: auto;
-
-      text-align: center;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-
-      padding: 8px 15px;
-
-      border-radius: 999px;
-
-      border:
-        1px solid rgba(79, 124, 255, 0.28);
-
-      background:
-        rgba(37, 99, 235, 0.1);
-
-      color:
-        #c8d8ff;
-
-      font-size: 13px;
-      font-weight: 700;
-
-      margin-bottom: 24px;
-    }
-
-    .hero h1 {
-      font-size:
-        clamp(2.7rem, 7vw, 5.3rem);
-
-      line-height:
-        1.02;
-
-      letter-spacing:
-        -0.065em;
-
-      max-width:
-        900px;
-
-      margin:
-        0 auto 25px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #ffffff 20%,
-          #dbe7ff 48%,
-          #6f8fff 100%
-        );
-
-      -webkit-background-clip:
-        text;
-
-      background-clip:
-        text;
-
-      -webkit-text-fill-color:
-        transparent;
-    }
-
-    .hero h1 span {
-      background:
-        linear-gradient(
-          135deg,
-          #60a5fa,
-          #4f46e5
-        );
-
-      -webkit-background-clip:
-        text;
-
-      background-clip:
-        text;
-
-      -webkit-text-fill-color:
-        transparent;
-    }
-
-    .hero-description {
-      max-width:
-        720px;
-
-      margin:
-        0 auto 34px;
-
-      color:
-        var(--muted);
-
-      font-size:
-        clamp(16px, 2vw, 19px);
-
-      line-height:
-        1.8;
-    }
-
-    .hero-actions {
-      display:
-        flex;
-
-      justify-content:
-        center;
-
-      flex-wrap:
-        wrap;
-
-      gap:
-        12px;
-
-      margin-bottom:
-        24px;
-    }
-
-    .hero-note {
-      color:
-        #8f9bb1;
-
-      font-size:
-        13px;
-    }
-
-    /* =========================================================
-       HERO DASHBOARD PREVIEW
-       ========================================================= */
-
-    .dashboard-preview {
-      position:
-        relative;
-
-      max-width:
-        980px;
-
-      margin:
-        70px auto 0;
-
-      padding:
-        10px;
-
-      border-radius:
-        24px;
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(79, 124, 255, 0.35),
-          rgba(255, 255, 255, 0.04)
-        );
-
-      box-shadow:
-        0 40px 100px rgba(0, 0, 0, 0.45);
-    }
-
-    .dashboard-window {
-      overflow:
-        hidden;
-
-      border-radius:
-        18px;
-
-      border:
-        1px solid rgba(255,255,255,.09);
-
-      background:
-        #0b1028;
-    }
-
-    .window-bar {
-      height:
-        46px;
-
-      display:
-        flex;
-
-      align-items:
-        center;
-
-      gap:
-        7px;
-
-      padding:
-        0 17px;
-
-      background:
-        #080d20;
-
-      border-bottom:
-        1px solid var(--border);
-    }
-
-    .window-dot {
-      width:
-        9px;
-
-      height:
-        9px;
-
-      border-radius:
-        50%;
-
-      background:
-        #334155;
-    }
-
-    .dashboard-body {
-      display:
-        grid;
-
-      grid-template-columns:
-        190px 1fr;
-
-      min-height:
-        350px;
-    }
-
-    .dashboard-sidebar {
-      padding:
-        22px 15px;
-
-      border-right:
-        1px solid var(--border);
-
-      background:
-        #080d20;
-    }
-
-    .side-brand {
-      font-size:
-        13px;
-
-      font-weight:
-        800;
-
-      margin-bottom:
-        28px;
-    }
-
-    .side-item {
-      padding:
-        10px 12px;
-
-      border-radius:
-        9px;
-
-      color:
-        #8290aa;
-
-      font-size:
-        11px;
-
-      margin-bottom:
-        5px;
-    }
-
-    .side-item.active {
-      background:
-        rgba(37, 99, 235, 0.16);
-
-      color:
-        #8db0ff;
-    }
-
-    .dashboard-main {
-      padding:
-        24px;
-    }
-
-    .dashboard-heading {
-      display:
-        flex;
-
-      justify-content:
-        space-between;
-
-      align-items:
-        center;
-
-      margin-bottom:
-        20px;
-    }
-
-    .dashboard-heading strong {
-      font-size:
-        16px;
-    }
-
-    .dashboard-heading small {
-      color:
-        #75829a;
-
-      font-size:
-        10px;
-    }
-
-    .mini-grid {
-      display:
-        grid;
-
-      grid-template-columns:
-        repeat(3, 1fr);
-
-      gap:
-        12px;
-
-      margin-bottom:
-        15px;
-    }
-
-    .mini-card {
-      padding:
-        17px;
-
-      border:
-        1px solid var(--border);
-
-      border-radius:
-        13px;
-
-      background:
-        rgba(255,255,255,.035);
-    }
-
-    .mini-card small {
-      display:
-        block;
-
-      color:
-        #77859e;
-
-      font-size:
-        9px;
-
-      margin-bottom:
-        8px;
-    }
-
-    .mini-card strong {
-      font-size:
-        19px;
-    }
-
-    .mini-card.blue strong {
-      color:
-        #6fa0ff;
-    }
-
-    .mini-card.green strong {
-      color:
-        #4ade80;
-    }
-
-    .mini-card.gold strong {
-      color:
-        #facc15;
-    }
-
-    .chart-card {
-      padding:
-        20px;
-
-      border:
-        1px solid var(--border);
-
-      border-radius:
-        13px;
-
-      background:
-        rgba(255,255,255,.035);
-    }
-
-    .chart-title {
-      font-size:
-        11px;
-
-      color:
-        #8290aa;
-
-      margin-bottom:
-        20px;
-    }
-
-    .chart-bars {
-      height:
-        120px;
-
-      display:
-        flex;
-
-      align-items:
-        flex-end;
-
-      justify-content:
-        space-between;
-
-      gap:
-        10px;
-    }
-
-    .bar {
-      width:
-        100%;
-
-      max-width:
-        38px;
-
-      border-radius:
-        6px 6px 2px 2px;
-
-      background:
-        linear-gradient(
-          180deg,
-          #4f7cff,
-          #2563eb
-        );
-
-      opacity:
-        .8;
-    }
-
-    /* =========================================================
-       TRUST STRIP
-       ========================================================= */
-
-    .trust-strip {
-      border-top:
-        1px solid var(--border);
-
-      border-bottom:
-        1px solid var(--border);
-
-      background:
-        rgba(255,255,255,.025);
-
-      padding:
-        24px 0;
-    }
-
-    .trust-content {
-      display:
-        flex;
-
-      align-items:
-        center;
-
-      justify-content:
-        center;
-
-      flex-wrap:
-        wrap;
-
-      gap:
-        30px;
-
-      color:
-        #8794aa;
-
-      font-size:
-        13px;
-
-      font-weight:
-        600;
-    }
-
-    .trust-item {
-      display:
-        flex;
-
-      align-items:
-        center;
-
-      gap:
-        8px;
-    }
-
-    .trust-check {
-      color:
-        #4ade80;
-
-      font-weight:
-        800;
-    }
-
-    /* =========================================================
-       FEATURES
-       ========================================================= */
-
-    .features {
-      background:
-        rgba(255,255,255,.012);
-    }
-
-    .feature-grid {
-      display:
-        grid;
-
-      grid-template-columns:
-        repeat(3, 1fr);
-
-      gap:
-        18px;
-    }
-
-    .feature-card {
-      padding:
-        28px;
-
-      border:
-        1px solid var(--border);
-
-      border-radius:
-        var(--radius-md);
-
-      background:
-        var(--bg-card);
-
-      transition:
-        transform .2s ease,
-        border-color .2s ease;
-    }
-
-    .feature-card:hover {
-      transform:
-        translateY(-5px);
-
-      border-color:
-        rgba(79,124,255,.35);
-    }
-
-    .feature-icon {
-      width:
-        48px;
-
-      height:
-        48px;
-
-      display:
-        grid;
-
-      place-items:
-        center;
-
-      border-radius:
-        14px;
-
-      background:
-        rgba(37,99,235,.13);
-
-      border:
-        1px solid rgba(79,124,255,.18);
-
-      font-size:
-        21px;
-
-      margin-bottom:
-        18px;
-    }
-
-    .feature-card h3 {
-      font-size:
-        17px;
-
-      margin-bottom:
-        9px;
-    }
-
-    .feature-card p {
-      color:
-        var(--muted);
-
-      font-size:
-        14px;
-
-      line-height:
-        1.75;
-    }
-
-    /* =========================================================
-       HOW IT WORKS
-       ========================================================= */
-
-    .steps {
-      display:
-        grid;
-
-      grid-template-columns:
-        repeat(3, 1fr);
-
-      gap:
-        20px;
-    }
-
-    .step {
-      position:
-        relative;
-
-      padding:
-        30px;
-
-      border:
-        1px solid var(--border);
-
-      border-radius:
-        var(--radius-md);
-
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.045),
-          rgba(255,255,255,.02)
-        );
-    }
-
-    .step-number {
-      width:
-        38px;
-
-      height:
-        38px;
-
-      display:
-        grid;
-
-      place-items:
-        center;
-
-      border-radius:
-        11px;
-
-      background:
-        var(--primary);
-
-      font-weight:
-        800;
-
-      margin-bottom:
-        18px;
-    }
-
-    .step h3 {
-      margin-bottom:
-        8px;
-
-      font-size:
-        17px;
-    }
-
-    .step p {
-      color:
-        var(--muted);
-
-      font-size:
-        14px;
-
-      line-height:
-        1.7;
-    }
-
-    /* =========================================================
-       PRICING
-       ========================================================= */
-
-    .pricing-section {
-      background:
-        #070c22;
-    }
-
-    .pricing-grid {
-      display:
-        grid;
-
-      grid-template-columns:
-        repeat(3, 1fr);
-
-      gap:
-        20px;
-
-      align-items:
-        stretch;
-    }
-
-    .pricing-card {
-      position:
-        relative;
-
-      display:
-        flex;
-
-      flex-direction:
-        column;
-
-      padding:
-        34px 28px;
-
-      border:
-        1px solid var(--border);
-
-      border-radius:
-        var(--radius-lg);
-
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.055),
-          rgba(255,255,255,.025)
-        );
-
-      box-shadow:
-        0 20px 50px rgba(0,0,0,.18);
-    }
-
-    .pricing-card.featured {
-      border:
-        2px solid var(--primary);
-
-      background:
-        linear-gradient(
-          180deg,
-          rgba(37,99,235,.12),
-          rgba(255,255,255,.035)
-        );
-
-      transform:
-        translateY(-8px);
-    }
-
-    .popular {
-      position:
-        absolute;
-
-      top:
-        -14px;
-
-      left:
-        50%;
-
-      transform:
-        translateX(-50%);
-
-      padding:
-        7px 17px;
-
-      border-radius:
-        999px;
-
-      background:
-        var(--primary);
-
-      color:
-        white;
-
-      font-size:
-        11px;
-
-      font-weight:
-        800;
-
-      white-space:
-        nowrap;
-    }
-
-    .pricing-card h3 {
-      font-size:
-        20px;
-
-      margin-bottom:
-        7px;
-    }
-
-    .plan-description {
-      color:
-        var(--muted);
-
-      font-size:
-        13px;
-    }
-
-    .price {
-      margin:
-        24px 0 6px;
-
-      display:
-        flex;
-
-      align-items:
-        baseline;
-
-      gap:
-        6px;
-    }
-
-    .price-amount {
-      font-size:
-        35px;
-
-      font-weight:
-        800;
-
-      letter-spacing:
-        -0.04em;
-
-      color:
-        white;
-    }
-
-    .price-period {
-      color:
-        var(--muted);
-
-      font-size:
-        13px;
-    }
-
-    .custom-price {
-      min-height:
-        48px;
-    }
-
-    .plan-features {
-      list-style:
-        none;
-
-      margin:
-        24px 0 28px;
-
-      flex:
-        1;
-    }
-
-    .plan-features li {
-      display:
-        flex;
-
-      align-items:
-        flex-start;
-
-      gap:
-        9px;
-
-      padding:
-        10px 0;
-
-      border-bottom:
-        1px solid rgba(255,255,255,.055);
-
-      color:
-        #cbd5e1;
-
-      font-size:
-        13px;
-    }
-
-    .check {
-      color:
-        #4ade80;
-
-      font-weight:
-        800;
-    }
-
-    .pricing-card .btn {
-      width:
-        100%;
-    }
-
-    .pricing-note {
-      margin-top:
-        30px;
-
-      text-align:
-        center;
-
-      color:
-        #78869e;
-
-      font-size:
-        12px;
-    }
-
-    /* =========================================================
-       SECURITY / VALUE
-       ========================================================= */
-
-    .value-grid {
-      display:
-        grid;
-
-      grid-template-columns:
-        1fr 1fr;
-
-      gap:
-        22px;
-    }
-
-    .value-card {
-      padding:
-        32px;
-
-      border:
-        1px solid var(--border);
-
-      border-radius:
-        var(--radius-lg);
-
-      background:
-        var(--bg-card);
-    }
-
-    .value-card h3 {
-      font-size:
-        20px;
-
-      margin-bottom:
-        10px;
-    }
-
-    .value-card > p {
-      color:
-        var(--muted);
-
-      font-size:
-        14px;
-
-      line-height:
-        1.75;
-
-      margin-bottom:
-        22px;
-    }
-
-    .value-list {
-      list-style:
-        none;
-    }
-
-    .value-list li {
-      display:
-        flex;
-
-      gap:
-        10px;
-
-      padding:
-        10px 0;
-
-      color:
-        #cbd5e1;
-
-      font-size:
-        14px;
-    }
-
-    /* =========================================================
-       FOUNDER
-       ========================================================= */
-
-    .founder-section {
-      background:
-        rgba(255,255,255,.015);
-    }
-
-    .founder-card {
-      display:
-        grid;
-
-      grid-template-columns:
-        130px 1fr;
-
-      gap:
-        30px;
-
-      align-items:
-        center;
-
-      padding:
-        40px;
-
-      border:
-        1px solid var(--border);
-
-      border-radius:
-        var(--radius-lg);
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(37,99,235,.09),
-          rgba(255,255,255,.025)
-        );
-
-      box-shadow:
-        var(--shadow);
-    }
-
-    .founder-avatar {
-      width:
-        130px;
-
-      height:
-        130px;
-
-      display:
-        grid;
-
-      place-items:
-        center;
-
-      border-radius:
-        32px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #2563eb,
-          #60a5fa
-        );
-
-      font-size:
-        36px;
-
-      font-weight:
-        800;
-
-      box-shadow:
-        0 20px 50px rgba(37,99,235,.28);
-    }
-
-    .founder-card h2 {
-      font-size:
-        clamp(1.6rem, 4vw, 2.3rem);
-
-      margin-bottom:
-        8px;
-    }
-
-    .founder-role {
-      color:
-        #6f9bff;
-
-      font-size:
-        13px;
-
-      font-weight:
-        700;
-
-      margin-bottom:
-        14px;
-    }
-
-    .founder-card p {
-      color:
-        var(--muted);
-
-      font-size:
-        14px;
-
-      line-height:
-        1.8;
-    }
-
-    .founder-actions {
-      display:
-        flex;
-
-      flex-wrap:
-        wrap;
-
-      gap:
-        10px;
-
-      margin-top:
-        22px;
-    }
-
-    /* =========================================================
-       FINAL CTA
-       ========================================================= */
-
-    .cta-section {
-      padding:
-        100px 0;
-    }
-
-    .cta-box {
-      position:
-        relative;
-
-      overflow:
-        hidden;
-
-      padding:
-        65px 30px;
-
-      text-align:
-        center;
-
-      border:
-        1px solid rgba(79,124,255,.25);
-
-      border-radius:
-        32px;
-
-      background:
-        radial-gradient(
-          circle at 50% 0%,
-          rgba(37,99,235,.3),
-          transparent 60%
-        ),
-        linear-gradient(
-          135deg,
-          rgba(37,99,235,.12),
-          rgba(255,255,255,.035)
-        );
-    }
-
-    .cta-box h2 {
-      position:
-        relative;
-
-      font-size:
-        clamp(2rem, 5vw, 3.2rem);
-
-      line-height:
-        1.1;
-
-      letter-spacing:
-        -0.04em;
-
-      margin-bottom:
-        15px;
-    }
-
-    .cta-box p {
-      position:
-        relative;
-
-      max-width:
-        650px;
-
-      margin:
-        0 auto 28px;
-
-      color:
-        var(--muted);
-
-      font-size:
-        16px;
-
-      line-height:
-        1.8;
-    }
-
-    .cta-actions {
-      position:
-        relative;
-
-      display:
-        flex;
-
-      justify-content:
-        center;
-
-      flex-wrap:
-        wrap;
-
-      gap:
-        10px;
-    }
-
-    /* =========================================================
-       FOOTER
-       ========================================================= */
-
-    footer {
-      border-top:
-        1px solid var(--border);
-
-      padding:
-        45px 0;
-
-      background:
-        #040716;
-    }
-
-    .footer-grid {
-      display:
-        flex;
-
-      align-items:
-        center;
-
-      justify-content:
-        space-between;
-
-      gap:
-        20px;
-    }
-
-    .footer-brand {
-      font-weight:
-        800;
-
-      margin-bottom:
-        5px;
-    }
-
-    .footer-text {
-      color:
-        #718096;
-
-      font-size:
-        12px;
-    }
-
-    .footer-links {
-      display:
-        flex;
-
-      flex-wrap:
-        wrap;
-
-      gap:
-        18px;
-    }
-
-    .footer-links a {
-      color:
-        #8290a8;
-
-      font-size:
-        12px;
-
-      text-decoration:
-        none;
-    }
-
-    .footer-links a:hover {
-      color:
-        white;
-    }
-
-    .copyright {
-      margin-top:
-        25px;
-
-      padding-top:
-        20px;
-
-      border-top:
-        1px solid var(--border);
-
-      color:
-        #64748b;
-
-      text-align:
-        center;
-
-      font-size:
-        11px;
-    }
-    
-    /*
-    =========================================================  
-       MOBILE
-       ========================================================= 
-    */
-
-    @media (max-width: 900px) {
-
-      .nav-links {
-        display:
-          none;
-      }
-
-      .feature-grid,
-      .steps,
-      .pricing-grid {
-        grid-template-columns:
-          1fr;
-      }
-
-      .pricing-card.featured {
-        transform:
-          none;
-      }
-
-      .value-grid {
-        grid-template-columns:
-          1fr;
-      }
-
-      .dashboard-body {
-        grid-template-columns:
-          1fr;
-      }
-
-      .dashboard-sidebar {
-        display:
-          none;
-      }
-
-      .dashboard-main {
-        padding:
-          18px;
-      }
-    }
-
-    @media (max-width: 650px) {
-
-      .section {
-        padding:
-          75px 0;
-      }
-
-      .hero {
-        padding:
-          75px 0 65px;
-      }
-
-      .navbar {
-        min-height:
-          68px;
-      }
-
-      .brand {
-        font-size:
-          16px;
-      }
-
-      .brand-icon {
-        width:
-          36px;
-
-        height:
-          36px;
-      }
-
-      .navbar > .btn {
-        min-height:
-          42px;
-
-        padding:
-          9px 13px;
-
-        font-size:
-          11px;
-      }
-
-      .hero h1 {
-        font-size:
-          clamp(2.35rem, 12vw, 3.5rem);
-      }
-
-      .hero-description {
-        font-size:
-          15px;
-      }
-
-      .hero-actions {
-        flex-direction:
-          column;
-
-        width:
-          100%;
-      }
-
-      .hero-actions .btn {
-        width:
-          100%;
-      }
-
-      .dashboard-preview {
-        margin-top:
-          45px;
-
-        padding:
-          6px;
-
-        border-radius:
-          18px;
-      }
-
-      .dashboard-window {
-        border-radius:
-          13px;
-      }
-
-      .mini-grid {
-        grid-template-columns:
-          1fr;
-      }
-
-      .mini-card {
-        padding:
-          13px;
-      }
-
-      .chart-card {
-        padding:
-          15px;
-      }
-
-      .founder-card {
-        grid-template-columns:
-          1fr;
-
-        text-align:
-          center;
-
-        padding:
-          28px 20px;
-      }
-
-      .founder-avatar {
-        margin:
-          0 auto;
-
-        width:
-          105px;
-
-        height:
-          105px;
-
-        border-radius:
-          27px;
-      }
-
-      .founder-actions {
-        justify-content:
-          center;
-      }
-
-      .founder-actions .btn {
-        width:
-          100%;
-      }
-
-      .value-card {
-        padding:
-          25px 20px;
-      }
-
-      .cta-box {
-        padding:
-          50px 20px;
-      }
-
-      .cta-actions {
-        flex-direction:
-          column;
-      }
-
-      .cta-actions .btn {
-        width:
-          100%;
-      }
-
-      .footer-grid {
-        flex-direction:
-          column;
-
-        text-align:
-          center;
-      }
-
-      .footer-links {
-        justify-content:
-          center;
-      }
-
-      .trust-content {
-        gap:
-          15px;
-      }
-    }
-
-    /* =========================================================
-       REDUCED MOTION
-       ========================================================= */
-
-    @media (prefers-reduced-motion: reduce) {
-
-      html {
-        scroll-behavior:
-          auto;
-      }
-
-      *,
-      *::before,
-      *::after {
-        transition:
-          none !important;
-      }
-
-      .btn:hover,
-      .feature-card:hover {
-        transform:
-          none;
-      }
-    }
-  </style>
 </head>
 
 <body>
 
-  <!-- =======================================================
-       HEADER
-       ======================================================= -->
+<header>
 
-  <header class="site-header">
+  <div class="container nav">
 
-    <nav
-      class="container navbar"
-      aria-label="Main navigation"
-    >
+    <a href="#" class="logo">
+
+      <div class="logo-badge">
+        TPC
+      </div>
+
+      ThinkPlus Cloud
+
+    </a>
+
+    <div class="nav-links">
 
       <a
-        href="#top"
-        class="brand"
-        aria-label="ThinkPlus Cloud home"
-      >
+        href="#pricing"
+        class="btn btn-outline">
+        View Pricing
+      </a>
 
-        <span
-          class="brand-icon"
-          aria-hidden="true"
-        >
-          TPC
-        </span>
+      <a
+        href="https://wa.me/254707649890?text=Hi%20Joseph,%20I%20would%20like%20to%20learn%20more%20about%20ThinkPlus%20Cloud."
+        class="btn"
+        target="_blank"
+        rel="noopener">
+        Contact Us
+      </a>
 
-        <span>
-          ThinkPlus Cloud
-        </span>
+    </div>
+
+  </div>
+
+</header>
+
+<main>
+
+<section class="hero">
+
+  <div class="container hero-content">
+
+    <div class="hero-icon" aria-hidden="true">
+      📊
+    </div>
+
+    <div class="badge">
+      🚀 Built for Kenyan Schools
+    </div>
+
+    <h1>
+      Run Your School Smarter.
+      Not Harder.
+    </h1>
+
+    <p class="hero-text">
+      ThinkPlus Cloud brings fees, M-Pesa payments,
+      students, exams, attendance, SMS, payroll and
+      reports into one simple cloud platform.
+    </p>
+
+    <div class="hero-actions">
+
+      <a
+        href="https://wa.me/254707649890?text=Hi%20Joseph,%20I%20want%20to%20book%20a%20free%20ThinkPlus%20Cloud%20demo."
+        class="btn"
+        target="_blank"
+        rel="noopener">
+        🚀 Book a Free Demo
+      </a>
+
+      <a
+        href="#pricing"
+        class="btn btn-outline">
+        View Plans
+      </a>
+
+    </div>
+
+    <p class="hero-note">
+      No installation • Cloud-based • Mobile friendly • Kenyan support
+    </p>
+
+  </div>
+
+</section>
+
+<section class="trust">
+
+  <div class="container trust-grid">
+
+    <div class="trust-card">
+      <strong>M-Pesa</strong>
+      <span>Designed for Kenyan payments</span>
+    </div>
+
+    <div class="trust-card">
+      <strong>Cloud</strong>
+      <span>Access from anywhere</span>
+    </div>
+
+    <div class="trust-card">
+      <strong>24/7</strong>
+      <span>Your school data stays accessible</span>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="features">
+
+  <div class="container">
+
+    <div class="section-header">
+
+      <div class="section-kicker">
+        Everything in one place
+      </div>
+
+      <h2 class="section-title">
+        Powerful tools for modern schools
+      </h2>
+
+      <p class="section-subtitle">
+        Replace spreadsheets, notebooks and scattered
+        records with one organized school management platform.
+      </p>
+
+    </div>
+
+    <div class="features-grid">
+
+      <div class="feature-card">
+
+        <div class="feature-icon" aria-hidden="true">
+          💰
+        </div>
+
+        <h3>
+          Fees Management
+        </h3>
+
+        <p>
+          Track student balances, payments, invoices,
+          receipts and fee statements from one dashboard.
+        </p>
+
+      </div>
+
+      <div class="feature-card">
+
+        <div class="feature-icon" aria-hidden="true">
+          📱
+        </div>
+
+        <h3>
+          M-Pesa Integration
+        </h3>
+
+        <p>
+          Make school fee collection easier with
+          payment workflows designed for Kenyan schools.
+        </p>
+
+      </div>
+
+      <div class="feature-card">
+
+        <div class="feature-icon" aria-hidden="true">
+          👨‍🎓
+        </div>
+
+        <h3>
+          Student Management
+        </h3>
+
+        <p>
+          Keep student profiles, parents, classes,
+          contacts and academic information organized.
+        </p>
+
+      </div>
+
+      <div class="feature-card">
+
+        <div class="feature-icon" aria-hidden="true">
+          📚
+        </div>
+
+        <h3>
+          Exams & Results
+        </h3>
+
+        <p>
+          Record marks, manage subjects and generate
+          professional academic reports.
+        </p>
+
+      </div>
+
+      <div class="feature-card">
+
+        <div class="feature-icon" aria-hidden="true">
+          📲
+        </div>
+
+        <h3>
+          SMS Notifications
+        </h3>
+
+        <p>
+          Communicate important school information,
+          reminders and updates to parents.
+        </p>
+
+      </div>
+
+      <div class="feature-card">
+
+        <div class="feature-icon" aria-hidden="true">
+          📊
+        </div>
+
+        <h3>
+          Analytics
+        </h3>
+
+        <p>
+          Turn school data into useful insights with
+          dashboards and management reports.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  </section>
+
+  <!-- =========================
+     PRICING SECTION
+========================= -->
+
+<section class="pricing" id="pricing">
+
+  <div class="container">
+
+    <div class="section-header">
+
+      <div class="section-kicker">
+        Simple pricing
+      </div>
+
+      <h2 class="section-title">
+        Choose the plan that fits your school
+      </h2>
+
+      <p class="section-subtitle">
+        Start with a plan that matches your school size.
+        Upgrade as your school grows.
+      </p>
+
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- BASIC PLAN -->
+
+      <div class="pricing-card">
+
+        <h3>
+          Basic
+        </h3>
+
+        <p class="plan-description">
+          For small and growing primary schools
+        </p>
+
+        <div class="price">
+
+          <span class="amount">
+            KES 3,000
+          </span>
+
+          <span class="period">
+            /month
+          </span>
+
+        </div>
+
+        <ul class="pricing-list">
+
+          <li>
+            ✓ Up to 300 students
+          </li>
+
+          <li>
+            ✓ Student management
+          </li>
+
+          <li>
+            ✓ Fees management
+          </li>
+
+          <li>
+            ✓ Exams & results
+          </li>
+
+          <li>
+            ✓ SMS notifications
+          </li>
+
+          <li>
+            ✓ Mobile access
+          </li>
+
+          <li>
+            ✓ Automatic updates
+          </li>
+
+        </ul>
+
+        <a
+          href="https://wa.me/254707649890?text=Hello%20ThinkPlus%20Cloud,%20I%20would%20like%20to%20book%20a%20free%20demo%20for%20the%20Basic%20plan%20at%20KES%203000%20per%20month."
+          class="btn"
+          target="_blank"
+          rel="noopener">
+
+          Book Free Demo
+
+        </a>
+
+      </div>
+
+
+      <!-- PRO PLAN -->
+
+      <div class="pricing-card featured">
+
+        <div class="popular">
+          MOST POPULAR
+        </div>
+
+        <h3>
+          Pro
+        </h3>
+
+        <p class="plan-description">
+          For established primary & secondary schools
+        </p>
+
+        <div class="price">
+
+          <span class="amount">
+            KES 5,000
+          </span>
+
+          <span class="period">
+            /month
+          </span>
+
+        </div>
+
+        <ul class="pricing-list">
+
+          <li>
+            ✓ Up to 1,000 students
+          </li>
+
+          <li>
+            ✓ Everything in Basic
+          </li>
+
+          <li>
+            ✓ M-Pesa payment workflows
+          </li>
+
+          <li>
+            ✓ Payroll & HR
+          </li>
+
+          <li>
+            ✓ WhatsApp broadcasts
+          </li>
+
+          <li>
+            ✓ Advanced analytics
+          </li>
+
+          <li>
+            ✓ Priority support
+          </li>
+
+          <li>
+            ✓ Automatic updates
+          </li>
+
+        </ul>
+
+        <a
+          href="https://wa.me/254707649890?text=Hello%20ThinkPlus%20Cloud,%20I%20would%20like%20to%20book%20a%20free%20demo%20for%20the%20Pro%20plan%20at%20KES%205000%20per%20month."
+          class="btn"
+          target="_blank"
+          rel="noopener">
+
+          🚀 Book Free Demo
+
+        </a>
+
+      </div>
+
+
+      <!-- ENTERPRISE PLAN -->
+
+      <div class="pricing-card enterprise">
+
+        <h3>
+          Enterprise
+        </h3>
+
+        <p class="plan-description">
+          For school groups and large institutions
+        </p>
+
+        <div class="price">
+
+          <span class="amount">
+            Custom
+          </span>
+
+        </div>
+
+        <ul class="pricing-list">
+
+          <li>
+            ✓ Unlimited students
+          </li>
+
+          <li>
+            ✓ Everything in Pro
+          </li>
+
+          <li>
+            ✓ Multi-school management
+          </li>
+
+          <li>
+            ✓ API access
+          </li>
+
+          <li>
+            ✓ Advanced reporting
+          </li>
+
+          <li>
+            ✓ Dedicated account management
+          </li>
+
+          <li>
+            ✓ Staff training
+          </li>
+
+        </ul>
+
+        <a
+          href="https://wa.me/254707649890?text=Hello%20ThinkPlus%20Cloud,%20I%20manage%20a%20school%20group%20and%20I%20would%20like%20to%20discuss%20the%20Enterprise%20plan."
+          class="btn"
+          target="_blank"
+          rel="noopener">
+
+          Talk to Sales →
+
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <p class="pricing-note">
+      ✓ No setup fees &nbsp; • &nbsp;
+      ✓ Automatic updates &nbsp; • &nbsp;
+      ✓ Kenyan support
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     HOW IT WORKS
+========================= -->
+
+<section
+  class="features"
+  id="how-it-works">
+
+  <div class="container">
+
+    <div class="section-header">
+
+      <div class="section-kicker">
+        Simple setup
+      </div>
+
+      <h2 class="section-title">
+        Get your school online in three steps
+      </h2>
+
+      <p class="section-subtitle">
+        No complicated installation.
+        No expensive servers.
+        Just a simple cloud platform.
+      </p>
+
+    </div>
+
+
+    <div class="features-grid">
+
+      <div class="feature-card">
+
+        <div class="feature-icon">
+          01
+        </div>
+
+        <h3>
+          Book a Demo
+        </h3>
+
+        <p>
+          Talk to us about your school and see
+          how ThinkPlus Cloud can fit your workflow.
+        </p>
+
+      </div>
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon">
+          02
+        </div>
+
+        <h3>
+          Set Up Your School
+        </h3>
+
+        <p>
+          Add your school, classes, students,
+          staff, fees and other important information.
+        </p>
+
+      </div>
+
+
+      <div class="feature-card">
+
+        <div class="feature-icon">
+          03
+        </div>
+
+        <h3>
+          Start Managing
+        </h3>
+
+        <p>
+          Manage school operations from your phone,
+          tablet or computer wherever you are.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     CALL TO ACTION
+========================= -->
+
+<section class="hero">
+
+  <div class="container hero-content">
+
+    <div class="badge">
+      🇰🇪 Built with Kenyan schools in mind
+    </div>
+
+    <h2 class="section-title">
+      Ready to move your school
+      beyond paperwork?
+    </h2>
+
+    <p class="hero-text">
+      See how ThinkPlus Cloud can help your
+      administration save time, organize records
+      and manage school finances more efficiently.
+    </p>
+
+    <div class="hero-actions">
+
+      <a
+        href="https://wa.me/254707649890?text=Hi%20Joseph,%20I%20would%20like%20to%20book%20a%20free%20ThinkPlus%20Cloud%20demo."
+        class="btn"
+        target="_blank"
+        rel="noopener">
+
+        💬 Book a Free Demo
 
       </a>
 
-      <div class="nav-links">
+      <a
+        href="mailto:mbuijoseph51@gmail.com"
+        class="btn btn-outline">
 
-        <a href="#features">
-          Features
+        ✉️ Email Us
+
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     FOUNDER SECTION
+========================= -->
+
+<section
+  class="features"
+  id="founder">
+
+  <div class="container">
+
+    <div class="section-header">
+
+      <div class="section-kicker">
+        About ThinkPlus Cloud
+      </div>
+
+      <h2 class="section-title">
+        Built to solve real school problems
+      </h2>
+
+    </div>
+
+
+    <div
+      class="feature-card"
+      style="max-width:850px;margin:auto;">
+
+      <div
+        style="
+          display:flex;
+          align-items:center;
+          gap:22px;
+          margin-bottom:22px;
+          flex-wrap:wrap;
+        ">
+
+        <div
+          style="
+            width:82px;
+            height:82px;
+            border-radius:22px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:linear-gradient(135deg,#2563eb,#60a5fa);
+            color:#fff;
+            font-size:25px;
+            font-weight:800;
+            box-shadow:0 15px 35px rgba(37,99,235,.25);
+          ">
+
+          JM
+
+        </div>
+
+
+        <div>
+
+          <h3 style="font-size:22px;">
+            Joseph Mbui
+          </h3>
+
+          <p
+            style="
+              color:#60a5fa;
+              font-size:14px;
+              font-weight:700;
+              margin-top:3px;
+            ">
+
+            Founder, ThinkPlus Cloud
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <p
+        style="
+          color:var(--muted-light);
+          line-height:1.8;
+          font-size:15px;
+        ">
+
+        ThinkPlus Cloud is being built as a practical
+        school management platform for Kenyan schools.
+
+        The goal is simple:
+
+        give school administrators modern tools for
+        managing students, fees, payments, exams,
+        communication and reports without requiring
+        complicated infrastructure.
+
+      </p>
+
+
+      <p
+        style="
+          color:var(--muted-light);
+          line-height:1.8;
+          font-size:15px;
+          margin-top:15px;
+        ">
+
+        <strong>
+          Every school deserves access to useful technology,
+          regardless of its size.
+        </strong>
+
+      </p>
+
+
+      <div
+        style="
+          margin-top:25px;
+          padding:20px;
+          border-radius:18px;
+          background:rgba(37,99,235,.08);
+          border:1px solid rgba(96,165,250,.15);
+        ">
+
+        <p
+          style="
+            color:#bfdbfe;
+            font-size:14px;
+            font-weight:600;
+            line-height:1.7;
+          ">
+
+          “Our mission is to help schools go digital
+          quickly, securely and affordably.”
+
+        </p>
+
+      </div>
+
+
+      <div
+        style="
+          display:flex;
+          gap:12px;
+          flex-wrap:wrap;
+          margin-top:25px;
+        ">
+
+        <a
+          href="https://wa.me/254707649890?text=Hi%20Joseph,%20I%20would%20like%20to%20learn%20more%20about%20ThinkPlus%20Cloud."
+          class="btn"
+          target="_blank"
+          rel="noopener">
+
+          💬 WhatsApp Joseph
+
+        </a>
+
+
+        <a
+          href="mailto:mbuijoseph51@gmail.com"
+          class="btn btn-outline">
+
+          ✉️ Email Joseph
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+  <!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="site-footer">
+
+  <div class="container">
+
+    <div class="footer-grid">
+
+      <!-- BRAND -->
+
+      <div class="footer-brand">
+
+        <div class="logo">
+
+          <div class="logo-badge">
+            TPC
+          </div>
+
+          <span>
+            ThinkPlus Cloud
+          </span>
+
+        </div>
+
+        <p>
+          Modern cloud-based school management
+          software designed for Kenyan schools.
+        </p>
+
+        <div class="footer-location">
+          🇰🇪 Built for Kenya
+        </div>
+
+      </div>
+
+
+      <!-- PLATFORM -->
+
+      <div class="footer-column">
+
+        <h4>
+          Platform
+        </h4>
+
+        <a href="#pricing">
+          Pricing
         </a>
 
         <a href="#how-it-works">
           How It Works
         </a>
 
-        <a href="#pricing">
-          Pricing
-        </a>
-
         <a href="#founder">
-          About
+          About Us
         </a>
 
       </div>
 
-      <a
-        href="https://wa.me/254707649890?text=Hi%20Joseph%2C%20I%20would%20like%20to%20learn%20more%20about%20ThinkPlus%20Cloud."
-        class="btn btn-primary"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Talk to Us
-      </a>
 
-    </nav>
+      <!-- CONTACT -->
 
-  </header>
+      <div class="footer-column">
 
+        <h4>
+          Contact
+        </h4>
 
-  <main id="top">
+        <a
+          href="https://wa.me/254707649890?text=Hi%20ThinkPlus%20Cloud,%20I%20would%20like%20more%20information."
+          target="_blank"
+          rel="noopener">
 
-    <!-- =====================================================
-         HERO
-         ===================================================== -->
+          WhatsApp
 
-    <section class="hero">
+        </a>
 
-      <div class="container">
+        <a href="mailto:mbuijoseph51@gmail.com">
 
-        <div class="hero-content">
+          Email
 
-          <div class="hero-badge">
-            <span aria-hidden="true">🚀</span>
-            Built for Kenyan Schools
-          </div>
+        </a>
 
-          <h1>
-            Run Your School
-            <span>Smarter.</span>
-            From One Cloud Platform.
-          </h1>
-
-          <p class="hero-description">
-            ThinkPlus Cloud helps schools manage fees, students,
-            exams, reports and parent communication without
-            spreadsheets, paperwork or complicated installations.
-          </p>
-
-          <div class="hero-actions">
-
-            <a
-              href="https://wa.me/254707649890?text=Hi%20Joseph%2C%20I%20want%20to%20book%20a%20free%20ThinkPlus%20Cloud%20demo."
-              class="btn btn-primary"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span aria-hidden="true">💬</span>
-              Book a Free Demo
-            </a>
-
-            <a
-              href="#pricing"
-              class="btn btn-secondary"
-            >
-              View Pricing
-              <span aria-hidden="true">↓</span>
-            </a>
-
-          </div>
-
-          <p class="hero-note">
-            No installation · Cloud-based · Mobile friendly ·
-            Kenyan support
-          </p>
-
-        </div>
-
-
-        <!-- Dashboard Preview -->
-
-        <div
-          class="dashboard-preview"
-          aria-label="ThinkPlus Cloud dashboard preview"
-        >
-
-          <div class="dashboard-window">
-
-            <div
-              class="window-bar"
-              aria-hidden="true"
-            >
-              <span class="window-dot"></span>
-              <span class="window-dot"></span>
-              <span class="window-dot"></span>
-            </div>
-
-            <div class="dashboard-body">
-
-              <aside class="dashboard-sidebar">
-
-                <div class="side-brand">
-                  ThinkPlus Cloud
-                </div>
-
-                <div class="side-item active">
-                  Dashboard
-                </div>
-
-                <div class="side-item">
-                  Students
-                </div>
-
-                <div class="side-item">
-                  Fees
-                </div>
-
-                <div class="side-item">
-                  Exams
-                </div>
-
-                <div class="side-item">
-                  Attendance
-                </div>
-
-                <div class="side-item">
-                  Reports
-                </div>
-
-                <div class="side-item">
-                  Communication
-                </div>
-
-              </aside>
-
-              <div class="dashboard-main">
-
-                <div class="dashboard-heading">
-
-                  <strong>
-                    School Overview
-                  </strong>
-
-                  <small>
-                    2026 Academic Year
-                  </small>
-
-                </div>
-
-                <div class="mini-grid">
-
-                  <div class="mini-card blue">
-
-                    <small>
-                      STUDENTS
-                    </small>
-
-                    <strong>
-                      842
-                    </strong>
-
-                  </div>
-
-                  <div class="mini-card green">
-
-                    <small>
-                      FEES COLLECTED
-                    </small>
-
-                    <strong>
-                      KES 4.8M
-                    </strong>
-
-                  </div>
-
-                  <div class="mini-card gold">
-
-                    <small>
-                      ATTENDANCE
-                    </small>
-
-                    <strong>
-                      94.2%
-                    </strong>
-
-                  </div>
-
-                </div>
-
-                <div class="chart-card">
-
-                  <div class="chart-title">
-                    Fee Collection Overview
-                  </div>
-
-                  <div class="chart-bars">
-
-                    <div
-                      class="bar"
-                      style="height:38%"
-                    ></div>
-
-                    <div
-                      class="bar"
-                      style="height:52%"
-                    ></div>
-
-                    <div
-                      class="bar"
-                      style="height:47%"
-                    ></div>
-
-                    <div
-                      class="bar"
-                      style="height:70%"
-                    ></div>
-
-                    <div
-                      class="bar"
-                      style="height:62%"
-                    ></div>
-
-                    <div
-                      class="bar"
-                      style="height:82%"
-                    ></div>
-
-                    <div
-                      class="bar"
-                      style="height:92%"
-                    ></div>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
+        <span>
+          Kilifi, Kenya
+        </span>
 
       </div>
 
-    </section>
 
+      <!-- CTA -->
 
-    <!-- =====================================================
-         TRUST
-         ===================================================== -->
+      <div class="footer-column">
 
-    <section class="trust-strip">
+        <h4>
+          Get Started
+        </h4>
 
-      <div class="container trust-content">
+        <p>
+          Ready to modernize your school?
+        </p>
 
-        <div class="trust-item">
-          <span
-            class="trust-check"
-            aria-hidden="true"
-          >
-            ✓
-          </span>
-          School Management
-        </div>
+        <a
+          href="https://wa.me/254707649890?text=Hi%20Joseph,%20I%20would%20like%20to%20book%20a%20free%20ThinkPlus%20Cloud%20demo."
+          class="footer-cta"
+          target="_blank"
+          rel="noopener">
 
-        <div class="trust-item">
-          <span
-            class="trust-check"
-            aria-hidden="true"
-          >
-            ✓
-          </span>
-          Fee Management
-        </div>
+          Book a Free Demo →
 
-        <div class="trust-item">
-          <span
-            class="trust-check"
-            aria-hidden="true"
-          >
-            ✓
-          </span>
-          Exams & Reports
-        </div>
-
-        <div class="trust-item">
-          <span
-            class="trust-check"
-            aria-hidden="true"
-          >
-            ✓
-          </span>
-          Parent Communication
-        </div>
-
-        <div class="trust-item">
-          <span
-            class="trust-check"
-            aria-hidden="true"
-          >
-            ✓
-          </span>
-          Mobile Access
-        </div>
+        </a>
 
       </div>
 
-    </section>
+    </div>
 
 
-    <!-- =====================================================
-         FEATURES
-         ===================================================== -->
+    <div class="footer-bottom">
 
-    <section
-      class="section features"
-      id="features"
-    >
+      <p>
+        © 2026 ThinkPlus Cloud.
+        All rights reserved.
+      </p>
 
-      <div class="container">
+      <p>
+        Founder: Joseph Mbui
+      </p>
 
-        <div class="section-header">
+    </div>
 
-          <div class="section-label">
-            ⚡ Everything in one place
-          </div>
+  </div>
 
-          <h2 class="section-title">
-            Less paperwork.
-            More control.
-          </h2>
-
-          <p class="section-description">
-            Replace disconnected spreadsheets and manual processes
-            with a centralized school management platform.
-          </p>
-
-        </div>
+</footer>
 
 
-        <div class="feature-grid">
+<!-- =========================
+     BACK TO TOP BUTTON
+========================= -->
 
-          <article class="feature-card">
+<button
+  id="backToTop"
+  class="back-to-top"
+  aria-label="Back to top"
+  type="button">
 
-            <div
-              class="feature-icon"
-              aria-hidden="true"
-            >
-              💰
-            </div>
+  ↑
 
-            <h3>
-              Fee Management
-            </h3>
-
-            <p>
-              Track student balances, payments and fee records
-              from one organized system.
-            </p>
-
-          </article>
+</button>
 
 
-          <article class="feature-card">
+<!-- =========================
+     JAVASCRIPT
+========================= -->
 
-            <div
-              class="feature-icon"
-              aria-hidden="true"
-            >
-              📱
-            </div>
+<script>
 
-            <h3>
-              M-Pesa Ready
-            </h3>
+  /* =========================
+     BACK TO TOP
+  ========================= */
 
-            <p>
-              Designed around the payment workflows Kenyan
-              schools and parents already use.
-            </p>
+  const backToTop =
+    document.getElementById("backToTop");
 
-          </article>
+  window.addEventListener("scroll", function () {
 
+    if (window.scrollY > 500) {
 
-          <article class="feature-card">
+      backToTop.classList.add("show");
 
-            <div
-              class="feature-icon"
-              aria-hidden="true"
-            >
-              📊
-            </div>
+    } else {
 
-            <h3>
-              Exams & Results
-            </h3>
+      backToTop.classList.remove("show");
 
-            <p>
-              Organize academic results and generate useful
-              reports without manual calculations.
-            </p>
+    }
 
-          </article>
+  });
 
 
-          <article class="feature-card">
+  backToTop.addEventListener("click", function () {
 
-            <div
-              class="feature-icon"
-              aria-hidden="true"
-            >
-              👨‍👩‍👧
-            </div>
+    window.scrollTo({
 
-            <h3>
-              Parent Communication
-            </h3>
+      top: 0,
 
-            <p>
-              Keep parents informed with school communication
-              and notifications.
-            </p>
+      behavior: "smooth"
 
-          </article>
+    });
+
+  });
 
 
-          <article class="feature-card">
+  /* =========================
+     SMOOTH SCROLL
+  ========================= */
 
-            <div
-              class="feature-icon"
-              aria-hidden="true"
-            >
-              📄
-            </div>
+  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
 
-            <h3>
-              Instant Reports
-            </h3>
+    link.addEventListener("click", function (event) {
 
-            <p>
-              Access school information and generate reports
-              whenever administrators need them.
-            </p>
+      const targetId =
+        this.getAttribute("href");
 
-          </article>
+      if (targetId === "#") {
+        return;
+      }
 
+      const target =
+        document.querySelector(targetId);
 
-          <article class="feature-card">
+      if (target) {
 
-            <div
-              class="feature-icon"
-              aria-hidden="true"
-            >
-              ☁️
-            </div>
+        event.preventDefault();
 
-            <h3>
-              Cloud Based
-            </h3>
+        target.scrollIntoView({
 
-            <p>
-              No local server installation. Access the platform
-              from compatible phones, tablets and computers.
-            </p>
+          behavior: "smooth",
 
-          </article>
+          block: "start"
 
-        </div>
+        });
 
-      </div>
+      }
 
-    </section>
+    });
+
+  });
 
 
-    <!--
-      
+  /* =========================
+     WHATSAPP CLICK TRACKING
+  ========================= */
+
+  document.querySelectorAll(
+    'a[href*="wa.me"]'
+  ).forEach(function (button) {
+
+    button.addEventListener("click", function () {
+
+      console.log(
+        "ThinkPlus Cloud WhatsApp CTA clicked"
+      );
+
+    });
+
+  });
+
+
+  /* =========================
+     PAGE LOAD
+  ========================= */
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+      document.body.classList.add("page-loaded");
+
+    }
+  );
+
+</script>
+
+
+<!-- =========================
+     END OF DOCUMENT
+========================= -->
+
+</body>
+</html>
