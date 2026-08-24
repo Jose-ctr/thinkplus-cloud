@@ -1,232 +1,1283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>ThinkPlus Cloud – School Fee Management System Kenya</title>
-<meta name="description" content="Cloud-based school fee management software for Kenyan schools. Collect fees via M-Pesa, send SMS reminders, manage payroll, and generate reports.">
+  <meta charset="UTF-8">
 
-<title>ThinkPlus Cloud – School Fee Management System Kenya</title>
-<meta name="description" content="Cloud-based school fee
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ThinkPlus Cloud | School Management SaaS for Kenyan Schools</title>
-<meta name="description" content="Cloud-based school management SaaS for Kenyan schools. Fees, Exams, M-Pesa, PDF Reports. KES 5000/month. 14-day free trial.">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{
---bg:#010126;--bg2:#111B4A;--card:#131B3D;--card2:#182354;
---primary:#2563EB;--primary2:#4A5BFF;--text:#F8FAFC;
---muted:#CBD5E1;--border:rgba(255,255,255,.08);
-}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Inter,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),var(--bg2));color:var(--text)}
-.container{width:min(1120px,92%);margin:auto}
-header{position:sticky;top:0;z-index:10;backdrop-filter:blur(10px);background:rgba(1,1,38,.75);border-bottom:1px solid var(--border)}
-.nav{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}
-.logo-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff}
-.btn{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;padding:12px 22px;border-radius:12px;text-decoration:none;font-weight:700;display:inline-block}
-.btn:hover{transform:translateY(-2px)}
-.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
-.badge{background:rgba(37,99,235,.15);color:#CFE0FF;border:1px solid rgba(70,140,255,.35);padding:6px 12px;border-radius:999px;font-size:12px}
-h1{font-size:48px;line-height:1.1;background:linear-gradient(135deg,#FFFFFF,var(--primary2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero{padding:100px 20px;text-align:center}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
-.card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:16px;padding:22px}
-.stat strong{font-size:36px;display:block;background:linear-gradient(135deg,#FFFFFF,var(--primary2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-/* PRICING SECTION */
-.pricing{padding:80px 20px;background:var(--bg2);color:var(--text)}
-.section-title{text-align:center;font-size:2.5rem;margin-bottom:10px}
-.section-subtitle{text-align:center;color:var(--muted);margin-bottom:50px}
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;max-width:1100px;margin:0 auto}
-.pricing-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:28px;padding:40px 30px;text-align:center;backdrop-filter:blur(12px);position:relative}
-.pricing-card.featured{border:2px solid var(--primary);transform:scale(1.05)}
-.pricing-card .badge-pop{position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:var(--primary);color:white;padding:8px 20px;border-radius:20px;font-size:12px;font-weight:700}
-.price{margin:20px 0}
-.price .amount{font-size:3rem;font-weight:bold;color:var(--primary)}
-.price .period{font-size:1rem;color:var(--muted)}
-.pricing-card ul{list-style:none;padding:0;margin:30px 0;text-align:left}
-.pricing-card ul li{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}
-.pricing-note{text-align:center;margin-top:40px;color:var(--muted)}
+  <meta
+    name="theme-color"
+    content="#070B2A"
+  >
 
-/* FOUNDER SECTION */
-.founder{padding:80px 20px;background:var(--bg)}
-.founder-card{display:flex;gap:28px;align-items:center;padding:32px;border-radius:28px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);box-shadow:0 18px 40px rgba(0,0,0,.25);margin-top:30px}
-.founder-img{width:110px;height:110px;border-radius:24px;background:linear-gradient(135deg,#2563eb,#60a5fa);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;color:white;flex-shrink:0;box-shadow:0 12px 30px rgba(37,99,235,.35)}
-.ghost{background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--text);padding:14px 26px;border-radius:12px;text-decoration:none;font-weight:700;display:inline-block;transition:all .2s}
-.ghost:hover{background:rgba(255,255,255,.05);transform:translateY(-2px)}
-@media(max-width:768px){.founder-card{flex-direction:column;text-align:center;padding:24px}.founder-img{width:90px;height:90px}}
+  <title>ThinkPlus Cloud | School Management Software for Kenyan Schools</title>
 
-footer{padding:40px 20px;text-align:center;border-top:1px solid var(--border);color:var(--muted)}
-@media(max-width:900px){.grid-3{grid-template-columns:1fr}.pricing-card.featured{transform:scale(1)}h1{font-size:32px}.section-title{font-size:2rem}}
-</style>
-</style>
-</head>
-<body>
-<header>
-  <div class="container nav">
-    <div class="logo"><div class="logo-badge">TPC</div>ThinkPlus Cloud</div>
-    <div>
-      <a href="https://wa.me/254707649890?text=Hi%20Joseph,%20I%20have%20a%20question%20about%20ThinkPlus%20Cloud"
-   class="btn-primary"
-   target="_blank">
-   Ask About ThinkPlus Cloud
-      </a>
-    </div>
-  </div>
-</header>
+  <meta
+    name="description"
+    content="ThinkPlus Cloud helps Kenyan schools manage fees, students, exams, attendance, reports and school communication from one modern cloud platform."
+  >
 
-<section class="hero">
-<div class="container">
-<div style="font-size:3rem;margin-bottom:12px">📊</div>
-  <div class="badge">🚀 Cloud-based SaaS for Kenyan Schools</div>
-  <h1>Stop Chasing Fee Defaulters on WhatsApp</h1>
-  <p style="color:var(--muted); font-size:18px; margin:20px 0; max-width:700px; margin-left:auto; margin-right:auto">
-    Collect Fees via M-Pesa, Send Auto SMS to Parents, and Download Instant Reports.
-    <br>No Installation. No Servers. Works on Any Phone.
-  </p>
-  </section>
+  <meta
+    name="robots"
+    content="index, follow"
+  >
 
-<!-- PRICING SECTION -->
-<section class="pricing" id="pricing">
-  <div class="container">
+  <meta
+    name="author"
+    content="Joseph Mbui - ThinkPlus Cloud"
+  >
 
-    <h2 class="section-title">Simple, Transparent SaaS Pricing</h2>
-    <p class="section-subtitle">
-      Pay monthly. Cancel anytime. No setup fees.
-    </p>
+  <link
+    rel="canonical"
+    href="https://jose-ctr.github.io/thinkplus-web/"
+  >
 
-    <div class="pricing-grid">
+  <!-- Open Graph -->
+  <meta
+    property="og:type"
+    content="website"
+  >
 
-      <!-- BASIC -->
-      <div class="pricing-card">
-        <h3>Basic</h3>
+  <meta
+    property="og:title"
+    content="ThinkPlus Cloud | Modern School Management Software"
+  >
 
-        <div class="price">
-          <span class="amount">KES 3,000</span>
-          <span class="period">/month</span>
-        </div>
+  <meta
+    property="og:description"
+    content="Manage school fees, students, exams, reports and communication from one cloud platform built for Kenyan schools."
+  >
 
-        <p style="color:var(--muted)">
-          Best for Primary Schools
-        </p>
+  <meta
+    property="og:url"
+    content="https://jose-ctr.github.io/thinkplus-web/"
+  >
 
-        <ul>
-          <li>✓ Up to 300 Students</li>
-          <li>✓ Fees Management</li>
-          <li>✓ Exams & Reports</li>
-          <li>✓ SMS Notifications</li>
-          <li>✓ Mobile Access</li>
-        </ul>
+  <meta
+    property="og:site_name"
+    content="ThinkPlus Cloud"
+  >
 
-        <a href="https://wa.me/254707649890?text=Hello%20ThinkPlus%20Cloud,%20I%20would%20like%20to%20book%20a%20free%20demo%20for%20the%20Basic%20plan."
-           class="btn"
-           target="_blank">
-           Book Free Demo
-        </a>
-      </div>
+  <!-- Twitter / X -->
+  <meta
+    name="twitter:card"
+    content="summary_large_image"
+  >
 
-      <!-- PRO - MOST POPULAR -->
-      <div class="pricing-card featured">
-        <h3>Pro</h3>
+  <meta
+    name="twitter:title"
+    content="ThinkPlus Cloud | School Management Software"
+  >
 
-        <div class="price">
-          <span class="amount">KES 5,000</span>
-          <span class="period">/month</span>
-        </div>
+  <meta
+    name="twitter:description"
+    content="Modern school management software for Kenyan schools."
+  >
 
-        <p style="color:var(--muted)">
-          Best for Secondary Schools
-        </p>
+  <!-- Favicon -->
+  <link
+    rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%232563EB'/%3E%3Ctext x='50%25' y='54%25' font-size='34' font-family='Arial' font-weight='800' text-anchor='middle' fill='white'%3ETPC%3C/text%3E%3C/svg%3E"
+  >
 
-        <ul>
-          <li>✓ Up to 1000 Students</li>
-          <li>✓ Everything in Basic</li>
-          <li>✓ Payroll & HR</li>
-          <li>✓ WhatsApp Broadcast</li>
-          <li>✓ Analytics Dashboard</li>
-          <li>✓ Priority Support</li>
-        </ul>
+  <!-- Fonts -->
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
 
-        <a href="https://wa.me/254707649890?text=Hello%20ThinkPlus%20Cloud,%20I%20would%20like%20to%20book%20a%20free%20demo%20for%20the%20Pro%20plan."
-           class="btn"
-           target="_blank">
-           Book Free Demo
-        </a>
-      </div>
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
-      <!-- ENTERPRISE -->
-      <div class="pricing-card">
-        <h3>Enterprise</h3>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
-        <div class="price">
-          <span class="amount">Custom</span>
-        </div>
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ThinkPlus Cloud",
+    "description": "Cloud-based school management software for Kenyan schools.",
+    "applicationCategory": "EducationApplication",
+    "operatingSystem": "Web",
+    "url": "https://jose-ctr.github.io/thinkplus-web/",
+    "author": {
+      "@type": "Person",
+      "name": "Joseph Mbui"
+    },
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Basic",
+        "price": "3000",
+        "priceCurrency": "KES"
+      },
+      {
+        "@type": "Offer",
+        "name": "Pro",
+        "price": "5000",
+        "priceCurrency": "KES"
+      }
+    ]
+  }
+  </script>
 
-        <p style="color:var(--muted)">
-          For School Chains & Groups
-        </p>
+  <style>
+    /* =========================================================
+       THINKPLUS CLOUD
+       MODERN SAAS LANDING PAGE
+       ========================================================= */
 
-        <ul>
-          <li>✓ Unlimited Students</li>
-          <li>✓ Everything in Pro</li>
-          <li>✓ API Access</li>
-          <li>✓ Dedicated Account Manager</li>
-          <li>✓ On-site Training</li>
-        </ul>
+    :root {
+      --bg: #050817;
+      --bg-soft: #080d25;
+      --bg-card: rgba(255, 255, 255, 0.055);
 
-        <a href="https://wa.me/254707649890?text=Hello%20ThinkPlus%20Cloud,%20I%20would%20like%20to%20book%20a%20free%20demo%20for%20the%20Enterprise%20plan."
-           class="btn"
-           target="_blank">
-           Book Enterprise Demo
-        </a>
-      </div>
+      --primary: #2563eb;
+      --primary-light: #4f7cff;
+      --primary-dark: #1d4ed8;
 
-    </div>
+      --accent: #22c55e;
+      --gold: #f5b700;
 
-    <p class="pricing-note">
-      *All plans include automatic updates and Kenyan support.*
-    </p>
+      --white: #ffffff;
+      --text: #f8fafc;
+      --muted: #aab6cc;
+      --muted-light: #cbd5e1;
 
-  </div>
-</section>
-<!-- FOUNDER SECTION -->
-<section class="founder" id="founder">
-  <div class="container">
-    <div class="founder-card">
-      <div class="founder-img">JM</div>
-      <div>
-        <h3>Joseph Mbui – Founder, ThinkPlus Cloud</h3>
-        <p style="color:var(--muted);font-size:16px;max-width:650px;margin-top:10px;line-height:1.8">
-          Based in <strong>Kilifi, Kenya</strong>, I build practical cloud software for Kenyan schools.
-          ThinkPlus Cloud was created to solve the challenges many schools face every day —
-          lost records, delayed report cards, manual fee tracking, and excessive paperwork.
-        </p>
-        <p style="color:var(--muted);font-size:16px;max-width:650px;margin-top:14px;line-height:1.8">
-          My mission is simple: <strong>help schools go digital quickly, securely, and affordably</strong>
-          so administrators can focus on education instead of paperwork.
-        </p>
-        <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap">
-          <a href="https://wa.me/254707649890?text=Hi%20Joseph,%20I%20have%20a%20question%20about%20ThinkPlus%20Cloud"
-             class="btn" target="_blank">💬 WhatsApp Joseph</a>
-          <a href="mailto:mbuijoseph51@gmail.com" class="ghost">✉️ Email Joseph</a>
-        </div>
-        <div style="margin-top:20px;padding:16px;border:1px solid rgba(255,255,255,.08);border-radius:16px;background:rgba(255,255,255,.03);max-width:520px">
-          <div style="font-weight:700;color:#e2e8f0;margin-bottom:6px">Founder’s Vision</div>
-          <p style="color:#cbd5e1;font-size:14px;line-height:1.7;margin:0">
-            “Every school deserves modern technology — not just large institutions in major cities.”
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<footer>
-  <div class="container">
-    <p><strong>ThinkPlus Cloud</strong></p>
-    <p>Founder: Joseph Mbui | 📱 WhatsApp: 0707649890 | 📍 Kilifi, Kenya</p>
-    <p style="margin-top:20px">© 2026 ThinkPlus Cloud. Made with ❤️ in Kenya.</p>
-  </div>
-</footer>
-</body>
-</html>
+      --border: rgba(255, 255, 255, 0.09);
+
+      --radius-sm: 12px;
+      --radius-md: 18px;
+      --radius-lg: 28px;
+
+      --shadow:
+        0 25px 70px rgba(0, 0, 0, 0.35);
+
+      --max-width: 1160px;
+    }
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          rgba(37, 99, 235, 0.22),
+          transparent 38%
+        ),
+        linear-gradient(
+          180deg,
+          #050817 0%,
+          #080d25 45%,
+          #050817 100%
+        );
+
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* =========================================================
+       UTILITIES
+       ========================================================= */
+
+    .container {
+      width: min(var(--max-width), 92%);
+      margin-inline: auto;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .section {
+      padding: 100px 0;
+    }
+
+    .section-header {
+      max-width: 760px;
+      margin: 0 auto 55px;
+      text-align: center;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 7px 13px;
+
+      border-radius: 999px;
+
+      background:
+        rgba(37, 99, 235, 0.12);
+
+      border:
+        1px solid rgba(79, 124, 255, 0.25);
+
+      color:
+        #bcd1ff;
+
+      font-size: 13px;
+      font-weight: 700;
+
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+
+      margin-bottom: 16px;
+    }
+
+    .section-description {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+      border-bottom:
+        1px solid var(--border);
+
+      background:
+        rgba(5, 8, 23, 0.82);
+
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
+    }
+
+    .navbar {
+      min-height: 76px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 25px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+
+      text-decoration: none;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+
+      display: grid;
+      place-items: center;
+
+      border-radius: 12px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-light)
+        );
+
+      box-shadow:
+        0 10px 30px rgba(37, 99, 235, 0.35);
+
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      color: var(--muted-light);
+      text-decoration: none;
+
+      font-size: 14px;
+      font-weight: 600;
+
+      transition:
+        color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+    }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+
+      min-height: 48px;
+
+      padding: 12px 20px;
+
+      border-radius: 13px;
+
+      text-decoration: none;
+
+      font-size: 14px;
+      font-weight: 700;
+
+      border: 1px solid transparent;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      color: white;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-light)
+        );
+
+      box-shadow:
+        0 12px 30px rgba(37, 99, 235, 0.28);
+    }
+
+    .btn-primary:hover {
+      box-shadow:
+        0 16px 40px rgba(37, 99, 235, 0.38);
+    }
+
+    .btn-secondary {
+      color: white;
+
+      background:
+        rgba(255, 255, 255, 0.055);
+
+      border-color:
+        var(--border);
+    }
+
+    .btn-secondary:hover {
+      background:
+        rgba(255, 255, 255, 0.09);
+    }
+
+    .btn-whatsapp {
+      background:
+        #16a34a;
+
+      color:
+        white;
+
+      box-shadow:
+        0 12px 30px rgba(22, 163, 74, 0.25);
+    }
+
+    .btn-gold {
+      background:
+        linear-gradient(
+          135deg,
+          #d4af37,
+          #f4d06f
+        );
+
+      color:
+        #171717;
+
+      box-shadow:
+        0 12px 30px rgba(212, 175, 55, 0.22);
+    }
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
+    .hero {
+      position: relative;
+
+      padding:
+        105px 0
+        90px;
+
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+
+      position: absolute;
+
+      width: 500px;
+      height: 500px;
+
+      top: -220px;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      background:
+        rgba(37, 99, 235, 0.18);
+
+      filter:
+        blur(100px);
+
+      border-radius:
+        50%;
+
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+
+      max-width: 900px;
+      margin: auto;
+
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 8px 15px;
+
+      border-radius: 999px;
+
+      border:
+        1px solid rgba(79, 124, 255, 0.28);
+
+      background:
+        rgba(37, 99, 235, 0.1);
+
+      color:
+        #c8d8ff;
+
+      font-size: 13px;
+      font-weight: 700;
+
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size:
+        clamp(2.7rem, 7vw, 5.3rem);
+
+      line-height:
+        1.02;
+
+      letter-spacing:
+        -0.065em;
+
+      max-width:
+        900px;
+
+      margin:
+        0 auto 25px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffffff 20%,
+          #dbe7ff 48%,
+          #6f8fff 100%
+        );
+
+      -webkit-background-clip:
+        text;
+
+      background-clip:
+        text;
+
+      -webkit-text-fill-color:
+        transparent;
+    }
+
+    .hero h1 span {
+      background:
+        linear-gradient(
+          135deg,
+          #60a5fa,
+          #4f46e5
+        );
+
+      -webkit-background-clip:
+        text;
+
+      background-clip:
+        text;
+
+      -webkit-text-fill-color:
+        transparent;
+    }
+
+    .hero-description {
+      max-width:
+        720px;
+
+      margin:
+        0 auto 34px;
+
+      color:
+        var(--muted);
+
+      font-size:
+        clamp(16px, 2vw, 19px);
+
+      line-height:
+        1.8;
+    }
+
+    .hero-actions {
+      display:
+        flex;
+
+      justify-content:
+        center;
+
+      flex-wrap:
+        wrap;
+
+      gap:
+        12px;
+
+      margin-bottom:
+        24px;
+    }
+
+    .hero-note {
+      color:
+        #8f9bb1;
+
+      font-size:
+        13px;
+    }
+
+    /* =========================================================
+       HERO DASHBOARD PREVIEW
+       ========================================================= */
+
+    .dashboard-preview {
+      position:
+        relative;
+
+      max-width:
+        980px;
+
+      margin:
+        70px auto 0;
+
+      padding:
+        10px;
+
+      border-radius:
+        24px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(79, 124, 255, 0.35),
+          rgba(255, 255, 255, 0.04)
+        );
+
+      box-shadow:
+        0 40px 100px rgba(0, 0, 0, 0.45);
+    }
+
+    .dashboard-window {
+      overflow:
+        hidden;
+
+      border-radius:
+        18px;
+
+      border:
+        1px solid rgba(255,255,255,.09);
+
+      background:
+        #0b1028;
+    }
+
+    .window-bar {
+      height:
+        46px;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      gap:
+        7px;
+
+      padding:
+        0 17px;
+
+      background:
+        #080d20;
+
+      border-bottom:
+        1px solid var(--border);
+    }
+
+    .window-dot {
+      width:
+        9px;
+
+      height:
+        9px;
+
+      border-radius:
+        50%;
+
+      background:
+        #334155;
+    }
+
+    .dashboard-body {
+      display:
+        grid;
+
+      grid-template-columns:
+        190px 1fr;
+
+      min-height:
+        350px;
+    }
+
+    .dashboard-sidebar {
+      padding:
+        22px 15px;
+
+      border-right:
+        1px solid var(--border);
+
+      background:
+        #080d20;
+    }
+
+    .side-brand {
+      font-size:
+        13px;
+
+      font-weight:
+        800;
+
+      margin-bottom:
+        28px;
+    }
+
+    .side-item {
+      padding:
+        10px 12px;
+
+      border-radius:
+        9px;
+
+      color:
+        #8290aa;
+
+      font-size:
+        11px;
+
+      margin-bottom:
+        5px;
+    }
+
+    .side-item.active {
+      background:
+        rgba(37, 99, 235, 0.16);
+
+      color:
+        #8db0ff;
+    }
+
+    .dashboard-main {
+      padding:
+        24px;
+    }
+
+    .dashboard-heading {
+      display:
+        flex;
+
+      justify-content:
+        space-between;
+
+      align-items:
+        center;
+
+      margin-bottom:
+        20px;
+    }
+
+    .dashboard-heading strong {
+      font-size:
+        16px;
+    }
+
+    .dashboard-heading small {
+      color:
+        #75829a;
+
+      font-size:
+        10px;
+    }
+
+    .mini-grid {
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap:
+        12px;
+
+      margin-bottom:
+        15px;
+    }
+
+    .mini-card {
+      padding:
+        17px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius:
+        13px;
+
+      background:
+        rgba(255,255,255,.035);
+    }
+
+    .mini-card small {
+      display:
+        block;
+
+      color:
+        #77859e;
+
+      font-size:
+        9px;
+
+      margin-bottom:
+        8px;
+    }
+
+    .mini-card strong {
+      font-size:
+        19px;
+    }
+
+    .mini-card.blue strong {
+      color:
+        #6fa0ff;
+    }
+
+    .mini-card.green strong {
+      color:
+        #4ade80;
+    }
+
+    .mini-card.gold strong {
+      color:
+        #facc15;
+    }
+
+    .chart-card {
+      padding:
+        20px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius:
+        13px;
+
+      background:
+        rgba(255,255,255,.035);
+    }
+
+    .chart-title {
+      font-size:
+        11px;
+
+      color:
+        #8290aa;
+
+      margin-bottom:
+        20px;
+    }
+
+    .chart-bars {
+      height:
+        120px;
+
+      display:
+        flex;
+
+      align-items:
+        flex-end;
+
+      justify-content:
+        space-between;
+
+      gap:
+        10px;
+    }
+
+    .bar {
+      width:
+        100%;
+
+      max-width:
+        38px;
+
+      border-radius:
+        6px 6px 2px 2px;
+
+      background:
+        linear-gradient(
+          180deg,
+          #4f7cff,
+          #2563eb
+        );
+
+      opacity:
+        .8;
+    }
+
+    /* =========================================================
+       TRUST STRIP
+       ========================================================= */
+
+    .trust-strip {
+      border-top:
+        1px solid var(--border);
+
+      border-bottom:
+        1px solid var(--border);
+
+      background:
+        rgba(255,255,255,.025);
+
+      padding:
+        24px 0;
+    }
+
+    .trust-content {
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      flex-wrap:
+        wrap;
+
+      gap:
+        30px;
+
+      color:
+        #8794aa;
+
+      font-size:
+        13px;
+
+      font-weight:
+        600;
+    }
+
+    .trust-item {
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      gap:
+        8px;
+    }
+
+    .trust-check {
+      color:
+        #4ade80;
+
+      font-weight:
+        800;
+    }
+
+    /* =========================================================
+       FEATURES
+       ========================================================= */
+
+    .features {
+      background:
+        rgba(255,255,255,.012);
+    }
+
+    .feature-grid {
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap:
+        18px;
+    }
+
+    .feature-card {
+      padding:
+        28px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius:
+        var(--radius-md);
+
+      background:
+        var(--bg-card);
+
+      transition:
+        transform .2s ease,
+        border-color .2s ease;
+    }
+
+    .feature-card:hover {
+      transform:
+        translateY(-5px);
+
+      border-color:
+        rgba(79,124,255,.35);
+    }
+
+    .feature-icon {
+      width:
+        48px;
+
+      height:
+        48px;
+
+      display:
+        grid;
+
+      place-items:
+        center;
+
+      border-radius:
+        14px;
+
+      background:
+        rgba(37,99,235,.13);
+
+      border:
+        1px solid rgba(79,124,255,.18);
+
+      font-size:
+        21px;
+
+      margin-bottom:
+        18px;
+    }
+
+    .feature-card h3 {
+      font-size:
+        17px;
+
+      margin-bottom:
+        9px;
+    }
+
+    .feature-card p {
+      color:
+        var(--muted);
+
+      font-size:
+        14px;
+
+      line-height:
+        1.75;
+    }
+
+    /* =========================================================
+       HOW IT WORKS
+       ========================================================= */
+
+    .steps {
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap:
+        20px;
+    }
+
+    .step {
+      position:
+        relative;
+
+      padding:
+        30px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius:
+        var(--radius-md);
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.045),
+          rgba(255,255,255,.02)
+        );
+    }
+
+    .step-number {
+      width:
+        38px;
+
+      height:
+        38px;
+
+      display:
+        grid;
+
+      place-items:
+        center;
+
+      border-radius:
+        11px;
+
+      background:
+        var(--primary);
+
+      font-weight:
+        800;
+
+      margin-bottom:
+        18px;
+    }
+
+    .step h3 {
+      margin-bottom:
+        8px;
+
+      font-size:
+        17px;
+    }
+
+    .step p {
+      color:
+        var(--muted);
+
+      font-size:
+        14px;
+
+      line-height:
+        1.7;
+    }
+
+    /* =========================================================
+       PRICING
+       ========================================================= */
+
+    .pricing-section {
+      background:
+        #070c22;
+    }
+
+    .pricing-grid {
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap:
+        20px;
+
+      align-items:
+        stretch;
+    }
+
+    .pricing-card {
+      position:
+        relative;
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      padding:
+        34px 28px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius:
+        var(--radius-lg);
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.055),
+          rgba(255,255,255,.025)
+        );
+
+      box-shadow:
+        0 20px 50px rgba(0,0,0,.18);
+    }
+
+    .pricing-card.featured {
+      border:
+        2px solid var(--primary);
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(37,99,235,.12),
+          rgba(255,255,255,.035)
+        );
+
+      transform:
+        translateY(-8px);
+    }
+
+    .popular {
+      position:
+        absolute;
+
+      top:
+        -14px;
+
+      left:
+        50%;
+
+      transform:
+        translateX(-50%);
+
+      padding:
+        7px 17px;
+
+      border-radius:
+        999px;
+
+      background:
+        var(--primary);
+
+      color:
+        white;
+
+      font-size:
+        11px;
+
+      font-weight:
+        800;
+
+      white-space:
+        nowrap;
+    }
+
+    .pricing-card h3 {
+      font-size:
+        20px;
+
+      margin-bottom:
+        7px;
+    }
+
+    .pl
