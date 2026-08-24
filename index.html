@@ -1774,4 +1774,764 @@
 
     /* =========================================================
        MOBILE
+
+    @media (max-width: 900px) {
+
+      .nav-links {
+        display:
+          none;
+      }
+
+      .feature-grid,
+      .steps,
+      .pricing-grid {
+        grid-template-columns:
+          1fr;
+      }
+
+      .pricing-card.featured {
+        transform:
+          none;
+      }
+
+      .value-grid {
+        grid-template-columns:
+          1fr;
+      }
+
+      .dashboard-body {
+        grid-template-columns:
+          1fr;
+      }
+
+      .dashboard-sidebar {
+        display:
+          none;
+      }
+
+      .dashboard-main {
+        padding:
+          18px;
+      }
+    }
+
+    @media (max-width: 650px) {
+
+      .section {
+        padding:
+          75px 0;
+      }
+
+      .hero {
+        padding:
+          75px 0 65px;
+      }
+
+      .navbar {
+        min-height:
+          68px;
+      }
+
+      .brand {
+        font-size:
+          16px;
+      }
+
+      .brand-icon {
+        width:
+          36px;
+
+        height:
+          36px;
+      }
+
+      .navbar > .btn {
+        min-height:
+          42px;
+
+        padding:
+          9px 13px;
+
+        font-size:
+          11px;
+      }
+
+      .hero h1 {
+        font-size:
+          clamp(2.35rem, 12vw, 3.5rem);
+      }
+
+      .hero-description {
+        font-size:
+          15px;
+      }
+
+      .hero-actions {
+        flex-direction:
+          column;
+
+        width:
+          100%;
+      }
+
+      .hero-actions .btn {
+        width:
+          100%;
+      }
+
+      .dashboard-preview {
+        margin-top:
+          45px;
+
+        padding:
+          6px;
+
+        border-radius:
+          18px;
+      }
+
+      .dashboard-window {
+        border-radius:
+          13px;
+      }
+
+      .mini-grid {
+        grid-template-columns:
+          1fr;
+      }
+
+      .mini-card {
+        padding:
+          13px;
+      }
+
+      .chart-card {
+        padding:
+          15px;
+      }
+
+      .founder-card {
+        grid-template-columns:
+          1fr;
+
+        text-align:
+          center;
+
+        padding:
+          28px 20px;
+      }
+
+      .founder-avatar {
+        margin:
+          0 auto;
+
+        width:
+          105px;
+
+        height:
+          105px;
+
+        border-radius:
+          27px;
+      }
+
+      .founder-actions {
+        justify-content:
+          center;
+      }
+
+      .founder-actions .btn {
+        width:
+          100%;
+      }
+
+      .value-card {
+        padding:
+          25px 20px;
+      }
+
+      .cta-box {
+        padding:
+          50px 20px;
+      }
+
+      .cta-actions {
+        flex-direction:
+          column;
+      }
+
+      .cta-actions .btn {
+        width:
+          100%;
+      }
+
+      .footer-grid {
+        flex-direction:
+          column;
+
+        text-align:
+          center;
+      }
+
+      .footer-links {
+        justify-content:
+          center;
+      }
+
+      .trust-content {
+        gap:
+          15px;
+      }
+    }
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+      html {
+        scroll-behavior:
+          auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition:
+          none !important;
+      }
+
+      .btn:hover,
+      .feature-card:hover {
+        transform:
+          none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =======================================================
+       HEADER
+       ======================================================= -->
+
+  <header class="site-header">
+
+    <nav
+      class="container navbar"
+      aria-label="Main navigation"
+    >
+
+      <a
+        href="#top"
+        class="brand"
+        aria-label="ThinkPlus Cloud home"
+      >
+
+        <span
+          class="brand-icon"
+          aria-hidden="true"
+        >
+          TPC
+        </span>
+
+        <span>
+          ThinkPlus Cloud
+        </span>
+
+      </a>
+
+      <div class="nav-links">
+
+        <a href="#features">
+          Features
+        </a>
+
+        <a href="#how-it-works">
+          How It Works
+        </a>
+
+        <a href="#pricing">
+          Pricing
+        </a>
+
+        <a href="#founder">
+          About
+        </a>
+
+      </div>
+
+      <a
+        href="https://wa.me/254707649890?text=Hi%20Joseph%2C%20I%20would%20like%20to%20learn%20more%20about%20ThinkPlus%20Cloud."
+        class="btn btn-primary"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Talk to Us
+      </a>
+
+    </nav>
+
+  </header>
+
+
+  <main id="top">
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="hero">
+
+      <div class="container">
+
+        <div class="hero-content">
+
+          <div class="hero-badge">
+            <span aria-hidden="true">🚀</span>
+            Built for Kenyan Schools
+          </div>
+
+          <h1>
+            Run Your School
+            <span>Smarter.</span>
+            From One Cloud Platform.
+          </h1>
+
+          <p class="hero-description">
+            ThinkPlus Cloud helps schools manage fees, students,
+            exams, reports and parent communication without
+            spreadsheets, paperwork or complicated installations.
+          </p>
+
+          <div class="hero-actions">
+
+            <a
+              href="https://wa.me/254707649890?text=Hi%20Joseph%2C%20I%20want%20to%20book%20a%20free%20ThinkPlus%20Cloud%20demo."
+              class="btn btn-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span aria-hidden="true">💬</span>
+              Book a Free Demo
+            </a>
+
+            <a
+              href="#pricing"
+              class="btn btn-secondary"
+            >
+              View Pricing
+              <span aria-hidden="true">↓</span>
+            </a>
+
+          </div>
+
+          <p class="hero-note">
+            No installation · Cloud-based · Mobile friendly ·
+            Kenyan support
+          </p>
+
+        </div>
+
+
+        <!-- Dashboard Preview -->
+
+        <div
+          class="dashboard-preview"
+          aria-label="ThinkPlus Cloud dashboard preview"
+        >
+
+          <div class="dashboard-window">
+
+            <div
+              class="window-bar"
+              aria-hidden="true"
+            >
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+            </div>
+
+            <div class="dashboard-body">
+
+              <aside class="dashboard-sidebar">
+
+                <div class="side-brand">
+                  ThinkPlus Cloud
+                </div>
+
+                <div class="side-item active">
+                  Dashboard
+                </div>
+
+                <div class="side-item">
+                  Students
+                </div>
+
+                <div class="side-item">
+                  Fees
+                </div>
+
+                <div class="side-item">
+                  Exams
+                </div>
+
+                <div class="side-item">
+                  Attendance
+                </div>
+
+                <div class="side-item">
+                  Reports
+                </div>
+
+                <div class="side-item">
+                  Communication
+                </div>
+
+              </aside>
+
+              <div class="dashboard-main">
+
+                <div class="dashboard-heading">
+
+                  <strong>
+                    School Overview
+                  </strong>
+
+                  <small>
+                    2026 Academic Year
+                  </small>
+
+                </div>
+
+                <div class="mini-grid">
+
+                  <div class="mini-card blue">
+
+                    <small>
+                      STUDENTS
+                    </small>
+
+                    <strong>
+                      842
+                    </strong>
+
+                  </div>
+
+                  <div class="mini-card green">
+
+                    <small>
+                      FEES COLLECTED
+                    </small>
+
+                    <strong>
+                      KES 4.8M
+                    </strong>
+
+                  </div>
+
+                  <div class="mini-card gold">
+
+                    <small>
+                      ATTENDANCE
+                    </small>
+
+                    <strong>
+                      94.2%
+                    </strong>
+
+                  </div>
+
+                </div>
+
+                <div class="chart-card">
+
+                  <div class="chart-title">
+                    Fee Collection Overview
+                  </div>
+
+                  <div class="chart-bars">
+
+                    <div
+                      class="bar"
+                      style="height:38%"
+                    ></div>
+
+                    <div
+                      class="bar"
+                      style="height:52%"
+                    ></div>
+
+                    <div
+                      class="bar"
+                      style="height:47%"
+                    ></div>
+
+                    <div
+                      class="bar"
+                      style="height:70%"
+                    ></div>
+
+                    <div
+                      class="bar"
+                      style="height:62%"
+                    ></div>
+
+                    <div
+                      class="bar"
+                      style="height:82%"
+                    ></div>
+
+                    <div
+                      class="bar"
+                      style="height:92%"
+                    ></div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         TRUST
+         ===================================================== -->
+
+    <section class="trust-strip">
+
+      <div class="container trust-content">
+
+        <div class="trust-item">
+          <span
+            class="trust-check"
+            aria-hidden="true"
+          >
+            ✓
+          </span>
+          School Management
+        </div>
+
+        <div class="trust-item">
+          <span
+            class="trust-check"
+            aria-hidden="true"
+          >
+            ✓
+          </span>
+          Fee Management
+        </div>
+
+        <div class="trust-item">
+          <span
+            class="trust-check"
+            aria-hidden="true"
+          >
+            ✓
+          </span>
+          Exams & Reports
+        </div>
+
+        <div class="trust-item">
+          <span
+            class="trust-check"
+            aria-hidden="true"
+          >
+            ✓
+          </span>
+          Parent Communication
+        </div>
+
+        <div class="trust-item">
+          <span
+            class="trust-check"
+            aria-hidden="true"
+          >
+            ✓
+          </span>
+          Mobile Access
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FEATURES
+         ===================================================== -->
+
+    <section
+      class="section features"
+      id="features"
+    >
+
+      <div class="container">
+
+        <div class="section-header">
+
+          <div class="section-label">
+            ⚡ Everything in one place
+          </div>
+
+          <h2 class="section-title">
+            Less paperwork.
+            More control.
+          </h2>
+
+          <p class="section-description">
+            Replace disconnected spreadsheets and manual processes
+            with a centralized school management platform.
+          </p>
+
+        </div>
+
+
+        <div class="feature-grid">
+
+          <article class="feature-card">
+
+            <div
+              class="feature-icon"
+              aria-hidden="true"
+            >
+              💰
+            </div>
+
+            <h3>
+              Fee Management
+            </h3>
+
+            <p>
+              Track student balances, payments and fee records
+              from one organized system.
+            </p>
+
+          </article>
+
+
+          <article class="feature-card">
+
+            <div
+              class="feature-icon"
+              aria-hidden="true"
+            >
+              📱
+            </div>
+
+            <h3>
+              M-Pesa Ready
+            </h3>
+
+            <p>
+              Designed around the payment workflows Kenyan
+              schools and parents already use.
+            </p>
+
+          </article>
+
+
+          <article class="feature-card">
+
+            <div
+              class="feature-icon"
+              aria-hidden="true"
+            >
+              📊
+            </div>
+
+            <h3>
+              Exams & Results
+            </h3>
+
+            <p>
+              Organize academic results and generate useful
+              reports without manual calculations.
+            </p>
+
+          </article>
+
+
+          <article class="feature-card">
+
+            <div
+              class="feature-icon"
+              aria-hidden="true"
+            >
+              👨‍👩‍👧
+            </div>
+
+            <h3>
+              Parent Communication
+            </h3>
+
+            <p>
+              Keep parents informed with school communication
+              and notifications.
+            </p>
+
+          </article>
+
+
+          <article class="feature-card">
+
+            <div
+              class="feature-icon"
+              aria-hidden="true"
+            >
+              📄
+            </div>
+
+            <h3>
+              Instant Reports
+            </h3>
+
+            <p>
+              Access school information and generate reports
+              whenever administrators need them.
+            </p>
+
+          </article>
+
+
+          <article class="feature-card">
+
+            <div
+              class="feature-icon"
+              aria-hidden="true"
+            >
+              ☁️
+            </div>
+
+            <h3>
+              Cloud Based
+            </h3>
+
+            <p>
+              No local server installation. Access the platform
+              from compatible phones, tablets and computers.
+            </p>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!--
       
