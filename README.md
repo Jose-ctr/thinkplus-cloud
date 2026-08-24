@@ -4,7 +4,7 @@
 
 **Run your entire school in the cloud.**
 
-Fees • Exams • Students • Parents • SMS • M-Pesa • Payroll • Reports
+**Fees • Exams • Students • Parents • SMS • M-Pesa • Payroll • Reports**
 
 > Multi-tenant school management platform built specifically for Kenyan schools.
 
@@ -13,7 +13,7 @@ Fees • Exams • Students • Parents • SMS • M-Pesa • Payroll • Repor
 ![PDO](https://img.shields.io/badge/Database-PDO-green)
 ![Status](https://img.shields.io/badge/status-Phase%202%2F12%20Complete-yellow)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
-![Location](https://img.shields.io/badge/Location-Mariakani%2C%20Kenya-brightgreen)
+![Location](https://img.shields.io/badge/Location-Kilifi%2C%20Kenya-brightgreen)
 
 ---
 
@@ -32,19 +32,20 @@ Fees • Exams • Students • Parents • SMS • M-Pesa • Payroll • Repor
 11. [Development Roadmap](#-development-roadmap)
 12. [Next Development Phase](#-next-development-phase)
 13. [Local Development](#-local-development)
-14. [Production Goals](#-production-goals)
-15. [Contact](#-contact)
-16. [License](#-license)
+14. [Development Principles](#-development-principles)
+15. [Production Goals](#-production-goals)
+16. [Contact](#-contact)
+17. [License](#-license)
 
 ---
 
 # 📖 Overview
 
-**ThinkPlus Cloud** is a cloud-based School Management SaaS platform designed for
-Kenyan schools.
+**ThinkPlus Cloud** is a cloud-based School Management SaaS platform designed
+for Kenyan schools.
 
 The platform is being developed to provide schools with one centralized system
-for managing their daily academic, administrative, financial and communication
+for managing their daily academic, administrative, financial, and communication
 operations.
 
 ThinkPlus Cloud is designed as a **multi-tenant SaaS platform**, allowing
@@ -62,6 +63,7 @@ isolated.
 - Academic years
 - Terms
 - Exams
+- Assessments
 - Marks
 - Grading
 - Report cards
@@ -71,7 +73,7 @@ isolated.
 - Invoices
 - Payments
 - M-Pesa transactions
-- SMS
+- SMS communication
 - WhatsApp communication
 - Announcements
 - Payroll
@@ -190,7 +192,7 @@ Planned functionality includes:
 - Automatic fee account updates
 - Payment receipts
 
-Production credentials must never be stored directly inside source code.
+> Production credentials must never be stored directly inside source code.
 
 ---
 
@@ -335,7 +337,7 @@ Planned access includes:
 - Fee information
 - School announcements
 
----
+- ---
 
 # 🏢 Multi-Tenant Architecture
 
@@ -355,10 +357,10 @@ WHERE school_id = ?
 AND deleted_at IS NULL;
 The application must never trust a school_id supplied directly by an untrusted request.
 The current authenticated user's school membership must determine the effective tenant.
-Tenant isolation goals
+Tenant Isolation Goals
 School A cannot access School B data
 School B cannot access School C data
-Users only access authorized branches
+Users can only access authorized branches
 User roles are scoped correctly
 Financial records remain tenant-specific
 Academic records remain tenant-specific
@@ -366,15 +368,12 @@ Communication records remain tenant-specific
 🗄️ Database
 ThinkPlus Cloud currently uses:
 MySQL 8.0+
-Database:
-thinkplus_cloud
-Storage engine:
-InnoDB
-Character set:
-utf8mb4
+Database: thinkplus_cloud
+Storage engine: InnoDB
+Character set: utf8mb4
 The primary database schema is:
 database/schema.sql
-Current schema:
+Current schema version:
 Database Schema v3.0
 The schema is designed to support:
 Multi-school tenancy
@@ -402,7 +401,7 @@ SMS
 Notifications
 Subscriptions
 Billing
-Audit/security
+Audit and security
 Database Design Principles
 The database uses:
 Primary keys
@@ -412,7 +411,7 @@ Check constraints
 Indexes
 Soft deletes
 Timestamps
-UUID-style public identifiers
+Public identifiers
 Tenant identifiers
 Referential integrity
 Many records use:
@@ -423,15 +422,16 @@ Public-facing identifiers use:
 public_id
 This helps avoid exposing internal numeric IDs through public APIs.
 🔒 Security
-Security is a core part of the architecture.
-Planned and implemented security mechanisms include:
+Security is a core part of the ThinkPlus Cloud architecture.
+The system is being designed around the following security principles.
 Password Security
-Passwords use PHP's password hashing system:
+Passwords must use PHP's password hashing system:
 password_hash()
-Passwords are verified using:
+Passwords must be verified using:
 password_verify()
 PDO Prepared Statements
-Database queries should use prepared statements:
+Database queries must use prepared statements.
+Example:
 $stmt = $pdo->prepare(
     'SELECT * FROM users WHERE id = ?'
 );
@@ -439,11 +439,13 @@ $stmt = $pdo->prepare(
 $stmt->execute([$userId]);
 User input must never be concatenated directly into SQL queries.
 CSRF Protection
-Forms use CSRF tokens.
+Protected forms must use CSRF tokens.
 Example:
 csrfField();
-Requests are verified using:
+Requests must be verified using:
 verifyCsrfToken();
+CSRF protection will be centralized in:
+security/Csrf.php
 Session Security
 Authentication sessions are designed to support:
 Secure session cookies
@@ -452,17 +454,24 @@ Session revocation
 Session token hashing
 Logout
 Session regeneration
+Login protection
 Tenant Security
 Tenant access must be verified before retrieving or modifying school data.
-Security components:
+Security components include:
 security/
 ├── Tenant.php
 ├── Csrf.php
 ├── Audit.php
 └── Security.php
+Authorization
+Every protected operation must verify:
+The user is authenticated.
+The user has the required role or permission.
+The user belongs to the correct school or authorized branch.
+The requested resource belongs to the user's effective tenant.
 Audit Logging
 Important security-sensitive actions should be recorded.
-Examples:
+Examples include:
 Login
 Logout
 Password changes
@@ -470,8 +479,11 @@ Permission changes
 Student changes
 Financial transactions
 Administrative actions
+School configuration changes
+Audit functionality will be centralized in:
+security/Audit.php
 🏗️ Project Structure
-Current project structure:
+The target application architecture is:
 thinkplus-cloud/
 │
 ├── app/
@@ -552,6 +564,22 @@ thinkplus-cloud/
 ├── .env.example
 ├── .gitignore
 └── README.md
+Legacy Files
+Older root-level PHP files may still exist in the repository from earlier development experiments.
+Examples include:
+/login.php
+/register.php
+/logout.php
+/process_register.php
+These files are considered legacy and are not the target architecture.
+The new application should use the structured:
+app/
+config/
+public/
+security/
+routes/
+architecture.
+Legacy files should only be removed after the replacement authentication system has been implemented and tested.
 ⚙️ Configuration
 ThinkPlus Cloud uses environment-based configuration.
 Create a local environment file from:
@@ -574,40 +602,51 @@ to GitHub.
 Only:
 .env.example
 should be committed.
-Production credentials must remain private.
-🧰 Local Development
-1. Requirements
+Production credentials must remain private and must never be hard-coded into application source code.
+
+---
+
+# 🧰 Local Development
+
+## 1. Requirements
+
 Install:
-PHP 8.2+
-MySQL 8.0+
-Git
-PHP PDO MySQL extension
+
+- PHP 8.2+
+- MySQL 8.0+
+- Git
+- PHP PDO MySQL extension
+
 Verify PHP:
+
+```bash
 php -v
 Verify MySQL:
 mysql --version
 2. Create Database
-Create the database:
+Create the ThinkPlus Cloud database:
 CREATE DATABASE thinkplus_cloud
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
-3. Import Schema
-Run:
+3. Import Database Schema
+Import the primary database schema:
 mysql -u root -p thinkplus_cloud < database/schema.sql
+If a seed file is available, it can be imported after the main schema:
+mysql -u root -p thinkplus_cloud < database/seed.sql
 4. Configure Environment
-Copy:
+Copy the example environment file:
 cp .env.example .env
-Then configure the database credentials.
-5. Run Development Server
+Then configure the database and application settings inside .env.
+Never commit the .env file.
+5. Run the Development Server
 From the project root:
 php -S localhost:8000 -t public
-Open:
+Then open:
 http://localhost:8000
 🚧 Development Roadmap
 ThinkPlus Cloud is being developed in 12 major phases.
 Phase 1 — Architecture & Foundation
-Status:
-✅ COMPLETE
+Status: ✅ COMPLETE
 Includes:
 Repository structure
 Application architecture
@@ -615,8 +654,7 @@ Initial configuration
 Project organization
 SaaS planning
 Phase 2 — Database v3.0
-Status:
-✅ COMPLETE
+Status: ✅ COMPLETE
 Includes:
 Multi-tenant database
 Schools
@@ -633,16 +671,15 @@ Academic structure
 Finance foundation
 Communication foundation
 SaaS foundation
-Audit/security foundation
+Audit and security foundation
 Primary file:
 database/schema.sql
 🚀 Phase 3 — Authentication & Security
-Status:
-🔜 NEXT
+Status: 🔜 NEXT
 This is the next major development stage.
-Phase 3 objectives
-Build a complete authentication and authorization system.
+The objective is to establish a secure and reusable authentication and authorization foundation before building the main school management modules.
 Authentication
+Implement:
 Login
 Logout
 Registration
@@ -653,8 +690,9 @@ Session management
 Session expiration
 Session revocation
 Login protection
+Session regeneration
 Authorization
-Implement:
+Implement the following roles:
 super_admin
 school_admin
 teacher
@@ -667,21 +705,20 @@ Implement:
 security/Tenant.php
 to determine the authenticated user's active school.
 All school-level operations must enforce tenant isolation.
-CSRF
+CSRF Protection
 Implement:
 security/Csrf.php
-for protected POST requests.
-Security helpers
+for protected POST and state-changing requests.
+Security Helpers
 Implement:
 security/Security.php
 for centralized security controls.
-Audit
+Audit Logging
 Implement:
 security/Audit.php
 for recording important system actions.
 🏫 Phase 4 — School Management
-Status:
-⏳ PLANNED
+Status: ⏳ PLANNED
 Features:
 School dashboard
 School profile
@@ -695,8 +732,7 @@ Stream management
 Academic year management
 Term management
 💰 Phase 5 — Finance
-Status:
-⏳ PLANNED
+Status: ⏳ PLANNED
 Features:
 Fee structures
 Student fee accounts
@@ -708,10 +744,9 @@ Financial reports
 Payment history
 Fee reminders
 📱 Phase 6 — M-Pesa Integration
-Status:
-⏳ PLANNED
+Status: ⏳ PLANNED
 Integration with:
-M-Pesa Daraja API
+Safaricom M-Pesa Daraja API
 Planned functionality:
 STK Push
 Callback endpoint
@@ -722,8 +757,7 @@ Automatic fee updates
 Receipt generation
 Production API credentials will be stored securely through environment configuration.
 📚 Phase 7 — Academics
-Status:
-⏳ PLANNED
+Status: ⏳ PLANNED
 Features:
 Subjects
 Exams
@@ -735,8 +769,7 @@ Report cards
 Academic performance
 CBC-oriented reporting
 📢 Phase 8 — Attendance & Communication
-Status:
-⏳ PLANNED
+Status: ⏳ PLANNED
 Features:
 Student attendance
 Staff attendance
@@ -748,8 +781,7 @@ Parent notifications
 Fee reminders
 Academic notifications
 👨‍💼 Phase 9 — HR & Payroll
-Status:
-⏳ PLANNED
+Status: ⏳ PLANNED
 Features:
 Staff records
 Employee management
@@ -759,8 +791,7 @@ Deductions
 Payslips
 Payroll reports
 👨‍👩‍👧 Phase 10 — Parent Portal
-Status:
-⏳ PLANNED
+Status: ⏳ PLANNED
 Parents will be able to:
 View children
 View attendance
@@ -772,8 +803,7 @@ Receive announcements
 Receive notifications
 Make supported payments
 ☁️ Phase 11 — SaaS Administration
-Status:
-⏳ PLANNED
+Status: ⏳ PLANNED
 Platform administration features:
 School onboarding
 School management
@@ -785,8 +815,7 @@ Subscription status
 Platform analytics
 Platform audit logs
 🚀 Phase 12 — Production Launch
-Status:
-⏳ PLANNED
+Status: ⏳ PLANNED
 Production launch will include:
 Production hosting
 HTTPS
@@ -804,91 +833,150 @@ School pilot testing
 Documentation
 Deployment procedures
 🔥 Immediate Next Development
-After the database v3.0 phase, development should proceed in this order:
-1. config/database.php
-2. config/app.php
-3. config/services.php
-4. app/helpers/functions.php
-5. security/Security.php
-6. security/Csrf.php
-7. security/Tenant.php
-8. security/Audit.php
-9. app/Auth/Login.php
-10. app/Auth/Register.php
-11. app/Auth/Reset.php
-12. app/Auth/Permissions.php
-13. public/login.php
-14. public/dashboard.php
-15. routes/web.php
-The first priority is to establish a working database connection and secure authentication foundation before building the school modules.
-🧪 Development Principles
+After completing the database v3.0 foundation, development should proceed in this order:
+config/database.php
+config/app.php
+config/services.php
+app/helpers/functions.php
+security/Security.php
+security/Csrf.php
+security/Tenant.php
+security/Audit.php
+app/Auth/Login.php
+app/Auth/Register.php
+app/Auth/Reset.php
+app/Auth/Permissions.php
+public/login.php
+public/dashboard.php
+routes/web.php
+The first priority is to establish a working database connection and secure authentication foundation before building the school management modules.
+---
+
+# 🧪 Development Principles
+
 ThinkPlus Cloud development follows these principles:
-Security First
+
+## Security First
+
 Never trust user input.
+
 Use:
-PDO prepared statements
-CSRF protection
-Password hashing
-Session security
-Tenant validation
-Authorization checks
-Audit logging
-Tenant Isolation
+
+- PDO prepared statements
+- CSRF protection
+- Password hashing
+- Session security
+- Tenant validation
+- Authorization checks
+- Audit logging
+
+## Tenant Isolation
+
 Every school-level operation must verify the authenticated user's school.
-Database Integrity
+
+## Database Integrity
+
 Use:
-Foreign keys
-Unique constraints
-Check constraints
-Transactions
-Proper indexes
-Maintainability
-Business logic should be organized into appropriate modules instead of placing the entire application inside a single PHP file.
-Production Readiness
+
+- Foreign keys
+- Unique constraints
+- Check constraints
+- Transactions
+- Proper indexes
+
+## Maintainability
+
+Business logic should be organized into appropriate modules instead of placing
+the entire application inside a single PHP file.
+
+## Production Readiness
+
 Development code should be written with eventual production deployment in mind.
-📈 Production Goals
-ThinkPlus Cloud is intended to become a scalable SaaS platform capable of supporting:
-Multiple schools
-Multiple branches
-Thousands of students
-Multiple parents per student
-Multiple children per parent
-Teachers and school staff
-Financial transactions
-M-Pesa payments
-SMS communication
-Academic records
-Attendance
-Payroll
-Subscription billing
-Mobile and web APIs
-📞 Contact
-Joseph Mbui
+
+---
+
+# 📈 Production Goals
+
+ThinkPlus Cloud is intended to become a scalable SaaS platform capable of
+supporting:
+
+- Multiple schools
+- Multiple branches
+- Thousands of students
+- Multiple parents per student
+- Multiple children per parent
+- Teachers and school staff
+- Financial transactions
+- M-Pesa payments
+- SMS communication
+- Academic records
+- Attendance
+- Payroll
+- Subscription billing
+- Mobile and web APIs
+
+---
+
+# 📞 Contact
+
+**Joseph Mbui**
+
 Founder — ThinkPlus Cloud
+
 📍 Mariakani, Kilifi County, Kenya
+
 📧 Email:
-mbuijoseph51@gmail.com
+
+**mbuijoseph51@gmail.com**
+
 GitHub:
-Jose-ctr/thinkplus-website
+
+**Jose-ctr/thinkplus-cloud**
+
 Website:
-https://jose-ctr.github.io/thinkplus-website/
-📄 License
+
+**https://jose-ctr.github.io/thinkplus-cloud/**
+
+---
+
+# 📄 License
+
 Copyright © 2026 ThinkPlus Cloud
+
 Released under the MIT License.
-🇰🇪 Built in Kenya
-ThinkPlus Cloud is being developed to help Kenyan schools move from manual school administration to a secure, centralized digital platform.
-Building in public.
-Current Status
-Phase 1  ✅ Architecture & Foundation
-Phase 2  ✅ Database v3.0
-Phase 3  🔜 Authentication & Security
-Phase 4  ⏳ School Management
-Phase 5  ⏳ Finance
-Phase 6  ⏳ M-Pesa
-Phase 7  ⏳ Academics
-Phase 8  ⏳ Attendance & Communication
-Phase 9  ⏳ HR & Payroll
-Phase 10 ⏳ Parent Portal
-Phase 11 ⏳ SaaS Administration
-Phase 12 ⏳ Production Launch
-ThinkPlus Cloud — One platform. One school system. Anywhere. ☁️🇰🇪
+
+---
+
+# 🇰🇪 Built in Kenya
+
+ThinkPlus Cloud is being developed to help Kenyan schools move from manual
+school administration to a secure, centralized digital platform.
+
+**Building in public.**
+
+---
+
+# 📊 Current Status
+
+| Phase | Status |
+|---|---|
+| Phase 1 — Architecture & Foundation | ✅ Complete |
+| Phase 2 — Database v3.0 | ✅ Complete |
+| Phase 3 — Authentication & Security | 🔜 Next |
+| Phase 4 — School Management | ⏳ Planned |
+| Phase 5 — Finance | ⏳ Planned |
+| Phase 6 — M-Pesa | ⏳ Planned |
+| Phase 7 — Academics | ⏳ Planned |
+| Phase 8 — Attendance & Communication | ⏳ Planned |
+| Phase 9 — HR & Payroll | ⏳ Planned |
+| Phase 10 — Parent Portal | ⏳ Planned |
+| Phase 11 — SaaS Administration | ⏳ Planned |
+| Phase 12 — Production Launch | ⏳ Planned |
+
+---
+
+## ☁️ ThinkPlus Cloud
+
+**One platform. One school system. Anywhere.**
+
+🇰🇪 **Built for Kenyan schools.**
