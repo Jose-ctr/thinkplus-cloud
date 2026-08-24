@@ -472,7 +472,7 @@ Financial transactions
 Administrative actions
 🏗️ Project Structure
 Current project structure:
-thinkplus-website/
+thinkplus-cloud/
 │
 ├── app/
 │   │
