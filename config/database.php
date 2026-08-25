@@ -1087,33 +1087,363 @@ function dbRollback(
     }
 }
 
+|--------------------------------------------------------------------------
+| Execute Prepared Query
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('executeQuery')) {
+
+    function executeQuery(
+        PDO $connection,
+        string $query,
+        array $params = []
+    ): PDOStatement {
+
+        $statement = $connection->prepare($query);
+
+        $statement->execute($params);
+
+        return $statement;
+    }
+}
+
 
 /*
 |--------------------------------------------------------------------------
-| End of Database Configuration
+| Fetch One Row
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('fetchOne')) {
+
+    function fetchOne(
+        PDOStatement $statement
+    ): ?array {
+
+        $result = $statement->fetch();
+
+        if ($result === false) {
+            return null;
+        }
+
+        return $result;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Fetch All Rows
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('fetchAll')) {
+
+    function fetchAll(
+        PDOStatement $statement
+    ): array {
+
+        $result = $statement->fetchAll();
+
+        return is_array($result)
+            ? $result
+            : [];
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Fetch Single Value
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('fetchValue')) {
+
+    function fetchValue(
+        PDOStatement $statement,
+        int $column = 0
+    ): mixed {
+
+        return $statement->fetchColumn($column);
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Execute INSERT / UPDATE / DELETE
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('executeStatement')) {
+
+    function executeStatement(
+        PDO $connection,
+        string $query,
+        array $params = []
+    ): bool {
+
+        $statement = $connection->prepare($query);
+
+        return $statement->execute($params);
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Last Insert ID
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('lastInsertId')) {
+
+    function lastInsertId(
+        PDO $connection
+    ): int {
+
+        return (int) $connection->lastInsertId();
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Transaction Helper
 |--------------------------------------------------------------------------
 |
-| ThinkPlus Cloud database layer responsibilities:
+| Executes multiple database operations atomically.
 |
-| ✓ Secure PDO connection
-| ✓ Environment-based credentials
-| ✓ TLS support
-| ✓ Controlled connection retries
-| ✓ Prepared statements
-| ✓ Transaction helpers
-| ✓ Legacy compatibility
+| If any operation throws an exception, the transaction
+| is rolled back automatically.
 |
-| Deliberately NOT handled here:
-|
-| ✗ User authentication
-| ✗ Authorization
-| ✗ school_id validation
-| ✗ Tenant isolation
-| ✗ Role permissions
-| ✗ Audit authorization decisions
-|
-| Those responsibilities belong to the ThinkPlus Cloud
-| Security and Application layers.
-|
+*/
+
+if (!function_exists('transaction')) {
+
+    function transaction(
+        PDO $connection,
+        callable $callback
+    ): mixed {
+
+        $connection->beginTransaction();
+
+        try {
+
+            $result = $callback($connection);
+
+            $connection->commit();
+
+            return $result;
+
+        } catch (Throwable $exception) {
+
+            if ($connection->inTransaction()) {
+                $connection->rollBack();
+            }
+
+            throw $exception;
+        }
+    }
+}
+
+
+/*
 |--------------------------------------------------------------------------
+| Database Health Check
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('databaseHealthy')) {
+
+    function databaseHealthy(
+        PDO $connection
+    ): bool {
+
+        try {
+
+            $statement = $connection->query(
+                'SELECT 1'
+            );
+
+            return $statement !== false;
+
+        } catch (Throwable $exception) {
+
+            error_log(
+                '[ThinkPlus Cloud] Database health check failed.'
+            );
+
+            return false;
+        }
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Database Configuration Accessor
+|--------------------------------------------------------------------------
+|
+| Provides non-sensitive configuration information to application
+| components without exposing the database password.
+|
+*/
+
+if (!function_exists('databaseConfig')) {
+
+    function databaseConfig(): array
+    {
+        global $databaseConfiguration;
+
+        return $databaseConfiguration;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Database Connection Accessor
+|--------------------------------------------------------------------------
+|
+| Existing code can continue using $pdo directly.
+|
+| New code may use:
+|
+|     $db = database();
+|
+*/
+
+if (!function_exists('database')) {
+
+    function database(): PDO
+    {
+        global $pdo;
+
+        if (!$pdo instanceof PDO) {
+
+            throw new RuntimeException(
+                'Database connection is not available.'
+            );
+        }
+
+        return $pdo;
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Database Transaction Status
+|--------------------------------------------------------------------------
+*/
+
+if (!function_exists('databaseInTransaction')) {
+
+    function databaseInTransaction(
+        ?PDO $connection = null
+    ): bool {
+
+        $connection ??= database();
+
+        return $connection->inTransaction();
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Graceful Database Shutdown
+|--------------------------------------------------------------------------
+|
+| PHP automatically closes PDO connections at the end of the request.
+| Explicitly clearing the global reference is unnecessary, but this
+| helper is available for long-running processes and workers.
+|
+*/
+
+if (!function_exists('closeDatabase')) {
+
+    function closeDatabase(): void
+    {
+        global $pdo;
+
+        $pdo = null;
+    }
+}
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Final Compatibility Verification
+|--------------------------------------------------------------------------
+|
+| The following guarantees are intentionally preserved:
+|
+| 1. $pdo remains globally available.
+| 2. DB_HOST remains available.
+| 3. DB_PORT remains available.
+| 4. DB_NAME remains available.
+| 5. DB_USER remains available.
+| 6. DB_CHARSET remains available.
+| 7. DB_PASS remains available when configured.
+|
+| This allows existing root-level PHP files and the current
+| application architecture to migrate gradually.
+|
+*/
+
+
+/*
+|--------------------------------------------------------------------------
+| Compatibility Assertions
+|--------------------------------------------------------------------------
+|
+| These checks are intentionally non-destructive.
+| They do not modify the existing database connection.
+|
+*/
+
+if (!isset($pdo) || !$pdo instanceof PDO) {
+
+    throw new RuntimeException(
+        'ThinkPlus Cloud database connection is not available.'
+    );
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| End of ThinkPlus Cloud Database Configuration
+|--------------------------------------------------------------------------
+|
+| Public compatibility surface:
+|
+|     $pdo
+|     DB_HOST
+|     DB_PORT
+|     DB_NAME
+|     DB_USER
+|     DB_PASS
+|     DB_CHARSET
+|
+| Helper functions:
+|
+|     envValue()
+|     castEnvValue()
+|     dbExecute()
+|     dbFetchOne()
+|     dbFetchAll()
+|     dbFetchValue()
+|     dbBeginTransaction()
+|     dbCommit()
+|     dbRollback()
+|     dbLastInsertId()
+|     dbHealthy()
+|     dbTransaction()
+|
+| The file intentionally has no closing PHP tag.
+|
 */
